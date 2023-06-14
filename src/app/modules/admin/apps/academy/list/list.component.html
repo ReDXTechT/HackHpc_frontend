@@ -1,0 +1,212 @@
+<div
+    class="absolute inset-0 flex flex-col min-w-0 overflow-y-auto"
+    cdkScrollable>
+
+    <!-- Header -->
+    <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-gray-800 dark">
+        <!-- Background - @formatter:off -->
+        <!-- Rings -->
+        <svg class="absolute inset-0 pointer-events-none"
+             viewBox="0 0 960 540" width="100%" height="100%" preserveAspectRatio="xMidYMax slice"
+             xmlns="http://www.w3.org/2000/svg">
+            <g class="text-gray-700 opacity-25" fill="none" stroke="currentColor" stroke-width="100">
+                <circle r="234" cx="196" cy="23"></circle>
+                <circle r="234" cx="790" cy="491"></circle>
+            </g>
+        </svg>
+        <!-- @formatter:on -->
+        <div class="z-10 relative flex flex-col items-center">
+            <h2 class="text-4xl font-semibold">HPC HACK</h2>
+            <div class="mt-1 text-3xl sm:text-3xl font-extrabold tracking-tight leading-tight text-center">
+                Don't miss out on the opportunity to learn, collaborate, and win exciting prizes!
+            </div>
+            <div class="max-w-2xl mt-6 sm:text-2xl text-center tracking-tight text-secondary">
+                Explore and join our exciting high-performance computing (HPC) competitions. Whether you're a data
+                scientist, machine learning enthusiast, or coding expert, our competitions offer you the opportunity to
+                showcase your skills and compete with fellow enthusiasts from around the world.
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex flex-auto  sm:p-10">
+
+        <div class="flex flex-col flex-auto w-full max-w-xs sm:max-w-7xl mx-auto">
+            <!-- Filters -->
+            <div class="flex flex-col sm:flex-row items-center justify-between w-full max-w-xs sm:max-w-none">
+                <mat-form-field
+                    class="w-full sm:w-36"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-select
+                        [value]="'all'"
+                        (selectionChange)="onCodeTypeSelect($event.value)">
+                        <mat-option [value]="'all'">All</mat-option>
+                        <mat-option value="openacc">OpenACC</mat-option>
+                        <mat-option value="openmp">OpenMP</mat-option>
+                        <mat-option value="mpi">MPI</mat-option>
+                        <mat-option value="c_cpp">C/C++</mat-option>
+
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                    class="w-full sm:w-72 mt-4 sm:mt-0 sm:ml-4"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-icon
+                        matPrefix
+                        class="icon-size-5"
+                        [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+                    <input
+                        (input)="onSearch(query.value)"
+                        placeholder="Search by title "
+                        matInput
+                        #query>
+                </mat-form-field>
+                <mat-slide-toggle
+                    class="mt-8 sm:mt-0 sm:ml-auto"
+                    [color]="'primary'"
+                    (change)="toggleCompleted($event)">
+                    Hide completed
+                </mat-slide-toggle>
+            </div>
+            <!-- competitions -->
+            <ng-container *ngIf="!hideCompleted$.value || competitions.length > 0; else nocompetitions">
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mt-8 sm:mt-10">
+                    <ng-container *ngFor="let competition of competitions; trackBy: trackByFn">
+                        <!-- competition -->
+                        <div class="flex flex-col  shadow rounded-2xl overflow-hidden bg-card">
+                            <div class="flex flex-col p-6">
+                                <div class="flex items-center justify-between">
+                                    <!-- competition category -->
+                                    <div
+                                        class="py-0.5 px-3 rounded-full text-sm font-semibold"
+                                        [ngClass]="{'text-blue-800 bg-blue-100 dark:text-blue-50 dark:bg-blue-500': competition.code_type === 'openacc',
+                                                                  'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500': competition.code_type === 'openmp',
+                                                                  'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500': competition.code_type === 'mpi',
+                                                                  'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500': competition.code_type === 'c_cpp' }">
+                                        {{ competition.code_type }}
+                                    </div>
+
+                                    <!-- competition status -->
+                                    <div
+                                        class="py-0.5 px-3 rounded-full text-sm font-semibold"
+                                        [ngClass]="{'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500': competition.status === 'Terminated',
+                                                                  'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500': competition.status === 'Running',
+                                                                  'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500': competition.status === 'About_to_start'}">
+                                        {{ competition.status }}
+                                    </div>
+                                </div>
+                                <!-- competition title & description -->
+                                <div class="mt-4 text-lg font-medium">{{competition.title}}</div>
+                                <div class="w-12 h-1 my-6 border-t-2"></div>
+                                <!-- competition time -->
+                                <div class="flex items-center leading-5 text-md text-secondary">
+                                    <mat-icon class="icon-size-5 text-hint"
+                                              [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                                    <div class="ml-1.5">
+                                        <ng-container>
+                                            <span class="date-label" style="font-weight: bold;">Starting Date : </span>
+                                            <span class="date-value"
+                                                  style="font-style: italic; color: #777;">{{ competition.starting_date }}</span>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <div class="flex items-center leading-5 text-md text-secondary mt-4">
+                                    <mat-icon class="icon-size-5 text-hint"
+                                              [svgIcon]="'heroicons_solid:clock'"></mat-icon>
+                                    <div class="ml-1.5">
+                                        <ng-container>
+
+                                            <span class="date-label"
+                                                  style="font-weight: bold;">Submission Deadline : </span>
+                                            <span class="date-value"
+                                                  style="font-style: italic; color: #777;">{{ competition.submission_deadline  }}</span>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <div class="flex items-center leading-5 text-md text-secondary mt-4">
+                                    <mat-icon class="icon-size-5 text-hint">emoji_events</mat-icon>
+                                    <div class="ml-1.5">
+                                        <ng-container>
+                                            <span class="date-label" style="font-weight: bold;">Winner Announcement Date : </span>
+                                            <span class="date-value"
+                                                  style="font-style: italic; color: #777;">{{ competition.winner_announcement_date }}</span>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <div class="w-12 h-1 my-6 border-t-2"></div>
+                                <div class="flex items-center leading-5 text-md text-secondary">
+                                    <mat-icon class="icon-size-5 text-hint">people</mat-icon>
+                                    <div class="ml-1.5">
+                                        <ng-container>
+                                            <span class="date-label"
+                                                  style="font-weight: bold;">Max competitors : </span>
+                                            <span class="date-value"
+                                                  style="font-style: italic; color: #777;">{{ competition.max_competitors }}</span>
+                                            <span class="date-label" style="font-weight: bold; margin-left: 1rem;">Competitors joined : </span>
+                                            <span class="date-value"
+                                                  style="font-style: italic; color: #777;">{{ competition.competitors.length }}</span>
+                                        </ng-container>
+                                    </div>
+                                </div>
+                                <div
+                                    class="flex items-center leading-5 text-md text-secondary mt-4 eduman-course-tutor">
+                                    <img [src]="'assets/images/profile.jpg'" class="user-image" alt="">
+                                    <a [routerLink]="['/admin/teachers/about-teacher']">Sponsor : Imen Chaari</a>
+                                </div>
+                            </div>
+                            <div class="flex flex-col w-full mt-auto mt-4">
+                                <!-- competition progress -->
+                                <div class="relative h-0.5">
+                                    <div
+                                        class="z-10 absolute inset-x-0 h-6 -mt-3"
+                                        [matTooltip]="getProgressTooltip(competition)"
+                                        [matTooltipPosition]="'above'"
+                                        [matTooltipClass]="'-mb-0.5'"
+                                    ></div>
+                                    <mat-progress-bar
+                                        class="h-0.5"
+                                        [value]="getProgressValue(competition)"
+                                    ></mat-progress-bar>
+                                </div>
+
+
+                                <!-- competition launch button -->
+                                <div class="px-6 py-4 text-right bg-gray-50 dark:bg-transparent">
+                                    <ng-container>
+                                        <!-- Display 'View Details' button -->
+                                        <a mat-stroked-button [routerLink]="[competition.id]">
+                                            <span class="inline-flex items-center">
+                                                <span>View Details</span>
+                                                <mat-icon class="ml-1.5 icon-size-5" [svgIcon]="'heroicons_solid:arrow-small-right'"></mat-icon>
+                                            </span>
+                                        </a>
+                                    </ng-container>
+<!--                                    <ng-container-->
+<!--                                        *ngIf="competition.status === 'About_to_start' && competition.competitors.length < competition.max_competitors">-->
+<!--                                        &lt;!&ndash; Display 'Join Now' button &ndash;&gt;-->
+<!--                                        <button mat-stroked-button>-->
+<!--                                            <span class="inline-flex items-center">-->
+<!--                                                <span>Join Now</span>-->
+<!--                                                <mat-icon class="ml-1.5 icon-size-5" [svgIcon]="'heroicons_solid:arrow-small-right'"></mat-icon>-->
+<!--                                            </span>-->
+<!--                                        </button>-->
+<!--                                    </ng-container>-->
+                                </div>
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-container>
+
+            <!-- No competitions -->
+            <ng-template #nocompetitions>
+                <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+                    <mat-icon class="icon-size-24">search</mat-icon>
+                    <div class="mt-6 text-2xl font-semibold tracking-tight text-secondary">No competitions found!</div>
+                </div>
+            </ng-template>
+        </div>
+
+    </div>
+
+</div>

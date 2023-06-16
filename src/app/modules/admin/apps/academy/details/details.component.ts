@@ -1,5 +1,5 @@
 import { CdkScrollable } from '@angular/cdk/scrolling';
-import { DOCUMENT, NgClass, NgFor, NgIf } from '@angular/common';
+import {CurrencyPipe, DOCUMENT, NgClass, NgFor, NgIf} from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, Inject, OnDestroy, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -18,6 +18,9 @@ import {FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, 
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
 import {Note} from "../../notes/notes.types";
+import {MatTableModule} from "@angular/material/table";
+import {Budget_reportService} from "../../../../../core/services/budget_report.service";
+import {ApexOptions, NgApexchartsModule} from "ng-apexcharts";
 
 @Component({
     selector       : 'academy-details',
@@ -25,7 +28,7 @@ import {Note} from "../../notes/notes.types";
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone     : true,
-    imports: [MatSidenavModule, FormsModule, ReactiveFormsModule, RouterLink, MatIconModule, NgIf, NgClass, NgFor, MatButtonModule, MatProgressBarModule, CdkScrollable, MatTabsModule, FuseFindByKeyPipe, FuseAlertComponent, MatFormFieldModule, MatInputModule],
+    imports: [MatSidenavModule, FormsModule, ReactiveFormsModule, RouterLink, MatIconModule, NgIf, NgClass, NgFor, MatButtonModule, MatProgressBarModule, CdkScrollable, MatTabsModule, FuseFindByKeyPipe, FuseAlertComponent, MatFormFieldModule, MatInputModule, MatTableModule, CurrencyPipe, NgApexchartsModule],
 })
 export class AcademyDetailsComponent implements OnInit
 {
@@ -37,10 +40,16 @@ export class AcademyDetailsComponent implements OnInit
     public days: number;
     public hours: number;
     public minutes: number;
+    data: any;
+    datasource: any;
+    chartBudgetDistribution: ApexOptions = {};
+    selectedIndex = 0;
+
 
     constructor(
         @Inject(DOCUMENT) private _document: Document,
         private competitionService: CompetitionService,
+        private budgetReportService: Budget_reportService,
         private route: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
         private _formBuilder: UntypedFormBuilder,
@@ -60,15 +69,132 @@ export class AcademyDetailsComponent implements OnInit
 
     async ngOnInit(): Promise<void> {
         try {
+            this.route.fragment.subscribe(fragment => {
+                if (fragment === 'Rules') {
+                    this.selectedIndex = 1;
+                } else if (fragment === 'Budget') {
+                    this.selectedIndex = 2;
+                } else if (fragment === 'Team') {
+                    this.selectedIndex = 3;
+                } else if (fragment === 'Leaderboard') {
+                    this.selectedIndex = 4;
+                } else if (fragment === 'Solution_Checker') {
+                    this.selectedIndex = 5;
+                } else {
+                    this.selectedIndex = 0; // Set the index of the default tab
+                }
+            });
             const competitionId = this.route.snapshot.paramMap.get('id');
             this.competition = await this.getCompetitionById(competitionId);
-            console.log(this.competition);
+            this.getBudgetDetailsByCompetitionId(competitionId);
         } catch (error) {
             console.error('Error fetching competition:', error);
         }
+        this.datasource = {
+            budgetDetails: {
+                columns: ['Item', 'Description', 'Total_cost']
+            }
+        };
+    }
+    getDotColor(index: number): string {
+        const dotColors = ['bg-blue-500', 'bg-red-500', 'bg-green-500', 'bg-amber-500', 'bg-indigo-500'];
+        const dotColorIndex = index % dotColors.length;
+        return dotColors[dotColorIndex];
+    }
+    getTotalCost(): number {
+        let totalCost = 0;
+        for (const budget of this.data.budget_items) {
+            totalCost += Number(budget.cost);
+        }
+        return totalCost;
     }
 
+    getBudgetDetailsByCompetitionId(competitionId){
+        this.budgetReportService.getBudgetDetailsByCompetitionsId(competitionId).subscribe(res=>{
+            console.log(res)
+            this.data = res
+            this.prepareChartData()
+        })
+    }
 
+    private prepareChartData(): void
+    {
+        this.chartBudgetDistribution = {
+            chart: {
+                fontFamily: 'inherit',
+                foreColor: 'inherit',
+                width:'100%',
+                height: '700px',
+                type: 'radar',
+                sparkline: {
+                    enabled: true,
+                },
+            },
+            colors: ['#818CF8'],
+            dataLabels: {
+                enabled: true,
+                formatter: (val: number): string | number => `${val}%`,
+                textAnchor: 'start',
+                style: {
+                    fontSize: '13px',
+                    fontWeight: 500,
+                },
+                background: {
+                    borderWidth: 0,
+                    padding: 4,
+                },
+                offsetY: -15,
+            },
+            markers: {
+                strokeColors: '#818CF8',
+                strokeWidth: 4,
+            },
+            plotOptions: {
+                radar: {
+                    polygons: {
+                        strokeColors: 'var(--fuse-border)',
+                        connectorColors: 'var(--fuse-border)',
+                    },
+                },
+            },
+            series: [
+                {
+                    name: 'Budget Distribution',
+                    data: this.calculateBudgetDistribution(),
+                },
+            ],
+            stroke: {
+                width: 2,
+            },
+            tooltip: {
+                theme: 'dark',
+                y: {
+                    formatter: (val: number): string => `${val}%`,
+                },
+            },
+            xaxis: {
+                labels: {
+                    show: true,
+                    style: {
+                        fontSize: '15px',
+                        fontWeight: '500',
+                    },
+                },
+                categories: this.data.budget_items.map((budget: any) => budget.item),
+            },
+            yaxis: {
+                max: (max: number): number => parseInt((max + 10).toFixed(0), 10),
+                tickAmount: 7,
+            },
+        };
+
+
+
+    }
+    calculateBudgetDistribution(): number[] {
+        const totalCost = this.data.budget_items.reduce((sum: number, budget: any) => sum + parseFloat(budget.cost), 0);
+        return this.data.budget_items.map((budget: any) => Math.round((parseFloat(budget.cost) / totalCost) * 100 * 10) / 10);
+    }
 
 
 

@@ -4,7 +4,7 @@ export interface User {
     firstName: string;
     lastName: string;
     gender: 'male' | 'female';
-    mobilePhone: string;
+    mobile_phone: string;
     isCompetitor: boolean;
     isCustomer: boolean;
     isActive: boolean;
@@ -19,7 +19,7 @@ export interface Competitor {
 
 export interface Customer {
     user: User
-    organizationName: string;
+    organization_name: string;
     biography?: string;
     approved: boolean;
 }

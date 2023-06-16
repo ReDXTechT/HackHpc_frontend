@@ -1,0 +1,239 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div
+        class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    {{competition.title}} Report
+                </h2>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto sm:p-5">
+        <div class="grid grid-cols-12 overflow-x-hidden">
+            <div class="col-span-12 sm:col-span-5 sm:mr-3">
+                <!-- Feedback section -->
+                <form [formGroup]="budgetForm" class="mt-5">
+
+                <div class="flex flex-col mt-5">
+                    <mat-form-field class="flex-auto">
+                        <mat-label>Feedback</mat-label>
+                        <textarea
+                            matInput
+                            [placeholder]="'If you have any suggestions to the customer, please add your thoughts here'"
+                            [rows]="3"
+                            [(ngModel)]="feedbackContent"
+                            formControlName="feedback"
+                            (ngModelChange)="updateDescriptionContent($event)"
+                        ></textarea>
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
+                    </mat-form-field>
+                </div>
+                    <div class="grid sm:grid-cols-3 gap-1 w-full">
+
+                        <div class="mt-5">
+                            <mat-form-field class="w-full">
+                                <mat-label>Start date</mat-label>
+                                <input
+                                    matInput
+                                    [formControlName]="'starting_date'"
+                                    [matDatepicker]="picker3"
+                                    [placeholder]="'Starting Date'"
+                                />
+                                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                                <mat-datepicker #picker3></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="mt-5">
+                            <mat-form-field class="w-full">
+                                <mat-label>Submission date</mat-label>
+                                <input
+                                    matInput
+                                    [formControlName]="'submission_deadline'"
+                                    [matDatepicker]="picker2"
+                                    [placeholder]="'Submission Deadline'"
+                                />
+                                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <div class="mt-5">
+                            <mat-form-field class="w-full">
+                                <mat-label>Winner annoucement date</mat-label>
+
+                                <input
+                                    matInput
+                                    [formControlName]="'winner_announcement_date'"
+                                    [matDatepicker]="picker1"
+                                    [placeholder]="'Winner Announcement Date'"
+
+                                />
+                                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                <!-- Budget items form -->
+                    <div formArrayName="budget_items">
+                        <div *ngFor="let item of budgetItems.controls; let i = index; let first = first; let last = last; trackBy: trackByFn"
+                             class="col-span-12 sm:col-span-6 sm:mr-3 mt-3" [formGroupName]="i">
+                            <!-- Service input -->
+                            <div class="grid grid-cols-2 gap-4">
+                                <div class="flex items-center">
+                                    <mat-form-field class="flex-auto">
+                                        <mat-label>Service</mat-label>
+                                        <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                                  [svgIcon]="'heroicons_solid:tag'"></mat-icon>
+                                        <input matInput formControlName="item" [(ngModel)]="item.value.item" [placeholder]="'dess'">
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex items-center">
+                                    <mat-form-field class="flex-auto">
+                                        <mat-label>Cost</mat-label>
+                                        <input matInput formControlName="cost" [(ngModel)]="item.value.cost" [placeholder]="'amount'"
+                                               type="number">
+                                        <span matPrefix>$</span>
+                                        <span matSuffix>.00</span>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+
+                            <!-- Description textarea -->
+                            <div class="mt-4">
+                                <mat-form-field class="flex-auto w-full">
+                                    <mat-icon svgIcon="heroicons_solid:pencil" class="mr-4"></mat-icon>
+                                    <textarea matInput formControlName="description" [(ngModel)]="item.value.description"
+                                              [placeholder]="'Service Description'" cdkTextareaAutosize></textarea>
+                                </mat-form-field>
+                            </div>
+
+                            <!-- Delete service button -->
+                            <div class="mt-3 sm:flex sm:justify-end">
+                                <div *ngIf="!(first && last)" class="flex items-center group cursor-pointer delete-service"
+                                     (click)="removeService(i)">
+                                    <mat-icon class="icon-size-4 text-primary-500" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                    <span class="ml-1 text-primary-500 group-hover:underline">Delete service</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add service button -->
+                    <div class="group inline-flex items-center mt-3 -ml-4 py-2 px-4 rounded cursor-pointer" (click)="addService()">
+                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                        <span class="ml-2 font-medium text-secondary group-hover:underline">Add another service</span>
+                    </div>
+
+                    <!-- Form buttons -->
+                    <div class="flex justify-end mt-8">
+                        <button class="px-3" mat-flat-button type="reset" (click)="budgetForm.reset();">Reset</button>
+                        <button class="px-3 ml-2" mat-flat-button type="submit" [class.auth-spinner]="loading" [disabled]="loading" (click)="onSubmit()">
+                            {{ (feedbackContent === '' && budgetItems.length === 0) ? 'Submit' : 'Update report' }}
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-span-12 sm:col-span-7 ">
+                <div class="flex justify-center">
+
+                <!-- Report section -->
+                <div class="inline-block text-left print:p-0">
+                    <div   id="report-section" class="p-8 rounded-2xl shadow bg-card print:w-auto print:p-0 print:rounded-none print:shadow-none print:bg-transparent">
+                        <div class="flex flex-col sm:flex-row items-start">
+                            <div class="grid grid-rows-2 place-items-start gap-y-12">
+                                <div class="grid auto-cols-max grid-flow-col gap-x-8">
+                                    <div class="place-self-center w-24">
+                                        <img class="w-24" src="assets/icons/redx.png">
+                                    </div>
+                                    <div class="pl-8 border-l text-md">
+                                        <div class="font-medium">Revolutionary Digital Transformation</div>
+                                        <div>Sfax, Tunisia</div>
+                                        <div>Menzel Chaker Road Km 3.5</div>
+                                        <div>contact@redxt.com</div>
+                                        <div>https://redxt.com</div>
+                                    </div>
+                                </div>
+                                <div class="grid auto-cols-max grid-flow-col gap-x-8">
+                                    <div class="place-self-center w-24 text-center text-xl text-secondary">Report To</div>
+                                    <div class="pl-8 border-l text-md">
+                                        <div class="font-medium">{{customer.organization_name}}</div>
+                                        <div>{{customer.user.firstName}} {{customer.user.lastName}}</div>
+                                        <div>{{customer.user.mobile_phone}}</div>
+                                        <div>{{customer.user.email}}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex flex-col gap-y-1 ml-5 mt-5 ">
+                                <div class="flex items-center">
+                                    <mat-icon class="mr-2" [svgIcon]="'heroicons_outline:clock'"></mat-icon>
+                                    <div class="font-medium mb-2">Estimated period: {{ calculatePeriod() }} days</div>
+                                </div>
+                                <div class="flex justify-start font-medium tracking-tight text-secondary ml-3">
+                                    Starting date:
+                                </div>
+                                <div class="font-medium ml-3">{{ formatDate(budgetForm.get('starting_date').value) }}</div>
+                                <div class="flex justify-start font-medium tracking-tight text-secondary ml-3">
+                                    Submission deadline:
+                                </div>
+                                <div class="font-medium ml-3">{{ formatDate(budgetForm.get('submission_deadline').value) }}</div>
+                                <div class="flex justify-start font-medium tracking-tight text-secondary ml-3">
+                                    Winner announcement date:
+                                </div>
+                                <div class="font-medium ml-3">{{ formatDate(budgetForm.get('winner_announcement_date').value) }}</div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-12 gap-x-1 mt-16">
+                            <!-- Columns -->
+                            <div class="col-span-8 font-medium text-md text-secondary">SERVICE</div>
+                            <div class="col-span-4 font-medium text-md text-right text-secondary">TOTAL COST</div>
+
+                            <!-- Divider -->
+                            <div class="col-span-12 my-4 border-b"></div>
+
+                            <!-- Item -->
+                            <ng-container *ngFor="let item of budgetItems.controls; let i = index">
+                                <div class="col-span-8">
+                                    <div class="text-lg font-medium">{{ item.value.item }}</div>
+                                    <div class="mt-2 text-md text-secondary">{{ item.value.description }}</div>
+                                </div>
+                                <div class="col-span-4 self-center text-right">{{ item.value.cost | currency }}</div>
+
+                                <!-- Divider -->
+                                <div class="col-span-12 my-4 border-b"></div>
+                            </ng-container>
+
+                            <!-- Total -->
+                            <div class="col-span-10 self-center text-2xl font-medium tracking-tight text-secondary">TOTAL</div>
+                            <div class="col-span-2 text-right text-2xl font-medium">{{ totalCost | currency }}</div>
+                        </div>
+
+                        <div class="mt-16">
+                            <div class="font-medium">Please pay within 15 days. Thank you for your business.</div>
+                            <div class="flex items-start mt-4">
+                                <img class="flex-0 w-10 mt-2" src="assets/icons/redx.png">
+                                <div class="ml-6 text-sm text-secondary">{{ feedbackContent }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Form buttons -->
+                    <div class="flex justify-end mt-8">
+                        <button class="px-3 ml-2 mat-icon-button" mat-flat-button type="submit" (click)="generatePDF()">
+                            <mat-icon class="icon-size-5">print</mat-icon>
+                            <span class="ml-2">Print report</span>
+                        </button>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

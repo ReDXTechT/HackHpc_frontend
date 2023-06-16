@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,10 +14,12 @@ import {MatOptionModule} from "@angular/material/core";
 import {AddCompetition} from "./add-competition/add-competition.component";
 import {CompetitionRoutes} from "./competition.routes";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
+import {ReportComponent} from "./report/report.component";
 
 @NgModule({
   declarations: [
-      AddCompetition
+      AddCompetition,
+      ReportComponent
   ],
     imports: [
         CommonModule,
@@ -37,6 +39,6 @@ import {MatSnackBarModule} from "@angular/material/snack-bar";
         MatSnackBarModule,
 
     ],
-  providers: [],
+  providers: [DatePipe],
 })
 export class CompetitionModule {}

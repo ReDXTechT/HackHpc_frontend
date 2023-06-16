@@ -85,7 +85,7 @@ export const appRoutes: Route[] = [
 
             // Apps
             {path: 'apps', children: [
-                {path: 'academy', loadChildren: () => import('app/modules/admin/apps/academy/academy.routes')},
+                {path: 'competitions', loadChildren: () => import('app/modules/admin/apps/academy/academy.routes')},
                 {path: 'competition', loadChildren: () => import('app/modules/admin/apps/competition/competition.module').then((m) => m.CompetitionModule)},
                 {path: 'chat', loadChildren: () => import('app/modules/admin/apps/chat/chat.routes')},
                 {path: 'contacts', loadChildren: () => import('app/modules/admin/apps/contacts/contacts.routes')},

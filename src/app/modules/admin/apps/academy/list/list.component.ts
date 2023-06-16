@@ -33,6 +33,7 @@ export class AcademyListComponent implements OnInit, OnDestroy
     status = '';
     code_type = '';
     title = '';
+
     codeTypes: { value: string, label: string }[] = [
         { value: 'openacc', label: 'OpenACC' },
         { value: 'openmp', label: 'OpenMP' },
@@ -45,12 +46,15 @@ export class AcademyListComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private competitionService: CompetitionService,
+        private route: ActivatedRoute,
+
         private changeDetectorRef: ChangeDetectorRef
     )
     {
     }
     ngOnInit(): void
     {
+
         this.getAllApprovedCompetitions()
 
     }

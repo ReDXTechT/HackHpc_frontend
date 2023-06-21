@@ -14,26 +14,11 @@ export class FuseNavigationService
     {
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Register navigation component
-     *
-     * @param name
-     * @param component
-     */
     registerComponent(name: string, component: any): void
     {
         this._componentRegistry.set(name, component);
     }
 
-    /**
-     * Deregister navigation component
-     *
-     * @param name
-     */
     deregisterComponent(name: string): void
     {
         this._componentRegistry.delete(name);
@@ -147,14 +132,6 @@ export class FuseNavigationService
         return null;
     }
 
-    /**
-     * Utility function that returns the item's parent
-     * with the given id from given navigation
-     *
-     * @param id
-     * @param navigation
-     * @param parent
-     */
     getItemParent(
         id: string,
         navigation: FuseNavigationItem[],

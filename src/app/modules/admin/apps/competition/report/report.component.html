@@ -21,20 +21,21 @@
                 <!-- Feedback section -->
                 <form [formGroup]="budgetForm" class="mt-5">
 
-                <div class="flex flex-col mt-5">
-                    <mat-form-field class="flex-auto">
-                        <mat-label>Feedback</mat-label>
-                        <textarea
-                            matInput
-                            [placeholder]="'If you have any suggestions to the customer, please add your thoughts here'"
-                            [rows]="3"
-                            [(ngModel)]="feedbackContent"
-                            formControlName="feedback"
-                            (ngModelChange)="updateDescriptionContent($event)"
-                        ></textarea>
-                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
-                    </mat-form-field>
-                </div>
+                    <div class="flex flex-col mt-5">
+                        <mat-form-field class="flex-auto">
+                            <mat-label>Feedback</mat-label>
+                            <textarea
+                                matInput
+                                placeholder="If you have any suggestions to the customer, please add your thoughts here"
+                                rows="3"
+                                [(ngModel)]="feedbackContent"
+                                formControlName="feedback"
+                                (ngModelChange)="updateDescriptionContent($event)"
+                            ></textarea>
+                            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
+                        </mat-form-field>
+                    </div>
+
                     <div class="grid sm:grid-cols-3 gap-1 w-full">
 
                         <div class="mt-5">
@@ -79,19 +80,37 @@
                             </mat-form-field>
                         </div>
                     </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <mat-form-field class="flex-auto">
+                                <mat-label>Instance type</mat-label>
+                                <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:tag'"></mat-icon>
+                                <input matInput formControlName="instance_type" [placeholder]="'instance type'">
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <mat-form-field class="flex-auto">
+                                <mat-label>Custom ami</mat-label>
+                                <input matInput formControlName="custom_ami" [placeholder]="'ami'"
+                                >
+                            </mat-form-field>
+                        </div>
+                    </div>
 
                 <!-- Budget items form -->
                     <div formArrayName="budget_items">
                         <div *ngFor="let item of budgetItems.controls; let i = index; let first = first; let last = last; trackBy: trackByFn"
                              class="col-span-12 sm:col-span-6 sm:mr-3 mt-3" [formGroupName]="i">
                             <!-- Service input -->
+
                             <div class="grid grid-cols-2 gap-4">
                                 <div class="flex items-center">
                                     <mat-form-field class="flex-auto">
                                         <mat-label>Service</mat-label>
                                         <mat-icon matPrefix class="hidden sm:flex icon-size-5"
                                                   [svgIcon]="'heroicons_solid:tag'"></mat-icon>
-                                        <input matInput formControlName="item" [(ngModel)]="item.value.item" [placeholder]="'dess'">
+                                        <input matInput formControlName="item" [(ngModel)]="item.value.item" [placeholder]="'service'">
                                     </mat-form-field>
                                 </div>
                                 <div class="flex items-center">
@@ -135,7 +154,7 @@
                     <div class="flex justify-end mt-8">
                         <button class="px-3" mat-flat-button type="reset" (click)="budgetForm.reset();">Reset</button>
                         <button class="px-3 ml-2" mat-flat-button type="submit" [class.auth-spinner]="loading" [disabled]="loading" (click)="onSubmit()">
-                            {{ (feedbackContent === '' && budgetItems.length === 0) ? 'Submit' : 'Update report' }}
+                            {{ (budget === undefined) ? 'Submit' : 'Update report' }}
                         </button>
                     </div>
 
@@ -164,10 +183,10 @@
                                 <div class="grid auto-cols-max grid-flow-col gap-x-8">
                                     <div class="place-self-center w-24 text-center text-xl text-secondary">Report To</div>
                                     <div class="pl-8 border-l text-md">
-                                        <div class="font-medium">{{customer.organization_name}}</div>
-                                        <div>{{customer.user.firstName}} {{customer.user.lastName}}</div>
-                                        <div>{{customer.user.mobile_phone}}</div>
-                                        <div>{{customer.user.email}}</div>
+                                        <div class="font-medium">{{customer?.organization_name}}</div>
+                                        <div>{{customer?.user?.firstName}} {{customer?.user?.lastName}}</div>
+                                        <div>{{customer?.user?.mobile_phone}}</div>
+                                        <div>{{customer?.user?.email}}</div>
                                     </div>
                                 </div>
                             </div>
@@ -220,7 +239,8 @@
                             <div class="font-medium">Please pay within 15 days. Thank you for your business.</div>
                             <div class="flex items-start mt-4">
                                 <img class="flex-0 w-10 mt-2" src="assets/icons/redx.png">
-                                <div class="ml-6 text-sm text-secondary">{{ feedbackContent }}</div>
+                                <!-- Add inline style to the div -->
+                                <div class="ml-6 text-sm text-secondary" style="white-space: pre-wrap;">{{ feedbackContent }}</div>
                             </div>
                         </div>
                     </div>

@@ -15,12 +15,14 @@ import {AddCompetition} from "./add-competition/add-competition.component";
 import {CompetitionRoutes} from "./competition.routes";
 import {MatSnackBarModule} from "@angular/material/snack-bar";
 import {ReportComponent} from "./report/report.component";
+import {ChangeBgDirective} from "../academy/details/quizz_passing/change-bg.directives";
 
 @NgModule({
-  declarations: [
-      AddCompetition,
-      ReportComponent
-  ],
+    declarations: [
+        AddCompetition,
+        ReportComponent,
+        ChangeBgDirective
+    ],
     imports: [
         CommonModule,
         CompetitionRoutes,
@@ -39,6 +41,9 @@ import {ReportComponent} from "./report/report.component";
         MatSnackBarModule,
 
     ],
-  providers: [DatePipe],
+    providers: [DatePipe],
+    exports: [
+        ChangeBgDirective
+    ]
 })
 export class CompetitionModule {}

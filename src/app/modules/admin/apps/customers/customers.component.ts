@@ -3,13 +3,13 @@ import { RouterOutlet } from '@angular/router';
 
 @Component({
     selector       : 'contacts',
-    templateUrl    : './contacts.component.html',
+    templateUrl    : './customers.component.html',
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone     : true,
     imports        : [RouterOutlet],
 })
-export class ContactsComponent
+export class CustomersComponent
 {
     /**
      * Constructor

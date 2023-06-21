@@ -14,26 +14,10 @@ export class NavigationService
     constructor(private _httpClient: HttpClient)
     {
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Accessors
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Getter for navigation
-     */
     get navigation$(): Observable<Navigation>
     {
         return this._navigation.asObservable();
     }
-
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Get all navigation data
-     */
     get(): Observable<Navigation>
     {
         return this._httpClient.get<Navigation>('api/common/navigation').pipe(

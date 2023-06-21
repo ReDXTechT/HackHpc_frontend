@@ -21,6 +21,7 @@ import {MatDatepickerModule} from "@angular/material/datepicker";
 import { CommonModule } from '@angular/common';
 import {CompetitionService} from "../../../../../core/services/competition.service";
 import {MatSnackBar} from "@angular/material/snack-bar";
+import {Router} from "@angular/router";
 
 @Component({
     selector     : 'add-competition',
@@ -33,6 +34,7 @@ export class AddCompetition implements OnInit
     constructor(private _formBuilder: UntypedFormBuilder,
                 private competitionService: CompetitionService,
                 private _snackBar: MatSnackBar,
+                private _router: Router,
 
                 private _changeDetectorRef: ChangeDetectorRef,)
     {
@@ -251,7 +253,9 @@ export class AddCompetition implements OnInit
                         'bottom',
                         'center'
                     );
-            },
+                    this._router.navigate(['/apps/competitions']);
+
+                },
                 error => {
                     console.error('Error occurred while creating competition:', error);
                     this.loading = false;

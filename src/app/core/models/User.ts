@@ -10,16 +10,22 @@ export interface User {
     isActive: boolean;
     isStaff: boolean;
     image: string;
+    role : string;
+    access : string;
 }
 
 export interface Competitor {
     user: User
     skills: string;
+    birthdate : Date;
+    biography : string
 }
 
 export interface Customer {
     user: User
     organization_name: string;
     biography?: string;
-    approved: boolean;
+    birthdate: Date;
+    address : string;
+    occupation : string
 }

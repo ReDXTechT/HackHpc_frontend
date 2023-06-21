@@ -17,6 +17,9 @@ export class CompetitionService {
     getAllApprovedCompetitions(): Observable<Competition[]> {
         return this.http.get<Competition[]>(`${this.baseUrl}/competitions`);
     }
+    getAllPendingCompetitions(): Observable<Competition[]> {
+        return this.http.get<Competition[]>(`${this.baseUrl}/competitions/pending`);
+    }
     getAllApprovedNotCompletedCompetitions(): Observable<Competition[]> {
         return this.http.get<Competition[]>(`${this.baseUrl}/competitions/approved_notCompleted`);
     }
@@ -43,11 +46,30 @@ export class CompetitionService {
         return this.http.post<Competition>(`${this.baseUrl}/create_competitions`, competition);
     }
 
-    // update(id: number, review: Review): Observable<Review> {
-    //     return this.http.put<Review>(`${this.baseUrl}${id}/`, review);
-    // }
-    //
-    deleteCompetition(competitionId: string): Observable<any> {
-        return this.http.delete(`${this.baseUrl}/competitions/${competitionId}/delete`);
+    updateCompetitionOverview(competitionId: number, competition: any): Observable<any> {
+        return this.http.put<any>(`${this.baseUrl}/competition-update-overview/${competitionId}`, competition);
+    }
+
+    approveCompetition(competitionId: string): Observable<any> {
+        return this.http.post(`${this.baseUrl}/competition/${competitionId}/approve`,{});
+    }
+    rejectCompetition(competitionId: string): Observable<any> {
+        return this.http.post(`${this.baseUrl}/competition/${competitionId}/reject`,{});
+    }
+
+    getAllWaitingListByCompetitionId(competitionId: number): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/competitions/${competitionId}/competitors/waiting`);
+    }
+    getTeamByCompetitionId(competitionId : any): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/competitions/${competitionId}/approved-competitors`);
+    }
+    checkCompetitorApprovedByInCompetition(competitorId: number, competitionId : any): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/check-competitor-approval-status/${competitorId}/${competitionId}`);
+    }
+    approveJoinRequest(requestId: string): Observable<any> {
+        return this.http.put(`${this.baseUrl}/join-request/${requestId}/approve`,{});
+    }
+    rejectJoinRequest(requestId: string): Observable<any> {
+        return this.http.put(`${this.baseUrl}/join-request/${requestId}/reject`,{});
     }
 }

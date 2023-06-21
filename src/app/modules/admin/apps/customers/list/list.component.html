@@ -25,15 +25,15 @@
 
                     <!-- Title -->
                     <div>
-                        <div class="text-4xl font-extrabold tracking-tight leading-none">Contacts</div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">Customers</div>
                         <div class="ml-0.5 font-medium text-secondary">
-                            <ng-container *ngIf="contactsCount > 0">
-                                {{contactsCount}}
+                            <ng-container *ngIf="customersCount > 0">
+                                {{customersCount}}
                             </ng-container>
-                            {{contactsCount | i18nPlural: {
-                            '=0'   : 'No contacts',
-                            '=1'   : 'contact',
-                            'other': 'contacts'
+                            {{customersCount | i18nPlural: {
+                            '=0'   : 'No customers',
+                            '=1'   : 'Customer',
+                            'other': 'Customers'
                         } }}
                         </div>
                     </div>
@@ -53,63 +53,63 @@
                                     matInput
                                     [formControl]="searchInputControl"
                                     [autocomplete]="'off'"
-                                    [placeholder]="'Search contacts'">
+                                    [placeholder]="'Search customers'">
                             </mat-form-field>
                         </div>
-                        <!-- Add contact button -->
+                        <!-- Add customer button -->
                         <button
                             class="ml-4"
                             mat-flat-button
                             [color]="'primary'"
-                            (click)="createContact()">
+                            (click)="createcustomer()">
                             <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
                             <span class="ml-2 mr-1">Add</span>
                         </button>
                     </div>
                 </div>
 
-                <!-- Contacts list -->
+                <!-- customers list -->
                 <div class="relative">
-                    <ng-container *ngIf="contacts$ | async as contacts">
-                        <ng-container *ngIf="contacts.length; else noContacts">
-                            <ng-container *ngFor="let contact of contacts; let i = index; trackBy: trackByFn">
+                    <ng-container *ngIf="customers$ | async as customers">
+                        <ng-container *ngIf="customers.length; else nocustomers">
+                            <ng-container *ngFor="let customer of customers; let i = index; trackBy: trackByFn">
                                 <!-- Group -->
-                                <ng-container *ngIf="i === 0 || contact.name.charAt(0) !== contacts[i - 1].name.charAt(0)">
+                                <ng-container *ngIf="i === 0 || customer.user.firstName.charAt(0) !== customers[i - 1].user.firstName.charAt(0)">
                                     <div class="z-10 sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-50 dark:bg-gray-900">
-                                        {{contact.name.charAt(0)}}
+                                        {{customer.user.firstName.charAt(0)}}
                                     </div>
                                 </ng-container>
-                                <!-- Contact -->
+                                <!-- customer -->
                                 <a
                                     class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer border-b"
-                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedContact || selectedContact.id !== contact.id,
-                                                'bg-primary-50 dark:bg-hover': selectedContact && selectedContact.id === contact.id}"
-                                    [routerLink]="['./', contact.id]">
-                                    <div class="flex flex-0 items-center justify-center w-10 h-10 rounded-full overflow-hidden">
-                                        <ng-container *ngIf="contact.avatar">
+                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedcustomer || selectedcustomer.user.id !== customer.user.id,
+                                                'bg-primary-50 dark:bg-hover': selectedcustomer && selectedcustomer.user.id === customer.user.id}"
+                                    [routerLink]="['./', customer.user.id]">
+                                    <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full  overflow-hidden">
+                                        <ng-container *ngIf="customer.user.image">
                                             <img
-                                                class="object-cover w-full h-full"
-                                                [src]="contact.avatar"
-                                                alt="Contact avatar"/>
+                                                class="object-contain w-full h-full"
+                                                [src]="customer.user.image"
+                                                alt="customer avatar"/>
                                         </ng-container>
-                                        <ng-container *ngIf="!contact.avatar">
+                                        <ng-container *ngIf="!customer.user.image">
                                             <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                                {{contact.name.charAt(0)}}
+                                                {{customer.user.firstName.charAt(0)}}
                                             </div>
                                         </ng-container>
                                     </div>
                                     <div class="min-w-0 ml-4">
-                                        <div class="font-medium leading-5 truncate">{{contact.name}}</div>
-                                        <div class="leading-5 truncate text-secondary">{{contact.title}}</div>
+                                        <div class="font-medium leading-5 truncate">{{customer.user.firstName}} {{customer.user.lastName}}</div>
+                                        <div class="leading-5 truncate text-secondary">{{customer.occupation}}</div>
                                     </div>
                                 </a>
                             </ng-container>
                         </ng-container>
                     </ng-container>
 
-                    <!-- No contacts -->
-                    <ng-template #noContacts>
-                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no contacts!</div>
+                    <!-- No customers -->
+                    <ng-template #nocustomers>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no customers!</div>
                     </ng-template>
 
                 </div>

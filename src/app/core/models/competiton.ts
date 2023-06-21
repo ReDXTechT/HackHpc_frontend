@@ -20,7 +20,7 @@ export interface Competition {
     status: 'pending' | 'update_pending_approval' | 'approved' | 'rejected' | 'Running'| 'Terminated' | 'About_to_start';
     competitors?: Competitor[];
     target_architecture: TargetArchitecture;
-    quiz : Quiz
+    quizzes : Quiz[]
 }
 
 export interface Prize {
@@ -33,13 +33,15 @@ export interface Prize {
 export interface Quiz {
     id?: number;
     competitionId: number;
-    minimalScore: number;
+    minimal_score: number;
+    questions : Question[]
 }
 
 export interface Question {
     id?: number;
     text: string;
     quizId: number;
+    options : Option[]
 }
 
 export interface Option {

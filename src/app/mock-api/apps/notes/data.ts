@@ -364,7 +364,7 @@ export const notes = [
     },
     {
         id       : '46214383-f8e7-44da-aa2e-0b685e0c5027',
-        title    : 'Team Meeting',
+        title    : 'TeamComponent Meeting',
         content  : 'Talk about the future of the web apps',
         tasks    : null,
         image    : null,

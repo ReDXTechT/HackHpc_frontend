@@ -16,6 +16,8 @@ import { FuseVerticalNavigationSpacerItemComponent } from '@fuse/components/navi
 import { FuseScrollbarDirective } from '@fuse/directives/scrollbar/scrollbar.directive';
 import { FuseUtilsService } from '@fuse/services/utils/utils.service';
 import { delay, filter, merge, ReplaySubject, Subject, Subscription, takeUntil } from 'rxjs';
+import {MatIconModule} from "@angular/material/icon";
+import {AuthenticationService} from "../../../../app/core/services/authentication.service";
 
 @Component({
     selector       : 'fuse-vertical-navigation',
@@ -26,7 +28,7 @@ import { delay, filter, merge, ReplaySubject, Subject, Subscription, takeUntil }
     changeDetection: ChangeDetectionStrategy.OnPush,
     exportAs       : 'fuseVerticalNavigation',
     standalone     : true,
-    imports        : [FuseScrollbarDirective, NgFor, NgIf, FuseVerticalNavigationAsideItemComponent, FuseVerticalNavigationBasicItemComponent, FuseVerticalNavigationCollapsableItemComponent, FuseVerticalNavigationDividerItemComponent, FuseVerticalNavigationGroupItemComponent, FuseVerticalNavigationSpacerItemComponent],
+    imports: [FuseScrollbarDirective, NgFor, NgIf, FuseVerticalNavigationAsideItemComponent, FuseVerticalNavigationBasicItemComponent, FuseVerticalNavigationCollapsableItemComponent, FuseVerticalNavigationDividerItemComponent, FuseVerticalNavigationGroupItemComponent, FuseVerticalNavigationSpacerItemComponent, MatIconModule],
 })
 export class FuseVerticalNavigationComponent implements OnChanges, OnInit, AfterViewInit, OnDestroy
 {
@@ -75,6 +77,8 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         private _animationBuilder: AnimationBuilder,
         private _changeDetectorRef: ChangeDetectorRef,
         @Inject(DOCUMENT) private _document: Document,
+
+
         private _elementRef: ElementRef,
         private _renderer2: Renderer2,
         private _router: Router,
@@ -792,4 +796,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         // Execute the observable
         this.openedChanged.next(open);
     }
+
+
+
 }

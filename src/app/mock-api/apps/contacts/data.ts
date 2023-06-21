@@ -4423,7 +4423,7 @@ export const tags = [
     },
     {
         id   : '3eaab175-ec0d-4db7-bc3b-efc633c769be',
-        title: 'Baseball Team',
+        title: 'Baseball TeamComponent',
     },
     {
         id   : 'cbde2486-5033-4e09-838e-e901b108cd41',

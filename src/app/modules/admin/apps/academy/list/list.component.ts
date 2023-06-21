@@ -29,7 +29,7 @@ import {Competition} from "../../../../../core/models/competiton";
 export class AcademyListComponent implements OnInit, OnDestroy
 {
     hideCompleted$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    competitions: Competition[] = [];
+    competitions: any[] = [];
     status = '';
     code_type = '';
     title = '';
@@ -132,26 +132,7 @@ export class AcademyListComponent implements OnInit, OnDestroy
         } else {
             this.getAllApprovedCompetitions();
         }
-        this.changeDetectorRef.detectChanges();
     }
-
-    // getProgressValue(competition: Competition): number {
-    //     if (competition.status === 'Running') {
-    //         const startDate = new Date(competition.starting_date).getTime();
-    //         const winnerDate = new Date(competition.winner_announcement_date).getTime();
-    //         const currentDate = new Date().getTime();
-    //         const totalDuration = winnerDate - startDate;
-    //         const elapsedDuration = currentDate - startDate;
-    //         console.log('startDate',competition.starting_date)
-    //         console.log('winnerDate',winnerDate)
-    //         console.log('currentDate',currentDate)
-    //         console.log('totalDuration',totalDuration)
-    //         console.log('elapsedDuration',elapsedDuration)
-    //         console.log('(elapsedDuration / totalDuration) * 100',(elapsedDuration / totalDuration) * 100)
-    //         return (elapsedDuration / totalDuration) * 100;
-    //     }
-    //     return 0;
-    // }
     getProgressValue(competition: Competition): number {
         if (competition.status === 'Running') {
             const startDate = new Date(competition.starting_date).getTime();

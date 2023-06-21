@@ -18,12 +18,12 @@ export class UsersService {
         return this.http.get<Customer>(`${this.baseUrl}/customer/${customerId}`);
     }
 
-    createCompetitionBudget(budget: any, competitionId: string): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/add_competition_budget/${competitionId}`, budget);
+    getAllCustomers(): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/customers`);
     }
 
-    updateCompetitionReport(competitionId: any, competition: any): Observable<any> {
-        return this.http.put<any>(`${this.baseUrl}/competition-budget-report/${competitionId}`, competition);
+    submitScore(competitionId: any, competitiorId: any,quizId:any, score:any): Observable<any> {
+        return this.http.post<any>(`${this.baseUrl}/competition/${competitionId}/competitor/${competitiorId}/quiz/${quizId}/submit-score`, score);
     }
     //
     deleteCompetition(competitionId: string): Observable<any> {

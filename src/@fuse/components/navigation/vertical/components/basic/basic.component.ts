@@ -2,12 +2,13 @@ import { NgClass, NgIf, NgTemplateOutlet } from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { IsActiveMatchOptions, RouterLink, RouterLinkActive } from '@angular/router';
+import {IsActiveMatchOptions, Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { FuseNavigationService } from '@fuse/components/navigation/navigation.service';
 import { FuseNavigationItem } from '@fuse/components/navigation/navigation.types';
 import { FuseVerticalNavigationComponent } from '@fuse/components/navigation/vertical/vertical.component';
 import { FuseUtilsService } from '@fuse/services/utils/utils.service';
 import { Subject, takeUntil } from 'rxjs';
+import {AuthenticationService} from "../../../../../../app/core/services/authentication.service";
 
 @Component({
     selector       : 'fuse-vertical-navigation-basic-item',
@@ -32,12 +33,11 @@ export class FuseVerticalNavigationBasicItemComponent implements OnInit, OnDestr
         private _changeDetectorRef: ChangeDetectorRef,
         private _fuseNavigationService: FuseNavigationService,
         private _fuseUtilsService: FuseUtilsService,
+        private router: Router,
+        private authService: AuthenticationService,
     )
     {
-        // Set the equivalent of {exact: false} as default for active match options.
-        // We are not assigning the item.isActiveMatchOptions directly to the
-        // [routerLinkActiveOptions] because if it's "undefined" initially, the router
-        // will throw an error and stop working.
+
         this.isActiveMatchOptions = this._fuseUtilsService.subsetMatchOptions;
     }
 
@@ -50,9 +50,6 @@ export class FuseVerticalNavigationBasicItemComponent implements OnInit, OnDestr
      */
     ngOnInit(): void
     {
-        // Set the "isActiveMatchOptions" either from item's
-        // "isActiveMatchOptions" or the equivalent form of
-        // item's "exactMatch" option
         this.isActiveMatchOptions =
             this.item.isActiveMatchOptions ?? this.item.exactMatch
                 ? this._fuseUtilsService.exactMatchOptions
@@ -83,4 +80,21 @@ export class FuseVerticalNavigationBasicItemComponent implements OnInit, OnDestr
         this._unsubscribeAll.next(null);
         this._unsubscribeAll.complete();
     }
+    handleItemClick(item: FuseNavigationItem): void {
+        if (item.id === 'logout') {
+            this.authService.logout().subscribe((res) => {
+                if (!res.success) {
+                    console.log(this.authService.currentUser)
+                    // this.router.navigate(['/sign-in']);
+                    this.router.navigate(['/sign-in'], { queryParams: { returnUrl: '/home' } });
+                }
+            });
+            // perform the logout operation here
+            } else if (item.function) {
+                // If it has a function, call it
+                item.function(item);
+            }
+        }
+
+
 }

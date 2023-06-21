@@ -10,60 +10,52 @@
                     <div class="flex flex-col min-w-0 ml-4">
                         <div class="flex items-center mb-3">
                             <div
-                                class="ml-1.5 leading-6 truncate text-secondary font-bold text-3xl">{{competition.title}}</div>
+                                class="ml-1.5 leading-6 truncate text-secondary font-bold text-3xl">{{competition?.title}}</div>
                         </div>
                         <hr class="my-4 border-b border-gray-300 mt-4">
-                        <div class="flex flex-auto items-center min-w-0">
-                            <div class="flex flex-col min-w-0 ml-4">
-                                <ng-container *transloco="let t">
-                                    <div
-                                        class="text-2xl md:text-5xl font-semibold tracking-tight leading-7 md:leading-snug truncate">{{t('welcome-back')}}
-                                        , Brian!
-                                    </div>
-                                </ng-container>
-                                <div class="flex justify-between">
-                                    <div>
-                                        <div class="flex items-center mt-2">
-                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:user'"></mat-icon>
-                                            <div class="font-bold">{{competition?.competitors.length}}</div>
-                                        </div>
-                                        <div class="text-sm text-gray-500">Registered</div>
-                                    </div>
-                                    <div class="mt-2 ml-15 flex justify-center">
-                                        <div>
-                                            <div class="flex items-center justify-between">
-                                                <div class="font-bold text-center">{{ endsInText }}</div>
-                                            </div>
-
-                                            <div class="flex items-center justify-between">
-                                                <div *ngIf="competition?.status != 'Terminated'"
-                                                     class="flex items-center">
-                                                    <!-- Display the calculated values based on the competition status -->
-                                                    <span class="font-bold mr-1">{{ days }}</span> Days
-                                                    <span class="font-bold mx-1">{{ hours }}</span> Hours
-                                                    <span class="font-bold ml-1 mr-1">{{ minutes }}</span> Minutes
-                                                </div>
-                                                <div *ngIf="competition?.status == 'Terminated'"
-                                                     class="flex items-center">
-                                                    <!-- Display the calculated values based on the competition status -->
-                                                    <span
-                                                        class="font-bold mr-1">{{ competition?.winner_announcement_date }}</span>
-
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="ml-10">
-                                        <div class="flex items-center mt-2">
-                                            <mat-icon svgIcon="feather:award" class="mr-1"></mat-icon>
-                                            <div class="font-bold mr-4">Prizes</div>
-                                        </div>
-                                        <div class="text-l text-gray-600 ml-2">1st place :
-                                            $ {{competition?.prizes[0].amount}}</div>
-                                    </div>
-
-
+                        <div class="flex flex-col md:flex-row items-start md:items-center md:space-x-4 w-full p-2 md:p-0">
+                            <div>
+                                <div class="flex items-center mt-2">
+                                    <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:user'"></mat-icon>
+                                    <div class="font-bold">{{customer?.user?.firstName}} {{customer?.user?.lastName}}</div>
                                 </div>
+                                <div class="text-sm text-gray-500">Sponsor</div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center w-full md:w-auto">
+                                <div class="flex items-center mb-2 md:mb-0">
+                                    <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:users'"></mat-icon>
+                                    <div class="font-bold">{{competition?.max_competitors}}</div>
+                                </div>
+                                <div class="text-sm text-gray-500">Max competitors</div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center w-full md:w-auto">
+                                <div class="flex items-center mb-2 md:mb-0">
+                                    <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:users'"></mat-icon>
+                                    <div class="font-bold">{{competition?.competitors.length}}</div>
+                                </div>
+                                <div class="text-sm text-gray-500">Registered</div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center w-full md:w-auto">
+                                <div class="font-bold text-center mb-2 md:mb-0">{{ endsInText }}</div>
+                                <div class="flex items-center justify-between">
+                                    <ng-container *ngIf="competition?.status != 'Terminated'">
+                                        <!-- Display the calculated values based on the competition status -->
+                                        <span class="font-bold mr-1">{{ days }}</span> Days
+                                        <span class="font-bold mx-1">{{ hours }}</span> Hours
+                                        <span class="font-bold ml-1 mr-1">{{ minutes }}</span> Minutes
+                                    </ng-container>
+                                    <ng-container *ngIf="competition?.status == 'Terminated'">
+                                        <!-- Display the calculated values based on the competition status -->
+                                        <span class="font-bold mr-1">{{ competition?.winner_announcement_date }}</span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center w-full md:w-auto">
+                                <div class="flex items-center mb-2 md:mb-0">
+                                    <mat-icon svgIcon="feather:award" class="mr-1"></mat-icon>
+                                    <div class="font-bold mr-4">Prizes</div>
+                                </div>
+                                <div class="text-l text-gray-600 ml-2">1st place : $ {{competition?.prizes[0].amount}}</div>
                             </div>
                         </div>
                         <hr class="my-4 border-b border-gray-300">
@@ -72,26 +64,43 @@
 
                 <!-- Actions -->
                 <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
-                    <div *ngIf="competition.status === 'About_to_start'">
-                        <button mat-flat-button [routerLink]="'/apps/competition/competition-report/' + competition.id"
+                    <div *ngIf="competition?.status === 'About_to_start'&& role=='Customer'">
+<!--                        <button mat-flat-button [routerLink]="'/apps/competition/competition-report/' + competition.id"-->
+<!--                                [color]="'primary'">-->
+<!--                            <mat-icon svgIcon="mat_solid:edit"></mat-icon>-->
+<!--                            <span class="ml-2">-->
+<!--                              <ng-container *ngIf="data.length === 0; else updateText">Create Report</ng-container>-->
+<!--                              <ng-template #updateText>Update Report</ng-template>-->
+<!--                            </span>-->
+<!--                        </button>-->
+                        <button class=" mr-2" mat-flat-button [routerLink]="'/apps/competition/competition-report/' + competition.id"
                                 [color]="'primary'">
                             <mat-icon svgIcon="mat_solid:edit"></mat-icon>
-                            <span class="ml-2">
-                              <ng-container *ngIf="data.length === 0; else updateText">Create Report</ng-container>
-                              <ng-template #updateText>Update Report</ng-template>
-                            </span>
+                            <span class="ml-2">Report</span>
                         </button>
                     </div>
 
-                    <div *ngIf="competition.status === 'About_to_start'">
+                    <div *ngIf="competition?.status === 'About_to_start' && role=='Competitor'">
 
-                    <button
-                        mat-flat-button
-                        [color]="'primary'">
-                        <mat-icon svgIcon="mat_solid:person_add"></mat-icon>
+                        <button *ngIf="approved === true && !register" mat-flat-button style="background-color: rgba(0,128,0,0.8); color: white;">
+                            <mat-icon svgIcon="heroicons_solid:check"></mat-icon>
+                            <span class="ml-2">Already Registered</span>
+                        </button>
 
-                        <span class="ml-2">Register</span>
-                    </button>
+                        <button *ngIf="approved === false && !register" mat-flat-button style="background-color: gray; color: white;">
+                            <mat-icon svgIcon="heroicons_solid:check"></mat-icon>
+                            <span class="ml-2">Request Sent</span>
+                        </button>
+
+
+                        <button *ngIf="register && !approved"
+                            mat-flat-button
+                            (click)="quizPassing(competition)"
+                            [color]="'primary'">
+                            <mat-icon svgIcon="mat_solid:person_add"></mat-icon>
+
+                            <span class="ml-2">Register</span>
+                        </button>
                     </div>
 
                 </div>
@@ -103,9 +112,9 @@
             >
                 <div class="flex items-center">
                     <div class="flex items-center mt-6 sm:mt-0  space-x-3">
-                        <mat-icon svgIcon="mat_solid:location_on"></mat-icon>
+                        <mat-icon svgIcon="heroicons_outline:building-office-2"></mat-icon>
 
-                        <div class="font-medium leading-6 truncate">Online</div>
+                        <div class="font-medium leading-6 truncate">Company : {{customer?.organization_name}}</div>
                     </div>
                 </div>
 
@@ -127,14 +136,20 @@
                     <ng-template matTabContent>
                         <!-- Summary -->
                         <div class="max-w-full mb-12 p-8 rounded-2xl shadow bg-card">
-                            <div>
+                            <div class="flex items-center">
                                 <h2 class="my-0 font-bold text-2xl">Challenge Overview</h2>
+                                <span class="ml-auto">
+                                    <button mat-icon-button (click)="editOverview(competition)">
+                                        <mat-icon svgIcon="feather:edit"></mat-icon>
+                                    </button>
+                                </span>
                             </div>
+
                             <hr class="mt-6">
                             <div class="mt-8">
                                 <span class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Challenge Description</span>
                                 <ul class="mt-4 ml-6">
-                                    <li>{{competition.project_description}}</li>
+                                    <li>{{competition?.project_description}}</li>
                                 </ul>
                             </div>
 
@@ -169,14 +184,14 @@
                             <div class="mt-8">
                                 <span class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Eligibility</span>
                                 <ul class="mt-4 ml-6">
-                                    <li>{{competition.skills_required}}</li>
+                                    <li>{{competition?.skills_required}}</li>
                                 </ul>
                             </div>
 
                             <div class="mt-8">
                                 <span class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Optimization guidelines</span>
                                 <ul class="mt-4 ml-6">
-                                    <li>{{competition.optimization_guidelines}}</li>
+                                    <li>{{competition?.optimization_guidelines}}</li>
                                 </ul>
                             </div>
 
@@ -257,7 +272,7 @@
                                     <ng-container *ngFor="let prize of competition.prizes; let i = index">
                                         <li class="ml-2">
                                             <span class="font-bold text-lg">{{ prize.level }} : </span>
-                                            $ {{ prize.amount }}
+                                            $ {{ prize?.amount }}
                                         </li>
                                     </ng-container>
                                 </ul>
@@ -414,60 +429,36 @@
                     </ng-template>
                 </mat-tab>
 
-                <!-- Team -->
-                <mat-tab label="Team" id="Team">
+                <!-- TeamComponent -->
+                <mat-tab label="Condidats" id="Team">
                     <ng-template mat-tab-label>
                         <span class="inline-flex items-center space-x-2">
-                            <span class="">Team</span>
+                            <span class="">Condidats</span>
                             <span
                                 class="px-2 py-1 text-sm rounded-full bg-primary-100 text-on-primary-100">{{competition?.competitors.length}}</span>
                         </span>
                     </ng-template>
+                    <team [competitionId]="competition.id"></team>
+                </mat-tab>
+
+                <!-- TeamComponent -->
+                <mat-tab label="Leaderbord" id="Leaderbord">
                     <ng-template matTabContent>
-                        <!--                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 w-full min-w-0">-->
-                        <!--                            <ng-container *ngFor="let member of data.teamMembers">-->
-                        <!--                                <div class="flex flex-col flex-auto items-center bg-card shadow rounded-2xl overflow-hidden">-->
-                        <!--                                    &lt;!&ndash; Avatar & Info &ndash;&gt;-->
-                        <!--                                    <div class="flex flex-col flex-auto w-full p-8 text-center">-->
-                        <!--                                        <div class="w-32 h-32 mx-auto rounded-full overflow-hidden">-->
-                        <!--                                            <img-->
-                        <!--                                                class="w-full h-full object-cover"-->
-                        <!--                                                [src]="member.avatar">-->
-                        <!--                                        </div>-->
-                        <!--                                        <div class="mt-6 font-medium">{{member.name}}</div>-->
-                        <!--                                        <div class="text-secondary">{{member.title}}</div>-->
-                        <!--                                    </div>-->
-                        <!--                                    &lt;!&ndash; Email & Phone &ndash;&gt;-->
-                        <!--                                    <div class="flex items-center w-full border-t divide-x">-->
-                        <!--                                        <a-->
-                        <!--                                            class="flex flex-auto items-center justify-center py-4 hover:bg-hover"-->
-                        <!--                                            [href]="'mailto:' + member.email">-->
-                        <!--                                            <mat-icon-->
-                        <!--                                                class="icon-size-5 text-hint"-->
-                        <!--                                                [svgIcon]="'heroicons_solid:envelope'"></mat-icon>-->
-                        <!--                                            <span class="ml-2">Email</span>-->
-                        <!--                                        </a>-->
-                        <!--                                        <a-->
-                        <!--                                            class="flex flex-auto items-center justify-center py-4 hover:bg-hover"-->
-                        <!--                                            [href]="'tel:' + member.phone">-->
-                        <!--                                            <mat-icon-->
-                        <!--                                                class="icon-size-5 text-hint"-->
-                        <!--                                                [svgIcon]="'heroicons_solid:phone'"></mat-icon>-->
-                        <!--                                            <span class="ml-2">Call</span>-->
-                        <!--                                        </a>-->
-                        <!--                                    </div>-->
-                        <!--                                </div>-->
-                        <!--                            </ng-container>-->
-                        <!--                        </div>-->
+                        <leaderbord></leaderbord>
                     </ng-template>
                 </mat-tab>
 
-                <!-- Leaderbord -->
-                <mat-tab label="Leaderbord" id="Leaderbord">
+                <mat-tab label="Waiting List" id="WaitingList">
+                    <ng-template mat-tab-label>
+                        <span class="inline-flex items-center space-x-2">
+                            <span class="">Waiting List</span>
+                            <span
+                                class="px-2 py-1 text-sm rounded-full bg-primary-100 text-on-primary-100">{{waitingList?.length}}</span>
+                        </span>
+                    </ng-template>
                     <ng-template matTabContent>
-                        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 w-full min-w-0">
+                        <waiting-list [competitionId]="competition.id"></waiting-list>
 
-                        </div>
                     </ng-template>
                 </mat-tab>
 

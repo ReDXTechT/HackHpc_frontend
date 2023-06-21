@@ -46,14 +46,17 @@ export class ReportComponent implements OnInit
     {
     }
     async ngOnInit(): Promise<void> {
+        console.log(this.budget)
+
         this.competitionId = this.route.snapshot.paramMap.get('id');
         this.competition = await this.getCompetitionById(this.competitionId);
         this.getBudgetDetailsByCompetitionId(this.competitionId);
-        console.log(this.budget)
         this.budgetForm = this._formBuilder.group({
             feedback : [this.budget?.feedback || '', Validators.required],
             starting_date : [this.competition?.starting_date || '', Validators.required],
             submission_deadline : [this.competition?.submission_deadline || '', Validators.required],
+            instance_type : [this.competition?.instance_type || '', Validators.required],
+            custom_ami : [this.competition?.ami || '', Validators.required],
             winner_announcement_date : [this.competition?.winner_announcement_date || '', Validators.required],
             budget_items: this._formBuilder.array([])
         });
@@ -93,7 +96,7 @@ export class ReportComponent implements OnInit
                     });
                     this.budgetItems.push(service);
                     console.error('Error retrieving budget details:', error);
-                    return of({}); // Returning an empty object as a fallback
+                    throw error;  // Throwing the error stops the subscription from continuing
                 })
             )
             .subscribe(res => {
@@ -101,14 +104,16 @@ export class ReportComponent implements OnInit
                 this.budget = res;
                 this.budgetForm.get('feedback').setValue(this.budget?.feedback || '');
 
-                this.budget.budget_items.forEach(item => {
-                    const service = this._formBuilder.group({
-                        item: [item.item, Validators.required],
-                        cost: [item.cost, Validators.required],
-                        description: [item.description, Validators.required],
+                if (this.budget && this.budget.budget_items) { // Check if budget_items exists
+                    this.budget.budget_items.forEach(item => {
+                        const service = this._formBuilder.group({
+                            item: [item.item, Validators.required],
+                            cost: [item.cost, Validators.required],
+                            description: [item.description, Validators.required],
+                        });
+                        this.budgetItems.push(service);
                     });
-                    this.budgetItems.push(service);
-                });
+                }
             });
     }
 
@@ -166,8 +171,6 @@ export class ReportComponent implements OnInit
         services.removeAt(index);
         this._changeDetectorRef.markForCheck();
     }
-
-
     showNotification(colorName, text, placementFrom, placementAlign) {
         this._snackBar.open(text, 'close', {
             duration: 5000,
@@ -177,12 +180,12 @@ export class ReportComponent implements OnInit
         });
     }
     navigateToCompetitionDetailsTab(tabId: string) {
-        this.router.navigateByUrl('/apps/competitions/' +this.competitionId+'#'+ tabId);
+        this.router.navigateByUrl('/apps/pending-competitions/' +this.competitionId+'#'+ tabId);
     }
 
     calculatePeriod(): number {
-        const startDate = new Date('random date'); // Replace 'random date' with the actual starting date
-        const winnerDate = new Date(this.competition.winner_announcement_date);
+        const startDate = new Date(this.budgetForm.value.starting_date); // Replace 'random date' with the actual starting date
+        const winnerDate = new Date(this.budgetForm.value.winner_announcement_date);
         const differenceInTime = winnerDate.getTime() - startDate.getTime();
         const differenceInDays = Math.floor(differenceInTime / (1000 * 3600 * 24));
         return differenceInDays;
@@ -212,24 +215,32 @@ export class ReportComponent implements OnInit
     }
     onSubmit(): void {
         if (this.budgetForm.valid) {
+            const winnerAnnouncementDate = this.formatDate(this.budgetForm.value.winner_announcement_date);
+            const submissionDeadline = this.formatDate(this.budgetForm.value.submission_deadline);
+            const starting_date = this.formatDate(this.budgetForm.value.starting_date);
             const payload = {
                 id: 1,
                 feedback: this.budgetForm.value.feedback,
-                starting_date: this.budgetForm.value.starting_date,
-                submission_deadline: this.budgetForm.value.submission_deadline,
-                winner_announcement_date: this.budgetForm.value.winner_announcement_date,
+                starting_date: starting_date,
+                submission_deadline:submissionDeadline,
+                winner_announcement_date:winnerAnnouncementDate,
+                instance_type: this.budgetForm.value.instance_type,
+                custom_ami: this.budgetForm.value.custom_ami,
                 competition: this.competitionId,
                 budget_items: this.budgetForm.value.budget_items
             };
 
             console.log(this.budgetForm.value);
             this.loading = true;
-            console.log(this.budgetItems.length)
-
-            if (this.budgetItems.length > 0) {
+            console.log(this.budget)
+            if (this.budget !== undefined) {
+                console.log(this.budget)
+                console.log("update")
                 // Update report
                 this.updateReport(this.competitionId, payload);
             } else {
+                console.log("create")
+
                 // Create new report
                 this.budgetReportService.createCompetitionBudget(payload, this.competitionId).subscribe(
                     (res) => {
@@ -246,47 +257,6 @@ export class ReportComponent implements OnInit
             }
         }
     }
-
-    // onSubmit(): void {
-    //     if (this.budgetForm.valid) {
-    //         const payload = {
-    //             id: 1,
-    //             feedback: this.budgetForm.value.feedback,
-    //             starting_date: this.budgetForm.value.starting_date,
-    //             submission_deadline: this.budgetForm.value.submission_deadline,
-    //             winner_announcement_date: this.budgetForm.value.winner_announcement_date,
-    //             competition: this.competitionId,
-    //             budget_items: this.budgetForm.value.budget_items
-    //         };
-    //
-    //         console.log(this.budgetForm.value)
-    //         this.loading=true
-    //         this.budgetReportService.createCompetitionBudget(payload,this.competitionId).subscribe(res=>{
-    //             this.loading=false
-    //                 this.showNotification(
-    //                     'snackbar-success',
-    //                     'Budget report added successfully !',
-    //                     'bottom',
-    //                     'center'
-    //                 );
-    //                 // this.router.navigateByUrl(`/apps/academy/${this.competitionId}`);
-    //                 this.navigateToCompetitionDetailsTab('Budget')
-    //
-    //
-    //             },
-    //             error => {
-    //                 console.error('Error occurred while creating budget report:', error.error.error);
-    //                 this.loading = false;
-    //                 this.showNotification(
-    //                     'snackbar-danger',
-    //                     error.error.error,
-    //                     'bottom',
-    //                     'center'
-    //                 );
-    //             })
-    //     }
-    //
-    // }
 
     updateReport(competitionId: any, payload: any){
         this.budgetReportService.updateCompetitionReport(competitionId,payload).subscribe(res=>{

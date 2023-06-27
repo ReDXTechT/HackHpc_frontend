@@ -1,0 +1,91 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160  ">
+    <!-- Header -->
+    <div class="flex items-center justify-between">
+        <div>
+            <h2 class="my-0 font-bold text-2xl">{{ competition.title }} winners announcement</h2>
+        </div>
+        <button
+            matDialogClose
+            mat-icon-button>
+            <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+        </button>
+    </div>
+    <div class="m-4" style="max-height: 500px; overflow-y: auto;">
+        <form [formGroup]="winner_announcement" class="mt-5">
+            <div formArrayName="achievements">
+                <div
+                    *ngFor="let item of achievements.controls; let i = index; let first = first; let last = last; trackBy: trackByFn"
+                    class="col-span-12 sm:col-span-6 sm:mr-3 mt-3" [formGroupName]="i">
+                    <!-- Service input -->
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="flex items-center">
+                            <mat-form-field class="flex-auto">
+                                <mat-label>Level</mat-label>
+                                <mat-icon matPrefix class="hidden sm:flex icon-size-5"
+                                          [svgIcon]="'heroicons_solid:tag'"></mat-icon>
+                                <input matInput formControlName="level"
+                                       [placeholder]="'level'">
+                            </mat-form-field>
+                        </div>
+                        <div class="flex items-center">
+                            <mat-form-field class="flex-auto">
+                                <mat-label>Prize</mat-label>
+                                <input matInput formControlName="prize"
+                                       [placeholder]="'prize amount'"
+                                       type="number">
+                                <span matPrefix>$</span>
+                                <span matSuffix>.00</span>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Description textarea -->
+                    <mat-form-field class="flex-auto w-full">
+                        <mat-icon svgIcon="heroicons_solid:user" class="mr-4"></mat-icon>
+                        <mat-select formControlName="competitor" [placeholder]="'Select Competitor'">
+                            <mat-option *ngFor="let competitor of competitors" [value]="competitor.user.id">
+                                <div class="flex items-center">
+                                    <img
+                                        class="w-8 h-8 rounded-full mr-2"
+                                        [src]="competitor.user.image"
+                                        [alt]="competitor.user.firstName"
+                                    />
+                                    <span>{{ competitor.user.firstName }} {{ competitor.user.lastName }}</span>
+                                </div>
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+
+
+                    <!-- Delete service button -->
+                    <div class="mt-3 sm:flex sm:justify-end">
+                        <div *ngIf="!(first && last)" class="flex items-center group cursor-pointer delete-service"
+                             (click)="removeWinner(i)">
+                            <mat-icon class="icon-size-4 text-red-600" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                            <span class="ml-1 text-red-600 group-hover:underline">Delete service</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="group inline-flex items-center mt-3 -ml-4 py-2 px-4 rounded cursor-pointer" (click)="addWinner()">
+                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                <span class="ml-2 font-medium text-black group-hover:underline">Add another winner</span>
+            </div>
+        </form>
+
+        <div class="flex justify-end mt-5">
+            <button
+                (click)="winner_annoucement()"
+                class="px-8 mr-2"
+                mat-flat-button
+                [color]="'warn'"
+                type="button"
+            >
+                Announce winners
+            </button>
+        </div>
+    </div>
+</div>

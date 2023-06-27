@@ -80,4 +80,15 @@ export class CompetitionService {
     getCompetitorContributions(userId : any): Observable<Competition[]> {
         return this.http.get<Competition[]>(`${this.baseUrl}/competitors-contributions/${userId}`);
     }
+
+    update_winner_annoucement(competition_id: string, payload): Observable<any> {
+        return this.http.put(`${this.baseUrl}/update-achievement/${competition_id}`,payload);
+    }
+
+    winner_annoucement(competition_id: number, payload): Observable<any> {
+        return this.http.post(`${this.baseUrl}/add-achievement/${competition_id}`,payload);
+    }
+    getWinnersByCompetitionId(competitionId : any): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/winners/${competitionId}`);
+    }
 }

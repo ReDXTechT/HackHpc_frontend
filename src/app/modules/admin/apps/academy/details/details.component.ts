@@ -38,6 +38,8 @@ import {AuthenticationService} from "../../../../../core/services/authentication
 import {UsersService} from "../../../../../core/services/users.service";
 import {Customer} from "../../../../../core/models/User";
 import {TeamComponent} from "./team/team.component";
+import {AnnounceWinners} from "./announce_winners/announce-winners";
+import {Winners} from "./winners/winners";
 
 @Component({
     selector: 'academy-details',
@@ -45,7 +47,7 @@ import {TeamComponent} from "./team/team.component";
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [MatSnackBarModule, MatSidenavModule, FormsModule, ReactiveFormsModule, RouterLink, MatIconModule, NgIf, NgClass, NgFor, MatButtonModule, MatProgressBarModule, CdkScrollable, MatTabsModule, FuseFindByKeyPipe, FuseAlertComponent, MatFormFieldModule, MatInputModule, MatTableModule, CurrencyPipe, NgApexchartsModule, WaitingList, Leaderbord, TeamComponent],
+    imports: [MatSnackBarModule, MatSidenavModule, FormsModule, ReactiveFormsModule, RouterLink, MatIconModule, NgIf, NgClass, NgFor, MatButtonModule, MatProgressBarModule, CdkScrollable, MatTabsModule, FuseFindByKeyPipe, FuseAlertComponent, MatFormFieldModule, MatInputModule, MatTableModule, CurrencyPipe, NgApexchartsModule, WaitingList, Leaderbord, TeamComponent, Winners],
 })
 export class AcademyDetailsComponent implements OnInit {
 
@@ -65,6 +67,7 @@ export class AcademyDetailsComponent implements OnInit {
     approved = false
     register = false
     waitingList =[]
+    winnersLength =0
     constructor(
         @Inject(DOCUMENT) private _document: Document,
         private competitionService: CompetitionService,
@@ -105,6 +108,8 @@ export class AcademyDetailsComponent implements OnInit {
                     this.selectedIndex = 4;
                 } else if (fragment === 'WaitingList') {
                     this.selectedIndex = 5;
+                } else if (fragment === 'Winners') {
+                    this.selectedIndex = 5;
                 } else if (fragment === 'Solution_Checker') {
                     this.selectedIndex = 6;
                 } else {
@@ -118,6 +123,7 @@ export class AcademyDetailsComponent implements OnInit {
                 this.getCurrentUserScore(this.authenticationService.currentUserValue.id, this.competition.id)
             }
             this.getWaitingListByCompetitionId(competitionId)
+            this.getWinnersByCompetitionId(competitionId)
         } catch (error) {
             console.error('Error fetching competition:', error);
         }
@@ -128,6 +134,12 @@ export class AcademyDetailsComponent implements OnInit {
         };
     }
 
+    getWinnersByCompetitionId(competitionId: string){
+        this.competitionService.getWinnersByCompetitionId(competitionId).subscribe(res=>{
+            this.winnersLength=res.length
+            this.changeDetectorRef.detectChanges()
+        })
+    }
     getCurrentUserScore(competitorId: any, competitionId: any) {
         this.competitionService.checkCompetitorApprovedByInCompetition(competitorId, competitionId).subscribe(res => {
             if (res.is_approved) {
@@ -428,4 +440,23 @@ export class AcademyDetailsComponent implements OnInit {
     }
 
 
+    announceWinners() {
+        const dialogRef = this._matDialog.open(AnnounceWinners, {
+            autoFocus: false,
+            data: {
+                competition: this.competition
+            },
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+            this.competitionService.winner_annoucement(this.competition.id ,result).subscribe(res=>{
+                this._snackBar.open(res.message, 'Close', {
+                    duration: 5000,
+                });
+                this.navigateToCompetitionDetailsTab('Winners')
+                this.changeDetectorRef.detectChanges()
+                window.location.reload()
+            })
+        });
+    }
 }

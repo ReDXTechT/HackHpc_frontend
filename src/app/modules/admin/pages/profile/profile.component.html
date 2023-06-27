@@ -297,6 +297,7 @@
                     <span class="leading-none">{{user?.birthdate}}</span>
                 </div>
             </div>
+
             <a *ngIf="role==='Competitor'"
                 class="px-6 mt-8"
                 mat-flat-button
@@ -305,6 +306,44 @@
                 href="{{user?.cv}}">>
                 Download your cv
             </a>
+        </fuse-card>
+        <fuse-card class="flex flex-col  w-full p-8 mt-5">
+            <div class="text-2xl font-semibold leading-tight">My Competitions</div>
+
+            <div class="tableBody mt-5">
+                <div class="table-responsive">
+                    <table class="centered-table table">
+                        <thead>
+                        <tr>
+                            <th>Competition</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let comp of customerCompetitions" [routerLink]="isClickableStatus(comp.status) ? '/apps/competitions/' + comp.id : null" style="cursor: pointer">
+                            <td>{{ comp.title }}</td>
+                            <td *ngIf="comp.status === 'About_to_start'">
+                                <span class="badge badge-solid-pink">{{ comp.status }}</span>
+                            </td>
+                            <td *ngIf="comp.status === 'Running'">
+                                <span class="badge badge-solid-green">{{ comp.status }}</span>
+                            </td>
+                            <td *ngIf="comp.status === 'Terminated'">
+                                <span class="badge badge-solid-orange">{{ comp.status }}</span>
+                            </td>
+                            <td *ngIf="comp.status === 'pending'">
+                                <span class="badge badge-solid-cyan">{{ comp.status }}</span>
+                            </td>
+                            <td *ngIf="comp.status === 'rejected'">
+                                <span class="badge badge-solid-purple">{{ comp.status }}</span>
+                            </td>
+                        </tr>
+                        <!-- Add more rows as necessary -->
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
         </fuse-card>
     </div>
     <div class="column-right">
@@ -315,7 +354,11 @@
                         <mat-icon class="example-tab-icon msr-2">face</mat-icon>
                         My journey
                     </ng-template>
-                    <div class="col-lg-12 col-md-12 col-sm-12 p-5">
+                    <div class="col-lg-12 col-md-12 col-sm-12 p-2">
+
+                        <activity *ngIf="role==='Customer'"></activity>
+
+
                         <div class="course-detelies-wrapper" *ngIf="role==='Competitor'">
                             <div class="header mb-10 achievements-title">
                                 <h2>Achievements</h2>
@@ -334,7 +377,7 @@
                                         </thead>
                                         <tbody>
                                         <tr *ngFor="let achievement of Achievements">
-                                            <td>{{ achievement.competition_title }}</td>
+                                            <td>{{ achievement.competition.title }}</td>
                                             <td>${{ achievement.prize }}</td>
                                             <td>{{ achievement.level}}</td>
                                             <td>{{ achievement.date  }}</td>

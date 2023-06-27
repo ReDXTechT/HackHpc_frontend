@@ -479,3 +479,65 @@ $xs:'(max-width: 575px)';
 .achievements-title mat-icon {
     margin-left: 10px;
 }
+
+.badge-solid-red {
+    color: #f11541;
+    background-color: rgba(241, 21, 65, 0.15);
+    border: none;
+    padding: 5px 12px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+.badge-solid-purple {
+    color: #6f42c1;
+    background-color: rgba(111, 66, 193, 0.15);
+    border: none;
+    padding: 5px 12px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+.badge-solid-green {
+    color: #198754;
+    background-color: rgba(25, 135, 84, 0.15);
+    border: none;
+    padding: 5px 12px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+.badge-solid-blue {
+    color: #0d6efd;
+    background-color: rgba(13, 110, 253, 0.15);
+    border: none;
+    padding: 5px 12px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+.badge-solid-pink {
+    color: rgba(243, 84, 214, 0.89);
+    background-color: rgba(253, 13, 253, 0.15);
+    border: none;
+    padding: 5px 12px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+.badge-solid-orange {
+    color: rgba(236, 74, 74, 0.7);
+    background-color: rgba(253, 126, 20, 0.15);
+    border: none;
+    padding: 5px 12px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+.badge-solid-cyan {
+    color: #0dcaf0;
+    background-color: rgba(13, 202, 240, 0.15);
+    border: none;
+    padding: 5px 12px;
+    font-weight: 500;
+    line-height: 1.2;
+}
+span.badge {
+    min-width: auto;
+    float: none;
+    font-size: 13px;
+}

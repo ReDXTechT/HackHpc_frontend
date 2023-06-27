@@ -1,0 +1,120 @@
+<div class="max-w-full mb-12  rounded-2xl shadow bg-card">
+    <div class="flex items-center">
+        <!-- Header -->
+        <div class="relative flex flex-col sm:flex-row items-center justify-between py-4 sm:py-8 px-2 sm:px-6 md:px-8 border-b">
+            <!-- Loader -->
+            <div class="absolute inset-x-0 bottom-0" *ngIf="isLoading">
+                <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
+            </div>
+            <!-- Title -->
+            <div class="text-lg sm:text-xl md:text-2xl lg:text-3xl font-extrabold tracking-tight mb-2 sm:mb-4">Our first places winners</div>
+        </div>
+    </div>
+
+
+    <!-- Main -->
+    <div class="flex flex-auto overflow-hidden">
+
+        <!-- condidats list -->
+        <div class="flex flex-col flex-auto sm:mb-18 overflow-hidden sm:overflow-y-auto">
+            <ng-container >
+                <ng-container >
+                    <div class="grid">
+                        <!-- Header -->
+                        <div
+                            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-gray-600 bg-red-50 dark:bg-black dark:bg-opacity-5"
+                            matSort
+                            matSortDisableClear>
+                            <div></div>
+                            <div
+                                [mat-sort-header]="'winner'">
+                                Winner
+                            </div>
+                            <div
+                                [mat-sort-header]="'email'">
+                                Email
+                            </div>
+                            <div
+                                [mat-sort-header]="'phone'">
+                                Phone
+                            </div>
+                            <div
+
+                                [mat-sort-header]="'level'">
+                                level
+                            </div>
+                            <div
+                                [mat-sort-header]="'prize'">
+                                Prize
+                            </div>
+
+
+                        </div>
+                        <!-- Rows -->
+                        <ng-container *ngIf="winners as condidats">
+                            <ng-container *ngFor="let condidat of winners">
+                                <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
+
+                                    <!-- Image -->
+                                    <div class="flex items-center">
+                                        <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
+                                            <img
+                                                class="w-8"
+                                                *ngIf="condidat.competitor.user.image"
+                                                [alt]="'condidat thumbnail image'"
+                                                [src]="condidat.competitor.user.image">
+                                            <div
+                                                class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
+                                                *ngIf="!condidat.competitor.user.image">
+                                                NO THUMB
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class=" truncate">
+                                        {{condidat.competitor.user.firstName}}  {{condidat.competitor.user.lastName}}
+                                    </div>
+
+                                    <div class="truncate">
+                                        {{condidat.competitor.user.email}}
+                                    </div>
+
+                                    <div class="">
+                                        {{condidat.competitor.user.mobile_phone}}
+                                    </div>
+
+                                    <div class=" lg:flex items-center">
+                                        <div class="min-w-4">{{condidat.level}}</div>
+                                    </div>
+                                    <div class=" lg:flex items-center">
+                                        <div class="min-w-4">$ {{condidat.prize}}</div>
+                                    </div>
+
+
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </div>
+
+<!--                    <mat-paginator-->
+<!--                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"-->
+<!--                        [ngClass]="{'pointer-events-none': isLoading}"-->
+<!--                        [length]="pagination.length"-->
+<!--                        [pageIndex]="pagination.page"-->
+<!--                        [pageSize]="pagination.size"-->
+<!--                        [pageSizeOptions]="[5, 10, 25, 100]"-->
+<!--                        [showFirstLastButtons]="true"></mat-paginator>-->
+
+                </ng-container>
+            </ng-container>
+            <ng-template #nocondidats>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no condidats wainting approval yet!</div>
+            </ng-template>
+
+        </div>
+
+    </div>
+    </div>
+
+
+

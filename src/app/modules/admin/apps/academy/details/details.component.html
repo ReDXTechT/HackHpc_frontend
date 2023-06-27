@@ -64,11 +64,16 @@
 
                 <!-- Actions -->
                 <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
-                    <div *ngIf="(competition?.status !== 'About_to_start'&& role=='Admin') || (competition?.status !== 'About_to_start'&& role=='Customer')">
-                        <button class=" mr-2" mat-flat-button routerLink="/apps/results-submissions"
+                    <div >
+                        <button  *ngIf="(competition?.status !== 'About_to_start'&& role=='Admin') || (competition?.status !== 'About_to_start'&& role=='Customer')"class=" mr-2" mat-flat-button routerLink="/apps/results-submissions"
                                 style="background-color: #020202; color: white;">
                             <mat-icon svgIcon="mat_solid:drive_file_move"></mat-icon>
                             <span class="ml-2">View Submissions</span>
+                        </button>
+                        <button *ngIf="(competition?.status == 'Running'&& role=='Admin') || (competition?.status == 'Running'&& role=='Customer')" class=" mr-2" mat-flat-button (click)="announceWinners()"
+                                style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="heroicons_outline:trophy"></mat-icon>
+                            <span class="ml-2">Announce winners</span>
                         </button>
                     </div>
 
@@ -451,7 +456,7 @@
                     </ng-template>
                 </mat-tab>
 
-                <mat-tab label="Waiting List" id="WaitingList">
+                <mat-tab *ngIf="competition.status==='About_to_start'" label="Waiting List" id="WaitingList">
                     <ng-template mat-tab-label>
                         <span class="inline-flex items-center space-x-2">
                             <span class="">Waiting List</span>
@@ -464,6 +469,21 @@
 
                     </ng-template>
                 </mat-tab>
+
+                <mat-tab *ngIf="competition.status==='Terminated'" label="Winners" id="Winners">
+                    <ng-template mat-tab-label>
+                        <span class="inline-flex items-center space-x-2">
+                            <span class="">Winners</span>
+                            <span
+                                class="px-2 py-1 text-sm rounded-full bg-red-100 text-on-black-100">{{winnersLength}}</span>
+                        </span>
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <winners [competitionId]="competition.id"></winners>
+
+                    </ng-template>
+                </mat-tab>
+
 
                 <!-- Solution checker -->
                 <mat-tab label="Solution checker" id="Solution_Checker">

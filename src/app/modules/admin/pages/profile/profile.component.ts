@@ -1,6 +1,6 @@
 import { TextFieldModule } from '@angular/cdk/text-field';
 import {NgClass, NgFor, NgIf} from '@angular/common';
-import { ChangeDetectionStrategy, Component, ViewEncapsulation } from '@angular/core';
+import {ChangeDetectionStrategy, ChangeDetectorRef, Component, ViewEncapsulation} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,6 +19,7 @@ import {SettingsAccountComponent} from "../settings/account/account.component";
 import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
 import {Observable} from "rxjs";
 import {Competition} from "../../../../core/models/competiton";
+import {ActivitiesComponent} from "../activities/activities.component";
 
 @Component({
     selector       : 'profile',
@@ -27,7 +28,7 @@ import {Competition} from "../../../../core/models/competiton";
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone     : true,
-    imports: [MatSnackBarModule,RouterLink, FuseCardComponent, NgFor, MatIconModule, MatButtonModule, MatMenuModule, MatFormFieldModule, MatInputModule, TextFieldModule, MatDividerModule, MatTooltipModule, NgClass, MatCardModule, MatExpansionModule, MatTabsModule, NgIf, SettingsAccountComponent],
+    imports: [MatSnackBarModule, RouterLink, FuseCardComponent, NgFor, MatIconModule, MatButtonModule, MatMenuModule, MatFormFieldModule, MatInputModule, TextFieldModule, MatDividerModule, MatTooltipModule, NgClass, MatCardModule, MatExpansionModule, MatTabsModule, NgIf, SettingsAccountComponent, ActivitiesComponent],
 })
 export class ProfileComponent
 {
@@ -37,10 +38,13 @@ export class ProfileComponent
     selectedImage: File;
     image: string = null;
     Contributions : Competition[]
+    customerCompetitions : Competition[]
     Achievements : any[]
 
     constructor(private authService : AuthenticationService,
                 private userService : UsersService,
+                private _changeDetectorRef: ChangeDetectorRef,
+
                 private _snackbar: MatSnackBar,
 
     )
@@ -55,6 +59,11 @@ export class ProfileComponent
             this.getCompetitorAchievements()
 
         }
+        else {            this.getCustomerCompetitions()
+        }
+    }
+    isClickableStatus(status: string): boolean {
+        return ['Running', 'About_to_start', 'Terminated'].includes(status);
     }
 
     getUserById(userId){
@@ -95,6 +104,14 @@ export class ProfileComponent
         this.userService.getCompetitorContributions(this.authService.currentUserValue.id).subscribe(res=>{
             console.log(res)
             this.Contributions=res
+        })
+    }
+    getCustomerCompetitions() {
+        console.log('tttt')
+        this.userService.getCustomerCompetitions(this.authService.currentUserValue.id).subscribe(res=>{
+            console.log(res)
+            this.customerCompetitions=res
+            this._changeDetectorRef.detectChanges()
         })
     }
 

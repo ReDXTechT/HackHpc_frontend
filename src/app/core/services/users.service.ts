@@ -73,5 +73,10 @@ export class UsersService {
     getCompetitorAchievements(userId : any): Observable<Competition[]> {
         return this.http.get<Competition[]>(`${this.baseUrl}/competitor-achievements/${userId}`);
     }
-
+    getCustomerActivities(userId : any): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/customer-activities/${userId}`);
+    }
+    getCustomerCompetitions(userId : any): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/customer-competitions/${userId}`);
+    }
 }

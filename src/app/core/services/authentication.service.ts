@@ -56,7 +56,7 @@ export class AuthenticationService {
                 })
             );
     }
-    public changePassword(userId: string, email: string, password: string, new_password: string) {
+    public changePassword(userId: number, email: string, password: string[], new_password: string[]):any {
         return this.http.post(`${environment.apiUrl}/user/${userId}/change-password`, {email, password, new_password})
 
     }

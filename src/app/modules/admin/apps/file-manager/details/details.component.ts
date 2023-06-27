@@ -17,7 +17,7 @@ import { Subject, takeUntil } from 'rxjs';
     standalone     : true,
     imports        : [MatButtonModule, RouterLink, MatIconModule, NgIf],
 })
-export class FileManagerDetailsComponent implements OnInit, OnDestroy
+export class FileDetails implements OnInit, OnDestroy
 {
     item: Item;
     private _unsubscribeAll: Subject<any> = new Subject<any>();

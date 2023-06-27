@@ -42,8 +42,6 @@ export const defaultNavigation: FuseNavigationItem[] = [
 
     {
         id      : 'apps',
-        title   : 'Applications',
-        subtitle: 'Custom made application designs',
         type    : 'group',
         icon    : 'heroicons_outline:home',
         children: [
@@ -53,6 +51,16 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'feather:home',
                 link: '/home',
+                roles:['Customer','Admin','Competitor','']
+
+            },
+            {
+                id   : 'pages.profile',
+                title: 'Profile',
+                type : 'basic',
+                icon : 'heroicons_outline:user-circle',
+                link : '/pages/profile',
+                roles:['Customer','Competitor']
 
             },
             {
@@ -61,6 +69,8 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type: 'basic',
                 icon: 'feather:monitor',
                 link: '/apps/clusters-monitoring',
+                roles: ['Admin']
+
 
             },
             {
@@ -69,57 +79,55 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type : 'basic',
                 icon : 'heroicons_outline:trophy',
                 link : '/apps/competitions',
+                roles:['Customer','Admin','Competitor','']
+
             },
             {
                 id   : 'apps.competitions',
                 title: 'Pending Competitions',
                 type : 'basic',
-                icon : 'heroicons_outline:trophy',
+                icon : 'pending',
                 link : '/apps/pending-competitions',
+                roles:['Admin']
+
             },
             {
                 id      : 'apps.add_competition',
                 title   : 'Add competition',
                 type    : 'basic',
                 icon    : 'heroicons_outline:pencil-square',
-                link : '/apps/competition/add-competition'
+                link : '/apps/competition/add-competition',
+                roles:['Customer','Admin']
+
 
             },
-            // {
-            //     id   : 'apps.customers',
-            //     title: 'Customers',
-            //     type : 'basic',
-            //     icon : 'heroicons_outline:user-group',
-            //     link : '/apps/customers',
-            // },
+
             {
                 id   : 'apps.customers',
                 title: 'Customers',
                 type : 'basic',
                 icon : 'heroicons_outline:building-office-2',
                 link : '/apps/customers',
-            },
+                roles:['Customer','Admin','Competitor','']
 
+            },
+            {
+                id   : 'apps.pending-customers',
+                title: 'Pending customers accounts',
+                type : 'basic',
+                icon : 'pending',
+                link : '/apps/pending-customers-accounts',
+                roles:['Admin']
+
+            },
             {
                 id   : 'apps.results-submission',
                 title: 'Results submission',
                 type : 'basic',
                 icon : 'heroicons_outline:cloud',
-                link : '/apps/file-manager',
-            },
-            {
-                id   : 'pages.profile',
-                title: 'Profile',
-                type : 'basic',
-                icon : 'heroicons_outline:user-circle',
-                link : '/pages/profile',
-            },
-            {
-                id   : 'pages.settings',
-                title: 'Settings',
-                type : 'basic',
-                icon : 'heroicons_outline:cog-8-tooth',
-                link : '/pages/settings',
+                link : '/apps/results-submissions',
+                roles:['Customer','Admin']
+
             },
             {
                 id      : 'apps.help-center',
@@ -127,6 +135,7 @@ export const defaultNavigation: FuseNavigationItem[] = [
                 type    : 'collapsable',
                 icon    : 'heroicons_outline:information-circle',
                 link    : '/apps/help-center',
+                roles:['Customer','Admin','Competitor',''],
                 children: [
                     {
                         id        : 'apps.help-center.home',
@@ -134,48 +143,66 @@ export const defaultNavigation: FuseNavigationItem[] = [
                         type      : 'basic',
                         link      : '/apps/help-center',
                         exactMatch: true,
+                        roles:['Customer','Admin','Competitor','']
+
                     },
                     {
                         id   : 'apps.help-center.faqs',
                         title: 'FAQs',
                         type : 'basic',
                         link : '/apps/help-center/faqs',
+                        roles:['Customer','Admin','Competitor','']
+
                     },
                     {
                         id   : 'apps.help-center.guides',
                         title: 'Guides',
                         type : 'basic',
                         link : '/apps/help-center/guides',
+                        roles:['Customer','Admin','Competitor','']
+
                     },
                     {
                         id   : 'apps.help-center.support',
                         title: 'Support',
                         type : 'basic',
                         link : '/apps/help-center/support',
+                        roles:['Customer','Admin','Competitor','']
+
                     },
                 ],
             },
-            {
-                id   : 'apps.mailbox',
-                title: 'Mailbox',
-                type : 'basic',
-                icon : 'heroicons_outline:envelope',
-                link : '/apps/mailbox',
-                badge: {
-                    title  : '27',
-                    classes: 'px-2 bg-pink-600 text-white rounded-full',
-                },
-            },
+            // {
+            //     id   : 'apps.mailbox',
+            //     title: 'Mailbox',
+            //     type : 'basic',
+            //     icon : 'heroicons_outline:envelope',
+            //     link : '/apps/mailbox',
+            //     badge: {
+            //         title  : '27',
+            //         classes: 'px-2 bg-pink-600 text-white rounded-full',
+            //     },
+            //     roles:['Customer','Admin','Competitor','']
+            //
+            // },
         ],
+    },
+    {
+        id   : 'pages.settings',
+        title: 'Settings',
+        type : 'basic',
+        icon : 'heroicons_outline:cog-8-tooth',
+        link : '/pages/settings',
+        roles:['Customer','Admin','Competitor','']
+
     },
     {
         id: 'logout',
         title: 'Logout',
         type: 'basic',
         icon: 'feather:log-out',
-        // link: '/sign-out',
-        function: () => {}
-
+        function: () => {},
+        roles:['Customer','Admin','Competitor','']
     },
     {
         id  : 'divider-1',

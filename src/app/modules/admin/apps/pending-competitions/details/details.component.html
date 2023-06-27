@@ -54,7 +54,7 @@
                     <div class="flex ml-2 items-center space-x-3 mb-2 sm:mb-0"
                          style="display: flex; flex-direction: row; justify-content: flex-start; margin-bottom: 10px;">
                         <button class=" mr-2" mat-flat-button [routerLink]="'/apps/competition/competition-report/' + competition.id"
-                                [color]="'primary'">
+                                style="background-color: #020202; color: white;">
                             <mat-icon svgIcon="mat_solid:edit"></mat-icon>
                             <span class="ml-2">Report</span>
                         </button>
@@ -62,7 +62,7 @@
                             class="mr-2"
                             mat-flat-button
                             (click)="quizPassing(competition)"
-                            [color]="'primary'">
+                            style="background-color: #020202; color: white;">
                             <mat-icon>assessment</mat-icon>
                             <span class="ml-2">Test</span>
                         </button>

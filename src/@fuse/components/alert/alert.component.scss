@@ -155,7 +155,7 @@ fuse-alert {
             .fuse-alert-container {
 
                 .fuse-alert-border {
-                    @apply bg-primary;
+                    @apply bg-red-600;
                 }
 
                 .fuse-alert-title,
@@ -303,24 +303,24 @@ fuse-alert {
             .fuse-alert-container {
 
                 .fuse-alert-border {
-                    @apply bg-blue-600;
+                    @apply bg-red-600;
                 }
 
                 .fuse-alert-title,
                 .fuse-alert-icon {
-                    @apply text-blue-700;
+                    @apply text-red-700;
                 }
 
                 .dark & {
                     @apply bg-gray-700;
 
                     .fuse-alert-border {
-                        @apply bg-blue-400;
+                        @apply bg-red-600;
                     }
 
                     .fuse-alert-title,
                     .fuse-alert-icon {
-                        @apply text-blue-400;
+                        @apply text-red-600;
                     }
 
                     .fuse-alert-message {
@@ -557,7 +557,7 @@ fuse-alert {
         &.fuse-alert-type-info {
 
             .fuse-alert-container {
-                @apply bg-blue-600;
+                @apply bg-red-600;
 
                 .fuse-alert-icon {
                     @apply text-white;
@@ -568,11 +568,11 @@ fuse-alert {
                 }
 
                 .fuse-alert-message {
-                    @apply text-blue-100;
+                    @apply text-red-100;
                 }
 
                 code {
-                    @apply bg-blue-200 text-blue-800;
+                    @apply bg-red-200 text-red-800;
                 }
             }
         }
@@ -829,27 +829,27 @@ fuse-alert {
         &.fuse-alert-type-info {
 
             .fuse-alert-container {
-                @apply bg-blue-50 ring-1 ring-blue-400 ring-inset;
+                @apply bg-red-50 ring-1 ring-red-400 ring-inset;
 
                 .fuse-alert-icon {
-                    @apply text-blue-600;
+                    @apply text-red-600;
                 }
 
                 .fuse-alert-title,
                 .fuse-alert-dismiss-button {
-                    @apply text-blue-900;
+                    @apply text-red-900;
                 }
 
                 .fuse-alert-message {
-                    @apply text-blue-700;
+                    @apply text-red-700;
                 }
 
                 code {
-                    @apply bg-blue-200 text-blue-800;
+                    @apply bg-red-200 text-red-800;
                 }
 
                 .dark & {
-                    @apply bg-blue-600;
+                    @apply bg-red-600;
 
                     .fuse-alert-icon {
                         @apply text-white;
@@ -861,7 +861,7 @@ fuse-alert {
                     }
 
                     .fuse-alert-message {
-                        @apply text-blue-200;
+                        @apply text-red-200;
                     }
                 }
             }
@@ -1173,27 +1173,27 @@ fuse-alert {
         &.fuse-alert-type-info {
 
             .fuse-alert-container {
-                @apply bg-blue-50;
+                @apply bg-red-50;
 
                 .fuse-alert-icon {
-                    @apply text-blue-600;
+                    @apply text-red-600;
                 }
 
                 .fuse-alert-title,
                 .fuse-alert-dismiss-button {
-                    @apply text-blue-900;
+                    @apply text-red-900;
                 }
 
                 .fuse-alert-message {
-                    @apply text-blue-700;
+                    @apply text-red-700;
                 }
 
                 code {
-                    @apply bg-blue-200 text-blue-800;
+                    @apply bg-red-200 text-red-800;
                 }
 
                 .dark & {
-                    @apply bg-blue-600;
+                    @apply bg-red-600;
 
                     .fuse-alert-icon {
                         @apply text-white;
@@ -1205,7 +1205,7 @@ fuse-alert {
                     }
 
                     .fuse-alert-message {
-                        @apply text-blue-200;
+                        @apply text-red-200;
                     }
                 }
             }

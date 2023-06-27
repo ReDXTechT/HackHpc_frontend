@@ -25,11 +25,11 @@
             <!-- Panel links -->
             <div class="flex flex-col divide-y border-t border-b">
                 <ng-container *ngFor="let panel of panels; trackBy: trackByFn">
-                    <div
-                        class="flex px-8 py-5 cursor-pointer"
-                        [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedPanel || selectedPanel !== panel.id,
-                                    'bg-primary-50 dark:bg-hover': selectedPanel && selectedPanel === panel.id}"
-                        (click)="goToPanel(panel.id)">
+                    <div *ngIf="panel.roles ? panel.roles.includes(role) : true"
+                         class="flex px-8 py-5 cursor-pointer"
+                         [ngClass]="{'hover:bg-dark-100 dark:hover:bg-hover': !selectedPanel || selectedPanel !== panel.id,
+                    'bg-red-50 dark:bg-hover': selectedPanel && selectedPanel === panel.id}"
+                         (click)="goToPanel(panel.id)">
                         <mat-icon
                             [ngClass]="{'text-hint': !selectedPanel || selectedPanel !== panel.id,
                                         'text-primary dark:text-primary-500': selectedPanel && selectedPanel === panel.id}"
@@ -86,10 +86,6 @@
                         <!-- Plan & Billing -->
                         <ng-container *ngSwitchCase="'plan-billing'">
                             <settings-plan-billing></settings-plan-billing>
-                        </ng-container>
-                        <!-- Notifications -->
-                        <ng-container *ngSwitchCase="'notifications'">
-                            <settings-notifications></settings-notifications>
                         </ng-container>
                         <!-- TeamComponent -->
                         <ng-container *ngSwitchCase="'team'">

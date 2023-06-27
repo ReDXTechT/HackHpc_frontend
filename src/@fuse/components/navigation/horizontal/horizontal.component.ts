@@ -79,7 +79,7 @@ export class FuseHorizontalNavigationComponent implements OnChanges, OnInit, OnD
     ngOnDestroy(): void
     {
         // Deregister the navigation component from the registry
-        this._fuseNavigationService.deregisterComponent(this.name);
+        // this._fuseNavigationService.deregisterComponent(this.name);
 
         // Unsubscribe from all subscriptions
         this._unsubscribeAll.next(null);

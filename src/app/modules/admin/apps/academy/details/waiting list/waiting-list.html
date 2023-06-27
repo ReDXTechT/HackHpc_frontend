@@ -22,7 +22,7 @@
                     <div class="grid">
                         <!-- Header -->
                         <div
-                            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-secondary bg-gray-50 dark:bg-black dark:bg-opacity-5"
+                            class="inventory-grid z-10 sticky top-0 grid gap-4 py-4 px-6 md:px-8 shadow text-md font-semibold text-gray-600 bg-red-50 dark:bg-black dark:bg-opacity-5"
                             matSort
                             matSortDisableClear>
                             <div></div>
@@ -43,7 +43,7 @@
 
 
                             <div [mat-sort-header]="'CV'" >CV</div>
-                            <div >Actions</div>
+                            <div *ngIf="user?.role!=='Competitor'">Actions</div>
 
                         </div>
                         <!-- Rows -->
@@ -93,7 +93,7 @@
                                         </a>
                                     </div>
 
-                                    <div>
+                                    <div *ngIf="user?.role!=='Competitor'">
                                         <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button (click)="approveJoinRequest(condidat.id)">
                                             <mat-icon svgIcon="mat_solid:thumb_up_alt"></mat-icon>
                                         </button>

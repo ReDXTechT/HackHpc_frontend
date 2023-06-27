@@ -3,7 +3,7 @@
     cdkScrollable>
 
     <!-- Header -->
-    <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-gray-800 dark">
+    <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-black dark">
         <!-- Background - @formatter:off -->
         <!-- Rings -->
         <svg class="absolute inset-0 pointer-events-none"
@@ -63,7 +63,7 @@
                 </mat-form-field>
                 <mat-slide-toggle
                     class="mt-8 sm:mt-0 sm:ml-auto"
-                    [color]="'primary'"
+                    [color]="'warn'"
                     (change)="toggleCompleted($event)">
                     Hide completed
                 </mat-slide-toggle>
@@ -90,7 +90,7 @@
                                     <div
                                         class="py-0.5 px-3 rounded-full text-sm font-semibold"
                                         [ngClass]="{'text-pink-800 bg-pink-100 dark:text-pink-50 dark:bg-pink-500': competition.status === 'Terminated',
-                                                                  'text-green-800 bg-green-100 dark:text-green-50 dark:bg-green-500': competition.status === 'Running',
+                                                                  'text-red-800 bg-red-100 dark:text-red-50 dark:bg-red-400': competition.status === 'Running',
                                                                   'text-amber-800 bg-amber-100 dark:text-amber-50 dark:bg-amber-500': competition.status === 'About_to_start'}">
                                         {{ competition.status }}
                                     </div>
@@ -150,8 +150,8 @@
                                 </div>
                                 <div
                                     class="flex items-center leading-5 text-md text-secondary mt-4 eduman-course-tutor">
-                                    <img [src]="'assets/images/profile.jpg'" class="user-image" alt="">
-                                    <a [routerLink]="['/admin/teachers/about-teacher']">Sponsor : Imen Chaari</a>
+                                    <img [src]="competition?.customer?.user?.image" class="user-image" alt="">
+                                    <a [routerLink]="['/admin/teachers/about-teacher']">Sponsor : {{competition?.customer?.user?.firstName}} {{competition?.customer?.user?.lastName}}</a>
                                 </div>
                             </div>
                             <div class="flex flex-col w-full mt-auto mt-4">

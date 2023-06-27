@@ -1,32 +1,31 @@
 <div class="flex flex-col w-full">
-
+<!--    <ng-container *ngIf="isAddButtonClicked">-->
+<!--        &lt;!&ndash; New sections here &ndash;&gt;-->
+<!--    </ng-container>-->
     <!-- View mode -->
-    <ng-container *ngIf="!editMode">
+    <ng-container>
 
         <!-- Header -->
-        <div class="relative w-full h-40 sm:h-48 px-8 sm:px-12 bg-accent-100 dark:bg-accent-700">
-            <!-- Background -->
-<!--            <ng-container *ngIf="contact.background">-->
-<!--                <img-->
-<!--                    class="absolute inset-0 object-cover w-full h-full"-->
-<!--                    [src]="contact.background">-->
-<!--            </ng-container>-->
-            <!-- Close button -->
+        <div class="relative w-full h-30 sm:h-28 px-8 sm:px-12 " style="background-image: url('assets/images/header8.webp');background-size: contain;">
             <div class="flex items-center justify-end w-full max-w-3xl mx-auto pt-6">
                 <a
                     mat-icon-button
                     [matTooltip]="'Close'"
-                    [routerLink]="['../']">
+                    [routerLink]="['..']"
+                    (click)="closeDrawer()"
+
+                >
                     <mat-icon
                         class="text-white"
                         [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
                 </a>
+
             </div>
         </div>
 
         <!-- Contact -->
         <div class="relative flex flex-col flex-auto items-center p-6 pt-0 sm:p-12 sm:pt-0">
-            <div class="w-full max-w-3xl">
+            <div class="w-full max-w-3xl ">
 
                 <!-- Avatar and actions -->
                 <div class="flex flex-auto items-end -mt-16">
@@ -42,33 +41,10 @@
                             {{customer?.user?.firstName.charAt(0)}}
                         </div>
                     </div>
-                    <!-- Actions -->
-                    <div class="flex items-center ml-auto mb-1">
-                        <button
-                            mat-stroked-button
-                            (click)="toggleEditMode(true)">
-                            <mat-icon
-                                class="icon-size-5"
-                                [svgIcon]="'heroicons_solid:pencil-square'"></mat-icon>
-                            <span class="ml-2">Edit</span>
-                        </button>
-                    </div>
                 </div>
 
                 <!-- Name -->
                 <div class="mt-3 text-4xl font-bold truncate">{{customer?.user?.firstName}} {{customer?.user?.lastName}}</div>
-
-<!--                &lt;!&ndash; Tags &ndash;&gt;-->
-<!--                <ng-container *ngIf="customer.tags.length">-->
-<!--                    <div class="flex flex-wrap items-center mt-2">-->
-<!--                        &lt;!&ndash; Tag &ndash;&gt;-->
-<!--                        <ng-container *ngFor="let tag of (customer.tags | fuseFindByKey:'id':tags); trackBy: trackByFn">-->
-<!--                            <div class="flex items-center justify-center py-1 px-3 mr-3 mb-3 rounded-full leading-normal text-gray-500 bg-gray-100 dark:text-gray-300 dark:bg-gray-700">-->
-<!--                                <span class="text-sm font-medium whitespace-nowrap">{{tag.title}}</span>-->
-<!--                            </div>-->
-<!--                        </ng-container>-->
-<!--                    </div>-->
-<!--                </ng-container>-->
 
                 <div class="flex flex-col mt-4 pt-6 border-t space-y-8">
                     <!-- Title -->
@@ -95,7 +71,7 @@
                                 <ng-container >
                                     <div class="flex items-center leading-6">
                                         <a
-                                            class="hover:underline text-primary-500"
+                                            class="hover:underline text-red-600"
                                             [href]="'mailto:' + customer?.user?.email"
                                             target="_blank">
                                             {{customer?.user?.email}}

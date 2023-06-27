@@ -44,7 +44,7 @@ export const appConfig: ApplicationConfig = {
         provideTransloco(),
 
         // Fuse
-        // provideAuth(),
+        provideAuth(),
         provideIcons(),
         provideFuse({
             mockApi: {

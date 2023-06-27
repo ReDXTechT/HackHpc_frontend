@@ -316,7 +316,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
         {
             this.name = this._fuseUtilsService.randomId();
         }
-
+        console.log('here')
         // Register the navigation component
         this._fuseNavigationService.registerComponent(this.name, this);
 
@@ -424,6 +424,7 @@ export class FuseVerticalNavigationComponent implements OnChanges, OnInit, After
      */
     ngOnDestroy(): void
     {
+        console.log('desztry')
         // Disconnect the mutation observer
         this._mutationObserver.disconnect();
 

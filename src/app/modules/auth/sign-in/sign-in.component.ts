@@ -12,6 +12,7 @@ import { fuseAnimations } from '@fuse/animations';
 import { FuseAlertComponent, FuseAlertType } from '@fuse/components/alert';
 import { AuthService } from 'app/core/auth/auth.service';
 import {AuthenticationService} from "../../../core/services/authentication.service";
+import {FuseNavigationService, FuseVerticalNavigationComponent} from "../../../../@fuse/components/navigation";
 
 @Component({
     selector     : 'auth-sign-in',
@@ -24,6 +25,7 @@ import {AuthenticationService} from "../../../core/services/authentication.servi
 export class AuthSignInComponent implements OnInit
 {
     @ViewChild('signInNgForm') signInNgForm: NgForm;
+    @ViewChild(FuseVerticalNavigationComponent) fuseNavComponent: FuseVerticalNavigationComponent;
 
     alert: { type: FuseAlertType; message: string } = {
         type   : 'success',
@@ -41,7 +43,7 @@ export class AuthSignInComponent implements OnInit
         private _formBuilder: UntypedFormBuilder,
         private router: Router,
         private route: ActivatedRoute,
-
+        private fuseNavigationService: FuseNavigationService
     )
     {
     }
@@ -55,6 +57,8 @@ export class AuthSignInComponent implements OnInit
      */
     ngOnInit(): void
     {
+        this.fuseNavigationService.registerComponent('mainNavigation', this.fuseNavComponent);
+
         // Create the form
         this.signInForm = this._formBuilder.group({
             email     : ['', [Validators.required, Validators.email]],

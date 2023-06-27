@@ -3,7 +3,7 @@
     cdkScrollable>
 
     <!-- Header -->
-    <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-gray-800 dark">
+    <div class="relative flex-0 py-8 px-4 sm:p-16 overflow-hidden bg-black dark">
         <!-- Background - @formatter:off -->
         <!-- Rings -->
         <svg class="absolute inset-0 pointer-events-none"
@@ -114,8 +114,8 @@
                                 </div>
                                 <div
                                     class="flex items-center leading-5 text-md text-secondary mt-4 eduman-course-tutor">
-                                    <img [src]="'assets/images/profile.jpg'" class="user-image" alt="">
-                                    <a [routerLink]="['/admin/teachers/about-teacher']">Sponsor : Imen Chaari</a>
+                                    <img [src]="competition.customer.user.image" class="user-image" alt="">
+                                    <a [routerLink]="['/admin/teachers/about-teacher']">Sponsor : {{competition.customer.user.firstName}} {{competition.customer.user.lastName}}</a>
                                 </div>
                             </div>
                             <div class="flex flex-col w-full mt-auto mt-4">

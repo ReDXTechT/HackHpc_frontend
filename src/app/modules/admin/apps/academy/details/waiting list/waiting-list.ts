@@ -28,6 +28,8 @@ import { InventoryService } from 'app/modules/admin/apps/ecommerce/inventory/inv
 import { InventoryBrand, InventoryCategory, InventoryPagination, InventoryProduct, InventoryTag, InventoryVendor } from 'app/modules/admin/apps/ecommerce/inventory/inventory.types';
 import { debounceTime, map, merge, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import {CompetitionService} from "../../../../../../core/services/competition.service";
+import {AuthenticationService} from "../../../../../../core/services/authentication.service";
+import {Router} from "@angular/router";
 
 @Component({
     selector       : 'waiting-list',
@@ -77,7 +79,7 @@ export class WaitingList implements OnInit, AfterViewInit, OnDestroy {
     vendors: InventoryVendor[];
     private _unsubscribeAll: Subject<any> = new Subject<any>();
     @Input() competitionId: number;
-
+user : any
 
     /**
      * Constructor
@@ -87,7 +89,12 @@ export class WaitingList implements OnInit, AfterViewInit, OnDestroy {
         private _fuseConfirmationService: FuseConfirmationService,
         private _formBuilder: UntypedFormBuilder,
         private competitionService: CompetitionService,
+        private router: Router,
+        private authenticationService: AuthenticationService,
     ) {
+        if(this.authenticationService.currentUser){
+            this.user = this.authenticationService.currentUserValue
+        }
     }
 
     ngOnInit(): void {
@@ -102,12 +109,17 @@ export class WaitingList implements OnInit, AfterViewInit, OnDestroy {
             this._changeDetectorRef.detectChanges()
         })
     }
+    navigateToCompetitionDetailsTab(tab: string) {
+        this.router.navigate(['/apps/competitions', this.competitionId], { fragment: tab });
+    }
     approveJoinRequest(requestId: any){
         this.competitionService.approveJoinRequest(requestId).subscribe(res=>{
             console.log(res)
             this.getWaitingListByCompetitionId(this.competitionId)
-            this._changeDetectorRef.detectChanges()
+            this.navigateToCompetitionDetailsTab('Team')
         })
+        this._changeDetectorRef.detectChanges()
+
     }
     rejectJoinRequest(requestId: any){
         this.competitionService.rejectJoinRequest(requestId).subscribe(res=>{
@@ -191,15 +203,6 @@ export class WaitingList implements OnInit, AfterViewInit, OnDestroy {
     toggleTagsEditMode(): void {
         this.tagsEditMode = !this.tagsEditMode;
     }
-
-
-    // filterTags(event): void {
-    //     // Get the value
-    //     const value = event.target.value.toLowerCase();
-    //
-    //     // Filter the tags
-    //     this.filteredTags = this.tags.filter(tag => tag.title.toLowerCase().includes(value));
-    // }
 
 
 }

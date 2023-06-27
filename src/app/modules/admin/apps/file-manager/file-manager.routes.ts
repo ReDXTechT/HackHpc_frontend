@@ -1,6 +1,6 @@
 import { inject } from '@angular/core';
 import { ActivatedRouteSnapshot, Router, RouterStateSnapshot, Routes } from '@angular/router';
-import { FileManagerDetailsComponent } from 'app/modules/admin/apps/file-manager/details/details.component';
+import { FileDetails } from 'app/modules/admin/apps/file-manager/details/details.component';
 import { FileManagerComponent } from 'app/modules/admin/apps/file-manager/file-manager.component';
 import { FileManagerService } from 'app/modules/admin/apps/file-manager/file-manager.service';
 import { FileManagerListComponent } from 'app/modules/admin/apps/file-manager/list/list.component';
@@ -66,16 +66,8 @@ const itemResolver = (route: ActivatedRouteSnapshot, state: RouterStateSnapshot)
     );
 };
 
-/**
- * Can deactivate file manager details
- *
- * @param component
- * @param currentRoute
- * @param currentState
- * @param nextState
- */
 const canDeactivateFileManagerDetails = (
-    component: FileManagerDetailsComponent,
+    component: FileDetails,
     currentRoute: ActivatedRouteSnapshot,
     currentState: RouterStateSnapshot,
     nextState: RouterStateSnapshot) =>
@@ -121,7 +113,7 @@ export default [
                 children : [
                     {
                         path         : 'details/:id',
-                        component    : FileManagerDetailsComponent,
+                        component    : FileDetails,
                         resolve      : {
                             item: itemResolver,
                         },
@@ -138,7 +130,7 @@ export default [
                 children : [
                     {
                         path         : 'details/:id',
-                        component    : FileManagerDetailsComponent,
+                        component    : FileDetails,
                         resolve      : {
                             item: itemResolver,
                         },

@@ -18,6 +18,8 @@ import {ShortcutsComponent} from 'app/layout/common/shortcuts/shortcuts.componen
 import {UserComponent} from 'app/layout/common/user/user.component';
 import {Subject, takeUntil} from 'rxjs';
 import {AuthenticationService} from "../../../../core/services/authentication.service";
+import {UsersService} from "../../../../core/services/users.service";
+import {User} from "../../../../core/models/User";
 
 @Component({
     selector: 'dense-layout',
@@ -32,6 +34,7 @@ export class DenseLayoutComponent implements OnInit, OnDestroy {
     navigation: Navigation;
     navigationAppearance: 'default' | 'dense' = 'dense';
     private _unsubscribeAll: Subject<any> = new Subject<any>();
+    user : User
 
     /**
      * Constructor
@@ -41,6 +44,7 @@ export class DenseLayoutComponent implements OnInit, OnDestroy {
         private _router: Router,
         private _navigationService: NavigationService,
         private authenticationService: AuthenticationService,
+        private usersService: UsersService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
         private _fuseNavigationService: FuseNavigationService,
     ) {
@@ -58,14 +62,13 @@ export class DenseLayoutComponent implements OnInit, OnDestroy {
         return new Date().getFullYear();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void {
+        if(this.authenticationService.currentUserValue){
+            this.usersService.getUserById(this.authenticationService.currentUserValue.id).subscribe(user=>{
+                this.user=user
+            })
+        }
+
         // Subscribe to navigation data
         this._navigationService.navigation$
             .pipe(takeUntil(this._unsubscribeAll))
@@ -90,8 +93,8 @@ export class DenseLayoutComponent implements OnInit, OnDestroy {
      */
     ngOnDestroy(): void {
         // Unsubscribe from all subscriptions
-        this._unsubscribeAll.next(null);
-        this._unsubscribeAll.complete();
+        // this._unsubscribeAll.next(null);
+        // this._unsubscribeAll.complete();
     }
 
     // -----------------------------------------------------------------------------------------------------
@@ -106,10 +109,15 @@ export class DenseLayoutComponent implements OnInit, OnDestroy {
     toggleNavigation(name: string): void {
         // Get the navigation
         const navigation = this._fuseNavigationService.getComponent<FuseVerticalNavigationComponent>(name);
-
+        console.log(navigation)
         if (navigation) {
+            console.log(navigation)
             // Toggle the opened status
             navigation.toggle();
+        }
+        else{
+            this._router.navigate(['/home']);
+
         }
     }
 

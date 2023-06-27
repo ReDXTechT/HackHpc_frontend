@@ -211,6 +211,7 @@ export class FuseDrawerComponent implements OnChanges, OnInit, OnDestroy
      */
     ngOnInit(): void
     {
+        console.log("register drawer")
         // Register the drawer
         this._fuseDrawerService.registerComponent(this.name, this);
     }
@@ -227,7 +228,7 @@ export class FuseDrawerComponent implements OnChanges, OnInit, OnDestroy
         }
 
         // Deregister the drawer from the registry
-        this._fuseDrawerService.deregisterComponent(this.name);
+        // this._fuseDrawerService.deregisterComponent(this.name);
     }
 
     // -----------------------------------------------------------------------------------------------------

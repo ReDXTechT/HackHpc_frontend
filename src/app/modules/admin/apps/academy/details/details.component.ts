@@ -60,7 +60,7 @@ export class AcademyDetailsComponent implements OnInit {
     datasource: any;
     chartBudgetDistribution: ApexOptions = {};
     selectedIndex = 0;
-    role: any
+    role =''
     customer: Customer
     approved = false
     register = false
@@ -80,7 +80,9 @@ export class AcademyDetailsComponent implements OnInit {
         private _elementRef: ElementRef,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
     ) {
-        this.role = this.authenticationService.currentUserValue.role
+        if(this.authenticationService.currentUserValue){
+            this.role = this.authenticationService.currentUserValue.role
+        }
         this.submissionForm = this._formBuilder.group({
             git_repo_url: ['', Validators.required],
             validate_script: ['', Validators.required],
@@ -112,9 +114,10 @@ export class AcademyDetailsComponent implements OnInit {
             const competitionId = this.route.snapshot.paramMap.get('id');
             this.competition = await this.getCompetitionById(competitionId);
             this.getBudgetDetailsByCompetitionId(competitionId);
-            this.getCurrentUserScore(this.authenticationService.currentUserValue.id, this.competition.id)
+            if(this.authenticationService.currentUserValue){
+                this.getCurrentUserScore(this.authenticationService.currentUserValue.id, this.competition.id)
+            }
             this.getWaitingListByCompetitionId(competitionId)
-            console.log(this.customer)
         } catch (error) {
             console.error('Error fetching competition:', error);
         }
@@ -128,6 +131,7 @@ export class AcademyDetailsComponent implements OnInit {
     getCurrentUserScore(competitorId: any, competitionId: any) {
         this.competitionService.checkCompetitorApprovedByInCompetition(competitorId, competitionId).subscribe(res => {
             if (res.is_approved) {
+
                 this.approved = true
                 this.changeDetectorRef.detectChanges()
             }
@@ -136,9 +140,18 @@ export class AcademyDetailsComponent implements OnInit {
                 this.changeDetectorRef.detectChanges()
 
             }
+            console.log(res)
 
             console.log(this.approved)
+            console.log(this.register)
+        },error => {
+            console.log(error)
+            this.register=true
+            console.log(this.approved,this.register)
+            this.changeDetectorRef.detectChanges()
+
         })
+
     }
 
     showNotification(colorName, text, placementFrom, placementAlign) {
@@ -188,7 +201,7 @@ export class AcademyDetailsComponent implements OnInit {
                     enabled: true,
                 },
             },
-            colors: ['#818CF8'],
+            colors: ['#b91717'],
             dataLabels: {
                 enabled: true,
                 formatter: (val: number): string | number => `${val}%`,
@@ -204,7 +217,7 @@ export class AcademyDetailsComponent implements OnInit {
                 offsetY: -15,
             },
             markers: {
-                strokeColors: '#818CF8',
+                strokeColors: '#171515',
                 strokeWidth: 4,
             },
             plotOptions: {

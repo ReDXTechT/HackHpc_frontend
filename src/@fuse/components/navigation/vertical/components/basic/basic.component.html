@@ -5,7 +5,7 @@
     [ngClass]="item.classes?.wrapper">
 
     <!-- Item with an internal link -->
-    <ng-container *ngIf="item.link && !item.externalLink && !item.function && !item.disabled">
+    <ng-container *ngIf="item.link && !item.externalLink && !item.function && !item.disabled && item.roles.includes(role)">
         <a
             class="fuse-vertical-navigation-item"
             [ngClass]="{'fuse-vertical-navigation-item-active-forced': item.active}"
@@ -21,19 +21,8 @@
         </a>
     </ng-container>
 
-    <!-- Item with an external link -->
-<!--    <ng-container *ngIf="item.link && item.externalLink && !item.function && !item.disabled">-->
-<!--        <a-->
-<!--            class="fuse-vertical-navigation-item"-->
-<!--            [href]="item.link"-->
-<!--            [target]="item.target || '_self'"-->
-<!--            [matTooltip]="item.tooltip || ''">-->
-<!--            <ng-container *ngTemplateOutlet="itemTemplate"></ng-container>-->
-<!--        </a>-->
-<!--    </ng-container>-->
-
 <!--     Item with a function -->
-    <ng-container *ngIf="!item.link && item.function && !item.disabled">
+    <ng-container *ngIf="!item.link && item.function && !item.disabled && item.roles.includes(role)">
         <div
             class="fuse-vertical-navigation-item"
             [ngClass]="{'fuse-vertical-navigation-item-active-forced': item.active}"
@@ -44,8 +33,8 @@
     </ng-container>
 
 
-<!--     Item with an internal link and function -->
-    <ng-container *ngIf="item.link && !item.externalLink && item.function && !item.disabled">
+<!--     Item with an internal link and function and role -->
+    <ng-container *ngIf="item.link && !item.externalLink && item.function && !item.disabled && item.roles.includes(role)">
         <a
             class="fuse-vertical-navigation-item"
             [ngClass]="{'fuse-vertical-navigation-item-active-forced': item.active}"

@@ -1,4 +1,4 @@
-<div class="w-full max-w-3xl">
+ <div class="w-full max-w-3xl">
 
     <!-- Form -->
     <form [formGroup]="securityForm">
@@ -20,7 +20,7 @@
                         [svgIcon]="'heroicons_solid:key'"
                         matPrefix></mat-icon>
                     <input
-                        [formControlName]="'currentPassword'"
+                        [formControlName]="'password'"
                         type="password"
                         matInput>
                 </mat-form-field>
@@ -36,7 +36,7 @@
                         [svgIcon]="'heroicons_solid:key'"
                         matPrefix></mat-icon>
                     <input
-                        [formControlName]="'newPassword'"
+                        [formControlName]="'new_password'"
                         type="password"
                         matInput>
                 </mat-form-field>
@@ -48,62 +48,63 @@
         <div class="my-10 border-t"></div>
 
         <!-- Section -->
-        <div class="w-full">
-            <div class="text-xl">Security preferences</div>
-            <div class="text-secondary">Keep your account more secure with following preferences.</div>
-        </div>
-        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">
-            <!-- 2-step auth -->
-            <div class="sm:col-span-4 flex items-center justify-between">
-                <div
-                    class="flex-auto cursor-pointer"
-                    (click)="twoStepToggle.toggle()">
-                    <div class="leading-6 font-medium">Enable 2-step authentication</div>
-                    <div class="text-md text-secondary">
-                        Protects you against password theft by requesting an authentication code via SMS on every login.
-                    </div>
-                </div>
-                <mat-slide-toggle
-                    class="ml-4"
-                    [color]="'primary'"
-                    [formControlName]="'twoStep'"
-                    #twoStepToggle>
-                </mat-slide-toggle>
-            </div>
-            <!-- Ask to change password -->
-            <div class="sm:col-span-4 flex items-center justify-between">
-                <div
-                    class="flex-auto cursor-pointer"
-                    (click)="askPasswordChangeToggle.toggle()">
-                    <div class="leading-6 font-medium">Ask to change password on every 6 months</div>
-                    <div class="text-md text-secondary">
-                        A simple but an effective way to be protected against data leaks and password theft.
-                    </div>
-                </div>
-                <mat-slide-toggle
-                    class="ml-4"
-                    [color]="'primary'"
-                    [formControlName]="'askPasswordChange'"
-                    #askPasswordChangeToggle>
-                </mat-slide-toggle>
-            </div>
-        </div>
+<!--        <div class="w-full">-->
+<!--            <div class="text-xl">Security preferences</div>-->
+<!--            <div class="text-secondary">Keep your account more secure with following preferences.</div>-->
+<!--        </div>-->
+<!--        <div class="grid sm:grid-cols-4 gap-6 w-full mt-8">-->
+<!--            &lt;!&ndash; 2-step auth &ndash;&gt;-->
+<!--            <div class="sm:col-span-4 flex items-center justify-between">-->
+<!--                <div-->
+<!--                    class="flex-auto cursor-pointer"-->
+<!--                    (click)="twoStepToggle.toggle()">-->
+<!--                    <div class="leading-6 font-medium">Enable 2-step authentication</div>-->
+<!--                    <div class="text-md text-secondary">-->
+<!--                        Protects you against password theft by requesting an authentication code via SMS on every login.-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <mat-slide-toggle-->
+<!--                    class="ml-4"-->
+<!--                    [color]="'primary'"-->
+<!--                    [formControlName]="'twoStep'"-->
+<!--                    #twoStepToggle>-->
+<!--                </mat-slide-toggle>-->
+<!--            </div>-->
+<!--            &lt;!&ndash; Ask to change password &ndash;&gt;-->
+<!--            <div class="sm:col-span-4 flex items-center justify-between">-->
+<!--                <div-->
+<!--                    class="flex-auto cursor-pointer"-->
+<!--                    (click)="askPasswordChangeToggle.toggle()">-->
+<!--                    <div class="leading-6 font-medium">Ask to change password on every 6 months</div>-->
+<!--                    <div class="text-md text-secondary">-->
+<!--                        A simple but an effective way to be protected against data leaks and password theft.-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <mat-slide-toggle-->
+<!--                    class="ml-4"-->
+<!--                    [color]="'primary'"-->
+<!--                    [formControlName]="'askPasswordChange'"-->
+<!--                    #askPasswordChangeToggle>-->
+<!--                </mat-slide-toggle>-->
+<!--            </div>-->
+<!--        </div>-->
 
-        <!-- Divider -->
-        <div class="my-10 border-t"></div>
+<!--        &lt;!&ndash; Divider &ndash;&gt;-->
+<!--        <div class="my-10 border-t"></div>-->
 
         <!-- Actions -->
         <div class="flex items-center justify-end">
-            <button
-                mat-stroked-button
-                type="button">
-                Cancel
-            </button>
+<!--            <button-->
+<!--                mat-stroked-button-->
+<!--                type="button">-->
+<!--                Cancel-->
+<!--            </button>-->
             <button
                 class="ml-4"
                 mat-flat-button
                 type="button"
-                [color]="'primary'">Save
+                [color]="'primary'"
+            (click)="changePassword()">Save
             </button>
         </div>
     </form>

@@ -10,7 +10,7 @@
                     <div class="flex flex-col min-w-0 ml-4">
                         <div class="flex items-center mb-3">
                             <div
-                                class="ml-1.5 leading-6 truncate text-secondary font-bold text-3xl">{{competition?.title}}</div>
+                                class="ml-1.5 leading-6 truncate text-gray-700 font-bold text-3xl">{{competition?.title}}</div>
                         </div>
                         <hr class="my-4 border-b border-gray-300 mt-4">
                         <div class="flex flex-col md:flex-row items-start md:items-center md:space-x-4 w-full p-2 md:p-0">
@@ -64,25 +64,17 @@
 
                 <!-- Actions -->
                 <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
-                    <div *ngIf="competition?.status === 'About_to_start'&& role=='Customer'">
-<!--                        <button mat-flat-button [routerLink]="'/apps/competition/competition-report/' + competition.id"-->
-<!--                                [color]="'primary'">-->
-<!--                            <mat-icon svgIcon="mat_solid:edit"></mat-icon>-->
-<!--                            <span class="ml-2">-->
-<!--                              <ng-container *ngIf="data.length === 0; else updateText">Create Report</ng-container>-->
-<!--                              <ng-template #updateText>Update Report</ng-template>-->
-<!--                            </span>-->
-<!--                        </button>-->
-                        <button class=" mr-2" mat-flat-button [routerLink]="'/apps/competition/competition-report/' + competition.id"
-                                [color]="'primary'">
-                            <mat-icon svgIcon="mat_solid:edit"></mat-icon>
-                            <span class="ml-2">Report</span>
+                    <div *ngIf="(competition?.status !== 'About_to_start'&& role=='Admin') || (competition?.status !== 'About_to_start'&& role=='Customer')">
+                        <button class=" mr-2" mat-flat-button routerLink="/apps/results-submissions"
+                                style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="mat_solid:drive_file_move"></mat-icon>
+                            <span class="ml-2">View Submissions</span>
                         </button>
                     </div>
 
                     <div *ngIf="competition?.status === 'About_to_start' && role=='Competitor'">
 
-                        <button *ngIf="approved === true && !register" mat-flat-button style="background-color: rgba(0,128,0,0.8); color: white;">
+                        <button *ngIf="approved === true && !register" mat-flat-button style="background-color:  #04b78d; color: white;">
                             <mat-icon svgIcon="heroicons_solid:check"></mat-icon>
                             <span class="ml-2">Already Registered</span>
                         </button>
@@ -96,7 +88,18 @@
                         <button *ngIf="register && !approved"
                             mat-flat-button
                             (click)="quizPassing(competition)"
-                            [color]="'primary'">
+                                style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="mat_solid:person_add"></mat-icon>
+
+                            <span class="ml-2">Register</span>
+                        </button>
+                    </div>
+                    <div *ngIf="competition?.status === 'About_to_start' && role==''">
+
+                        <button
+                                mat-flat-button
+                                (click)="quizPassing(competition)"
+                                style="background-color: #020202; color: white;">
                             <mat-icon svgIcon="mat_solid:person_add"></mat-icon>
 
                             <span class="ml-2">Register</span>
@@ -107,7 +110,7 @@
             </div>
             <!-- Project selector -->
             <div
-                class="relative flex self-start pt-2 pb-1 pl-5 pr-4 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 bg-default"
+                class="relative flex self-start pt-2 pb-1 pl-5 pr-4 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 " style="background-color: rgba(252, 249, 249, 0.81)"
                 matRipple
             >
                 <div class="flex items-center">
@@ -147,32 +150,32 @@
 
                             <hr class="mt-6">
                             <div class="mt-8">
-                                <span class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Challenge Description</span>
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Challenge Description</span>
                                 <ul class="mt-4 ml-6">
                                     <li>{{competition?.project_description}}</li>
                                 </ul>
                             </div>
 
                             <div class="mt-8">
-                                <span class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold"> Challenge Dates </span>
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold"> Challenge Dates </span>
                                 <ul class="mt-4 ml-6">
                                     <li>
                                         <div class="flex items-center">
-                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'" style="color: darkred"></mat-icon>
                                             <div class="font-bold">Starting Date:</div>
                                             <div class="ml-2">{{ competition?.starting_date }}</div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="flex items-center">
-                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'" style="color: darkred"></mat-icon>
                                             <div class="font-bold">Submission Deadline:</div>
                                             <div class="ml-2">{{ competition?.submission_deadline  }}</div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="flex items-center">
-                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'"></mat-icon>
+                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'" style="color: darkred"></mat-icon>
                                             <div class="font-bold">Winner Announcement:</div>
                                             <div class="ml-2">{{ competition?.winner_announcement_date }}</div>
                                         </div>
@@ -182,46 +185,46 @@
 
 
                             <div class="mt-8">
-                                <span class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Eligibility</span>
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Eligibility</span>
                                 <ul class="mt-4 ml-6">
                                     <li>{{competition?.skills_required}}</li>
                                 </ul>
                             </div>
 
                             <div class="mt-8">
-                                <span class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Optimization guidelines</span>
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Optimization guidelines</span>
                                 <ul class="mt-4 ml-6">
                                     <li>{{competition?.optimization_guidelines}}</li>
                                 </ul>
                             </div>
 
                             <div class="mt-8">
-                                <span class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Target Architecture</span>
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Target Architecture</span>
                                 <ul class="mt-4 ml-6">
                                     <li>
                                         <div class="flex items-center">
-                                            <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2"></mat-icon>
+                                            <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
                                             <div class="font-bold">CPU Memory:</div>
                                             <div class="ml-2">{{ competition?.target_architecture.cpu_memory }}</div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="flex items-center">
-                                            <mat-icon svgIcon="feather:cpu" class="mr-2"></mat-icon>
+                                            <mat-icon svgIcon="feather:cpu" class="mr-2" style="color: darkred"></mat-icon>
                                             <div class="font-bold">Processor:</div>
                                             <div class="ml-2">{{ competition?.target_architecture.processor }}</div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="flex items-center">
-                                            <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2"></mat-icon>
+                                            <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
                                             <div class="font-bold">vCPU:</div>
                                             <div class="ml-2">{{ competition?.target_architecture.vcpu }}</div>
                                         </div>
                                     </li>
                                     <li>
                                         <div class="flex items-center">
-                                            <mat-icon svgIcon="feather:hard-drive" class="mr-2"></mat-icon>
+                                            <mat-icon svgIcon="feather:hard-drive" class="mr-2" style="color: darkred"></mat-icon>
                                             <div class="font-bold">Storage:</div>
                                             <div class="ml-2">{{ competition?.target_architecture.storage }}</div>
                                         </div>
@@ -229,7 +232,7 @@
                                     <ng-container *ngIf="competition?.target_architecture.graphics_card === null">
                                         <li>
                                             <div class="flex items-center">
-                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2"></mat-icon>
+                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
                                                 <div class="font-bold">Graphics Card:</div>
                                                 <div class="ml-2">N/A</div>
                                             </div>
@@ -238,7 +241,7 @@
                                     <ng-container *ngIf="competition?.target_architecture.graphics_card !== null">
                                         <li>
                                             <div class="flex items-center">
-                                                <mat-icon svgIcon="feather:cpu" class="mr-2"></mat-icon>
+                                                <mat-icon svgIcon="feather:cpu" class="mr-2" style="color: darkred"></mat-icon>
                                                 <div class="font-bold">Graphics Card:</div>
                                                 <div
                                                     class="ml-2">{{ competition?.target_architecture.graphics_card }}</div>
@@ -246,7 +249,7 @@
                                         </li>
                                         <li>
                                             <div class="flex items-center">
-                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2"></mat-icon>
+                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
                                                 <div class="font-bold">Graphics Card Memory:</div>
                                                 <div
                                                     class="ml-2">{{ competition?.target_architecture.graphics_card_memory }}</div>
@@ -254,7 +257,7 @@
                                         </li>
                                         <li>
                                             <div class="flex items-center">
-                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2"></mat-icon>
+                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
                                                 <div class="font-bold">Parallel Processing Units:</div>
                                                 <div
                                                     class="ml-2">{{ competition?.target_architecture.parallel_processing_units }}</div>
@@ -267,7 +270,7 @@
 
                             <div class="mt-8">
                                 <span
-                                    class="inline-flex bg-default rounded px-3 py-1 text-secondary font-bold">Prizes</span>
+                                    class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Prizes</span>
                                 <ul class="mt-4 ml-6 list-disc">
                                     <ng-container *ngFor="let prize of competition.prizes; let i = index">
                                         <li class="ml-2">
@@ -435,7 +438,7 @@
                         <span class="inline-flex items-center space-x-2">
                             <span class="">Condidats</span>
                             <span
-                                class="px-2 py-1 text-sm rounded-full bg-primary-100 text-on-primary-100">{{competition?.competitors.length}}</span>
+                                class="px-2 py-1 text-sm rounded-full bg-red-100 text-on-black-100">{{competition?.competitors.length}}</span>
                         </span>
                     </ng-template>
                     <team [competitionId]="competition.id"></team>
@@ -453,7 +456,7 @@
                         <span class="inline-flex items-center space-x-2">
                             <span class="">Waiting List</span>
                             <span
-                                class="px-2 py-1 text-sm rounded-full bg-primary-100 text-on-primary-100">{{waitingList?.length}}</span>
+                                class="px-2 py-1 text-sm rounded-full bg-red-100 text-on-black-100">{{waitingList?.length}}</span>
                         </span>
                     </ng-template>
                     <ng-template matTabContent>

@@ -53,8 +53,8 @@ export class CompetitionService {
     approveCompetition(competitionId: string): Observable<any> {
         return this.http.post(`${this.baseUrl}/competition/${competitionId}/approve`,{});
     }
-    rejectCompetition(competitionId: string): Observable<any> {
-        return this.http.post(`${this.baseUrl}/competition/${competitionId}/reject`,{});
+    rejectCompetition(competitionId: string,body: any): Observable<any> {
+        return this.http.post(`${this.baseUrl}/competition/${competitionId}/reject`,body);
     }
 
     getAllWaitingListByCompetitionId(competitionId: number): Observable<any> {
@@ -71,5 +71,13 @@ export class CompetitionService {
     }
     rejectJoinRequest(requestId: string): Observable<any> {
         return this.http.put(`${this.baseUrl}/join-request/${requestId}/reject`,{});
+    }
+
+    getActiveCompetitions(): Observable<Competition[]> {
+        return this.http.get<Competition[]>(`${this.baseUrl}/competitions/running`);
+    }
+
+    getCompetitorContributions(userId : any): Observable<Competition[]> {
+        return this.http.get<Competition[]>(`${this.baseUrl}/competitors-contributions/${userId}`);
     }
 }

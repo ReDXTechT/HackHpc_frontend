@@ -16,6 +16,8 @@ export class FuseNavigationService
 
     registerComponent(name: string, component: any): void
     {
+        console.log(component)
+        console.log(name)
         this._componentRegistry.set(name, component);
     }
 

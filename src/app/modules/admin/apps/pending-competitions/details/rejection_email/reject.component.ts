@@ -1,8 +1,8 @@
 import { NgIf } from '@angular/common';
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import {Component, Inject, OnInit, ViewEncapsulation} from '@angular/core';
 import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
-import { MatDialogRef } from '@angular/material/dialog';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -34,6 +34,7 @@ export class RejectComponent implements OnInit
      * Constructor
      */
     constructor(
+        @Inject(MAT_DIALOG_DATA) public data: any,
         public matDialogRef: MatDialogRef<RejectComponent>,
         private _formBuilder: UntypedFormBuilder,
     )
@@ -49,25 +50,15 @@ export class RejectComponent implements OnInit
      */
     ngOnInit(): void
     {
+        console.log(this.data)
         // Create the form
         this.composeForm = this._formBuilder.group({
-            to     : ['', [Validators.required, Validators.email]],
-            cc     : ['', [Validators.email]],
-            bcc    : ['', [Validators.email]],
-            subject: [''],
+            to     : [this.data.sponsorEmail, [Validators.required, Validators.email]],
+            subject: ['',[Validators.required]],
             body   : ['', [Validators.required]],
         });
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Show the copy field with the given field name
-     *
-     * @param name
-     */
     showCopyField(name: string): void
     {
         // Return if the name is not one of the available names
@@ -86,8 +77,6 @@ export class RejectComponent implements OnInit
     saveAndClose(): void
     {
         // Save the message as a draft
-        this.saveAsDraft();
-
         // Close the dialog
         this.matDialogRef.close();
     }
@@ -97,13 +86,8 @@ export class RejectComponent implements OnInit
      */
     discard(): void
     {
-    }
+        this.matDialogRef.close();
 
-    /**
-     * Save the message as a draft
-     */
-    saveAsDraft(): void
-    {
     }
 
     /**
@@ -111,5 +95,8 @@ export class RejectComponent implements OnInit
      */
     send(): void
     {
+        console.log(this.composeForm.value)
+        this.matDialogRef.close(this.composeForm.value); // Closing dialog and sending the form data
+
     }
 }

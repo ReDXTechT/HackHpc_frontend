@@ -8,8 +8,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatDrawer, MatSidenavModule } from '@angular/material/sidenav';
 import { ActivatedRoute, Router, RouterLink, RouterOutlet } from '@angular/router';
 import { FuseMediaWatcherService } from '@fuse/services/media-watcher';
-import { CustomersService } from 'app/modules/admin/apps/customers/customers.service';
-import { Contact, Country } from 'app/modules/admin/apps/customers/customers.types';
 import { filter, fromEvent, Observable, Subject, switchMap, takeUntil } from 'rxjs';
 import {UsersService} from "../../../../../core/services/users.service";
 import {Customer} from "../../../../../core/models/User";
@@ -26,26 +24,23 @@ export class CustomersListComponent implements OnInit, OnDestroy
 {
     @ViewChild('matDrawer', {static: true}) matDrawer: MatDrawer;
 
-    customers$: Observable<Customer[]>;
-
+    customers: any[] = [];
     customersCount: number = 0;
-    contactsTableColumns: string[] = ['name', 'email', 'phoneNumber', 'job'];
-    countries: Country[];
     drawerMode: 'side' | 'over';
     searchInputControl: UntypedFormControl = new UntypedFormControl();
     selectedcustomer: Customer;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
+    name =''
     /**
      * Constructor
      */
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
-        private _contactsService: CustomersService,
         private usersService: UsersService,
         @Inject(DOCUMENT) private _document: any,
-        private _router: Router,
+        private router: Router,
+        private route: ActivatedRoute,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
     )
     {
@@ -53,44 +48,6 @@ export class CustomersListComponent implements OnInit, OnDestroy
     ngOnInit(): void
     {
         this.getAllCustomers();
-        // Get the countries
-        this._contactsService.countries$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((countries: Country[]) =>
-            {
-                // Update the countries
-                this.countries = countries;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
-
-        // Subscribe to search input field value changes
-        this.searchInputControl.valueChanges
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                switchMap(query =>
-
-                    // Search
-                    this._contactsService.searchContacts(query),
-                ),
-            )
-            .subscribe();
-
-        // Subscribe to MatDrawer opened change
-        this.matDrawer.openedChange.subscribe((opened) =>
-        {
-            if ( !opened )
-            {
-                // Remove the selected contact when drawer closed
-                this.selectedcustomer = null;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            }
-        });
-
-        // Subscribe to media changes
         this._fuseMediaWatcherService.onMediaChange$
             .pipe(takeUntil(this._unsubscribeAll))
             .subscribe(({matchingAliases}) =>
@@ -109,19 +66,21 @@ export class CustomersListComponent implements OnInit, OnDestroy
                 this._changeDetectorRef.markForCheck();
             });
 
-        // Listen for shortcuts
-        fromEvent(this._document, 'keydown')
-            .pipe(
-                takeUntil(this._unsubscribeAll),
-                filter<KeyboardEvent>(event =>
-                    (event.ctrlKey === true || event.metaKey) // Ctrl or Cmd
-                    && (event.key === '/'), // '/'
-                ),
-            )
-            .subscribe(() =>
-            {
-                this.createcustomer();
-            });
+    }
+    onSearch(query: string) {
+
+        this.name = query;
+        this.getFilteredCustomers()
+    }
+    getFilteredCustomers() {
+        // this.customers = this.usersService.getFilteredCustomers(this.name)
+        this.usersService.getFilteredCustomers(this.name).subscribe(res=>{
+            console.log(res)
+            this.customers=res
+            this._changeDetectorRef.detectChanges()
+
+        })
+
     }
     ngOnDestroy(): void
     {
@@ -131,32 +90,23 @@ export class CustomersListComponent implements OnInit, OnDestroy
     }
 
     getAllCustomers(){
-        this.customers$= this.usersService.getAllCustomers()
         this.usersService.getAllCustomers().subscribe(customers=>{
             console.log(customers)
             this.customersCount = customers.length;
+            this.customers=customers
+            this._changeDetectorRef.detectChanges()
         })
     }
     onBackdropClicked(): void
     {
         // Go back to the list
-        this._router.navigate(['./'], {relativeTo: this._activatedRoute});
+        this.router.navigate(['./'], {relativeTo: this._activatedRoute});
 
         // Mark for check
         this._changeDetectorRef.markForCheck();
     }
-    createcustomer(): void
-    {
-        // Create the contact
-        this._contactsService.createContact().subscribe((newContact) =>
-        {
-            // Go to the new contact
-            this._router.navigate(['./', newContact.id], {relativeTo: this._activatedRoute});
 
-            // Mark for check
-            this._changeDetectorRef.markForCheck();
-        });
-    }
+
     trackByFn(index: number, item: any): any
     {
         return item.id || index;

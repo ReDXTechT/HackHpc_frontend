@@ -10,14 +10,7 @@ import { LayoutComponent } from 'app/layout/layout.component';
 export const appRoutes: Route[] = [
 
     // Redirect empty path to '/dashboards/project'
-    {path: '', pathMatch : 'full', redirectTo: 'dashboards/project'},
-
-    // Redirect signed-in user to the '/dashboards/project'
-    //
-    // After the user signs in, the sign-in page will redirect the user to the 'signed-in-redirect'
-    // path. Below is another redirection for that path to redirect the user to the desired
-    // location. This is a small convenience to keep all main routes together here on this file.
-    {path: 'signed-in-redirect', pathMatch : 'full', redirectTo: 'dashboards/project'},
+    {path: '', pathMatch : 'full', redirectTo: '/home'},
 
     // Auth routes for guests
     {
@@ -40,8 +33,8 @@ export const appRoutes: Route[] = [
     // Auth routes for authenticated users
     {
         path: '',
-        canActivate: [AuthGuard],
-        canActivateChild: [AuthGuard],
+        canActivate: [NoAuthGuard],
+        canActivateChild: [NoAuthGuard],
         component: LayoutComponent,
         data: {
             layout: 'empty'
@@ -80,14 +73,16 @@ export const appRoutes: Route[] = [
             // Apps
             {path: 'apps', children: [
                 {path: 'clusters-monitoring', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.routes')},
-                    {path: 'competitions', loadChildren: () => import('app/modules/admin/apps/academy/academy.routes')},
+                {path: 'competitions', loadChildren: () => import('app/modules/admin/apps/academy/academy.routes')},
                 {path: 'pending-competitions', loadChildren: () => import('app/modules/admin/apps/pending-competitions/pending-competitions.routes')},
                 {path: 'competition', loadChildren: () => import('app/modules/admin/apps/competition/competition.module').then((m) => m.CompetitionModule)},
                 {path: 'customers', loadChildren: () => import('app/modules/admin/apps/customers/customers.routes')},
-                {path: 'file-manager', loadChildren: () => import('app/modules/admin/apps/file-manager/file-manager.routes')},
+                {path: 'pending-customers-accounts', loadChildren: () => import('app/modules/admin/apps/pending-customers/pending-customers.routes')},
+                {path: 'results-submissions', loadChildren: () => import('app/modules/admin/apps/file-manager/file-manager.routes')},
                 {path: 'help-center', loadChildren: () => import('app/modules/admin/apps/help-center/help-center.routes')},
                 {path: 'mailbox', loadChildren: () => import('app/modules/admin/apps/mailbox/mailbox.routes')},
                 {path: 'scrumboard', loadChildren: () => import('app/modules/admin/apps/scrumboard/scrumboard.routes')},
+                {path: 'test', loadChildren: () => import('app/modules/admin/apps/test/test.routes')},
             ]},
 
             // Pages

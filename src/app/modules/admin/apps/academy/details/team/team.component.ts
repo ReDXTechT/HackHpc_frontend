@@ -76,6 +76,8 @@ export class TeamComponent implements OnInit, AfterViewInit, OnDestroy {
             this.team=res
             this._changeDetectorRef.detectChanges()
         })
+        this._changeDetectorRef.detectChanges()
+
     }
 
     // rejectJoinRequest(requestId: any){

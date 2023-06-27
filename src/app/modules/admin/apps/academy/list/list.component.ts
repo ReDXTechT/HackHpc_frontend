@@ -15,6 +15,9 @@ import { FuseFindByKeyPipe } from '@fuse/pipes/find-by-key/find-by-key.pipe';
 import { BehaviorSubject, combineLatest, Subject, takeUntil } from 'rxjs';
 import {CompetitionService} from "../../../../../core/services/competition.service";
 import {Competition} from "../../../../../core/models/competiton";
+import {Customer} from "../../../../../core/models/User";
+import {UsersService} from "../../../../../core/services/users.service";
+import {WhyJoin} from "../../../../landing/home/whyJoin/whyJoin";
 
 @Component({
     selector       : 'academy-list',
@@ -24,15 +27,16 @@ import {Competition} from "../../../../../core/models/competiton";
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone     : true,
-    imports        : [MatIconModule,CdkScrollable, MatFormFieldModule, MatSelectModule, MatOptionModule, NgFor, MatIconModule, MatInputModule, MatSlideToggleModule, NgIf, NgClass, MatTooltipModule, MatProgressBarModule, MatButtonModule, RouterLink, FuseFindByKeyPipe, PercentPipe, I18nPluralPipe],
+    imports: [MatIconModule, CdkScrollable, MatFormFieldModule, MatSelectModule, MatOptionModule, NgFor, MatIconModule, MatInputModule, MatSlideToggleModule, NgIf, NgClass, MatTooltipModule, MatProgressBarModule, MatButtonModule, RouterLink, FuseFindByKeyPipe, PercentPipe, I18nPluralPipe, WhyJoin],
 })
 export class AcademyListComponent implements OnInit, OnDestroy
 {
     hideCompleted$: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
-    competitions: any[] = [];
+    competitions: Competition[] = [];
     status = '';
     code_type = '';
     title = '';
+    customer: Customer;
 
     codeTypes: { value: string, label: string }[] = [
         { value: 'openacc', label: 'OpenACC' },
@@ -46,6 +50,7 @@ export class AcademyListComponent implements OnInit, OnDestroy
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private competitionService: CompetitionService,
+        private usersService: UsersService,
         private route: ActivatedRoute,
 
         private changeDetectorRef: ChangeDetectorRef
@@ -70,6 +75,14 @@ export class AcademyListComponent implements OnInit, OnDestroy
             (data) => {
                 console.log(data)
                 this.competitions=data
+                // Assign a customer to each competition
+                for (let i = 0; i < this.competitions.length; i++) {
+                    const competition = this.competitions[i];
+                    this.usersService.getCustomerDetailsById(competition.sponsor).subscribe(customer => {
+                        console.log(this.customer)
+                        competition.customer = customer;
+                });
+                }
                 this.changeDetectorRef.detectChanges();
 
             },

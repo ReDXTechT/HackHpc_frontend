@@ -51,61 +51,62 @@
                                     [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
                                 <input
                                     matInput
+                                    (input)="onSearch(query.value)"
                                     [formControl]="searchInputControl"
                                     [autocomplete]="'off'"
-                                    [placeholder]="'Search customers'">
+                                    [placeholder]="'Search customers'"
+                                    #query>
                             </mat-form-field>
                         </div>
                         <!-- Add customer button -->
-                        <button
-                            class="ml-4"
-                            mat-flat-button
-                            [color]="'primary'"
-                            (click)="createcustomer()">
-                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                            <span class="ml-2 mr-1">Add</span>
-                        </button>
+<!--                        <button-->
+<!--                            class="ml-4"-->
+<!--                            mat-flat-button-->
+<!--                            [color]="'primary'"-->
+<!--                            (click)="openDrawer(true)">-->
+<!--                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>-->
+<!--                            <span class="ml-2 mr-1">Add</span>-->
+<!--                        </button>-->
+
                     </div>
                 </div>
 
                 <!-- customers list -->
                 <div class="relative">
-                    <ng-container *ngIf="customers$ | async as customers">
                         <ng-container *ngIf="customers.length; else nocustomers">
                             <ng-container *ngFor="let customer of customers; let i = index; trackBy: trackByFn">
                                 <!-- Group -->
-                                <ng-container *ngIf="i === 0 || customer.user.firstName.charAt(0) !== customers[i - 1].user.firstName.charAt(0)">
+                                <ng-container *ngIf="i === 0 || customer?.user?.firstName.charAt(0) !== customers[i - 1]?.user?.firstName.charAt(0)">
                                     <div class="z-10 sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-50 dark:bg-gray-900">
-                                        {{customer.user.firstName.charAt(0)}}
+                                        {{customer?.user?.firstName.charAt(0)}}
                                     </div>
                                 </ng-container>
                                 <!-- customer -->
                                 <a
                                     class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer border-b"
-                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedcustomer || selectedcustomer.user.id !== customer.user.id,
-                                                'bg-primary-50 dark:bg-hover': selectedcustomer && selectedcustomer.user.id === customer.user.id}"
-                                    [routerLink]="['./', customer.user.id]">
+                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedcustomer || selectedcustomer?.user?.id !== customer?.user?.id,
+                'bg-primary-50 dark:bg-hover': selectedcustomer && selectedcustomer?.user?.id === customer?.user?.id}"
+                                    [routerLink]="['./', customer?.user?.id]">
                                     <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full  overflow-hidden">
-                                        <ng-container *ngIf="customer.user.image">
+                                        <ng-container *ngIf="customer?.user?.image">
                                             <img
                                                 class="object-contain w-full h-full"
-                                                [src]="customer.user.image"
+                                                [src]="customer?.user?.image"
                                                 alt="customer avatar"/>
                                         </ng-container>
-                                        <ng-container *ngIf="!customer.user.image">
+                                        <ng-container *ngIf="!customer?.user?.image">
                                             <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
-                                                {{customer.user.firstName.charAt(0)}}
+                                                {{customer?.user?.firstName.charAt(0)}}
                                             </div>
                                         </ng-container>
                                     </div>
                                     <div class="min-w-0 ml-4">
-                                        <div class="font-medium leading-5 truncate">{{customer.user.firstName}} {{customer.user.lastName}}</div>
-                                        <div class="leading-5 truncate text-secondary">{{customer.occupation}}</div>
+                                        <div class="font-medium leading-5 truncate">{{customer?.user?.firstName}} {{customer?.user?.lastName}}</div>
+                                        <div class="leading-5 truncate text-secondary">{{customer?.occupation}}</div>
                                     </div>
                                 </a>
                             </ng-container>
                         </ng-container>
-                    </ng-container>
 
                     <!-- No customers -->
                     <ng-template #nocustomers>

@@ -145,7 +145,7 @@ export class PendingCompetitionsDetailsComponent implements OnInit
                     enabled: true,
                 },
             },
-            colors: ['#818CF8'],
+            colors: ['#b91717'],
             dataLabels: {
                 enabled: true,
                 formatter: (val: number): string | number => `${val}%`,
@@ -161,7 +161,7 @@ export class PendingCompetitionsDetailsComponent implements OnInit
                 offsetY: -15,
             },
             markers: {
-                strokeColors: '#818CF8',
+                strokeColors: '#484747',
                 strokeWidth: 4,
             },
             plotOptions: {
@@ -384,14 +384,18 @@ export class PendingCompetitionsDetailsComponent implements OnInit
 
     }
     rejectCompetition(competititionId : any){
-        const dialogRef = this._matDialog.open(RejectComponent);
+        const dialogRef = this._matDialog.open(RejectComponent, {
+            data: { sponsorEmail: this.customer.user.email }
+        });
 
         dialogRef.afterClosed()
             .subscribe((result) =>
             {
+                console.log(result)
                 console.log('Compose dialog was closed!');
-                this.competitionService.rejectCompetition(competititionId).subscribe(res=>{
+                this.competitionService.rejectCompetition(competititionId,result).subscribe(res=>{
                     console.log(res)
+                    this._router.navigateByUrl("/apps/pending-competitions")
                 })
             });
     }

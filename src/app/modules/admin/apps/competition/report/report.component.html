@@ -137,8 +137,8 @@
                             <div class="mt-3 sm:flex sm:justify-end">
                                 <div *ngIf="!(first && last)" class="flex items-center group cursor-pointer delete-service"
                                      (click)="removeService(i)">
-                                    <mat-icon class="icon-size-4 text-primary-500" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
-                                    <span class="ml-1 text-primary-500 group-hover:underline">Delete service</span>
+                                    <mat-icon class="icon-size-4 text-red-600" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                    <span class="ml-1 text-red-600 group-hover:underline">Delete service</span>
                                 </div>
                             </div>
                         </div>
@@ -147,7 +147,7 @@
                     <!-- Add service button -->
                     <div class="group inline-flex items-center mt-3 -ml-4 py-2 px-4 rounded cursor-pointer" (click)="addService()">
                         <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
-                        <span class="ml-2 font-medium text-secondary group-hover:underline">Add another service</span>
+                        <span class="ml-2 font-medium text-black group-hover:underline">Add another service</span>
                     </div>
 
                     <!-- Form buttons -->

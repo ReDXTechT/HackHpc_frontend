@@ -1,4 +1,4 @@
-import {Competitor} from "./User";
+import {Competitor, Customer} from "./User";
 
 export interface Competition {
     id?: number;
@@ -6,6 +6,7 @@ export interface Competition {
     git_repo_url: string;
     code_type: 'openacc' | 'openmp' | 'mpi' | 'c_cpp';
     sponsor: number;
+    customer : Customer
     instance_type: string;
     ami: string;
     project_description: string;

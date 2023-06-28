@@ -202,24 +202,55 @@ export class ReportComponent implements OnInit
         this.totalCost = total;
     }
     generatePDF(): void {
-        const element = document.getElementById('report-section'); // Replace 'report-section' with the id of the div containing the report
+        const element = document.getElementById('report-section');
+
+        const currentDatetime = new Date();
+        const formattedDatetime = `${currentDatetime.getFullYear()}-${currentDatetime.getMonth()+1}-${currentDatetime.getDate()}_${currentDatetime.getHours()}-${currentDatetime.getMinutes()}`;
         const opt = {
             margin: [0.3, 0.3, 0.3, 0.3], // Set the margins (in inches) for the PDF
-            filename: 'report.pdf', // Set the filename for the downloaded PDF
+            filename:  `report_${formattedDatetime}.pdf`, // Set the filename for the downloaded PDF
+            image: { type: 'jpeg', quality: 0.98 }, // Set the image quality for the PDF
+            html2canvas: { scale: 2 }, // Set the scale for the HTML to Canvas conversion
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }, // Set the PDF format and orientation
+        };
+
+        // html2pdf().set(opt).from(element).save(); // Generate and save the PDF
+        html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
+            // Create a new File object from the PDF blob
+            const reportData = new File([pdfBlob], `report_${formattedDatetime}.pdf`, { type: 'application/pdf' });
+
+            // Call the onSubmit function and pass the file as form data
+            this.onSubmit(reportData);
+        });
+    }
+
+    printPDF(): void {
+        const element = document.getElementById('report-section');
+
+        const currentDatetime = new Date();
+        const formattedDatetime = currentDatetime.toISOString().replace(/:/g, '-'); // Replace colons because they are not allowed in file names
+        const opt = {
+            margin: [0.3, 0.3, 0.3, 0.3], // Set the margins (in inches) for the PDF
+            filename:  `report_${formattedDatetime}.pdf`, // Set the filename for the downloaded PDF
             image: { type: 'jpeg', quality: 0.98 }, // Set the image quality for the PDF
             html2canvas: { scale: 2 }, // Set the scale for the HTML to Canvas conversion
             jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }, // Set the PDF format and orientation
         };
 
         html2pdf().set(opt).from(element).save(); // Generate and save the PDF
+
     }
-    onSubmit(): void {
+    onSubmit(reportData: File): void {
+        console.log(reportData)
         if (this.budgetForm.valid) {
+            console.log(reportData)
+            const formData = new FormData();
+
+            formData.append('report', reportData, reportData.name);
             const winnerAnnouncementDate = this.formatDate(this.budgetForm.value.winner_announcement_date);
             const submissionDeadline = this.formatDate(this.budgetForm.value.submission_deadline);
             const starting_date = this.formatDate(this.budgetForm.value.starting_date);
             const payload = {
-                id: 1,
                 feedback: this.budgetForm.value.feedback,
                 starting_date: starting_date,
                 submission_deadline:submissionDeadline,
@@ -227,8 +258,11 @@ export class ReportComponent implements OnInit
                 instance_type: this.budgetForm.value.instance_type,
                 custom_ami: this.budgetForm.value.custom_ami,
                 competition: this.competitionId,
-                budget_items: this.budgetForm.value.budget_items
+                budget_items: this.budgetForm.value.budget_items,
             };
+
+            console.log(typeof payload.competition)
+            formData.append('data', JSON.stringify(payload));
 
             console.log(this.budgetForm.value);
             this.loading = true;
@@ -237,12 +271,12 @@ export class ReportComponent implements OnInit
                 console.log(this.budget)
                 console.log("update")
                 // Update report
-                this.updateReport(this.competitionId, payload);
+                this.updateReport(this.competitionId, formData);
             } else {
                 console.log("create")
 
                 // Create new report
-                this.budgetReportService.createCompetitionBudget(payload, this.competitionId).subscribe(
+                this.budgetReportService.createCompetitionBudget(formData, this.competitionId).subscribe(
                     (res) => {
                         this.loading = false;
                         this.showNotification('snackbar-success', 'Budget report added successfully!', 'bottom', 'center');

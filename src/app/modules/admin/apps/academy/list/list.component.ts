@@ -137,6 +137,17 @@ export class AcademyListComponent implements OnInit, OnDestroy
         }
 
     }
+    onStatusSelect(selectedStatus: string) {
+        this.status = selectedStatus;
+        if (selectedStatus == 'all'){
+            this.getAllApprovedCompetitions()
+        }
+        else {
+            this.changeDetectorRef.detectChanges();
+            this.getFilteredCompetitions();
+        }
+
+    }
 
     toggleCompleted(change: MatSlideToggleChange): void {
         this.hideCompleted$.next(change.checked);

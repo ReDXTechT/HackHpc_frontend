@@ -40,11 +40,24 @@
                     <mat-select
                         [value]="'all'"
                         (selectionChange)="onCodeTypeSelect($event.value)">
-                        <mat-option [value]="'all'">All</mat-option>
+                        <mat-option [value]="'all'">Type</mat-option>
                         <mat-option value="openacc">OpenACC</mat-option>
                         <mat-option value="openmp">OpenMP</mat-option>
                         <mat-option value="mpi">MPI</mat-option>
                         <mat-option value="c_cpp">C/C++</mat-option>
+
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field
+                    class="w-full sm:w-36 ml-4"
+                    [subscriptSizing]="'dynamic'">
+                    <mat-select
+                        [value]="'all'"
+                        (selectionChange)="onStatusSelect($event.value)">
+                        <mat-option [value]="'all'">Status</mat-option>
+                        <mat-option value="Running">Running</mat-option>
+                        <mat-option value="About_to_start">About to start</mat-option>
+                        <mat-option value="Terminated">Terminated</mat-option>
 
                     </mat-select>
                 </mat-form-field>

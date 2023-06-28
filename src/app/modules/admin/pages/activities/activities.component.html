@@ -76,6 +76,26 @@
                                                         </a>
 
                                                     </ng-container>
+                                                    <ng-container *ngIf="activity.type === 'report_generation'">
+                                                        <a class="cursor-pointer text-red-600" target="_blank" href="{{activity.linked_content}}">
+                                                        View updated report
+                                                        </a>
+
+                                                    </ng-container>
+                                                    <ng-container *ngIf="activity.type === 'first_report_generation'">
+                                                        <a class="cursor-pointer text-red-600" target="_blank" href="{{activity.linked_content}}">
+                                                            View created report
+                                                        </a>
+
+                                                    </ng-container>
+                                                    <ng-container *ngIf="activity.type === 'competition approved'">
+                                                        <a class="cursor-pointer text-red-600" routerLink="/apps/competitions/{{activity.competition_id}}">
+                                                            View competition details
+                                                        </a>
+
+                                                    </ng-container>
+
+
 
                                                 </ng-container>
                                             </div>

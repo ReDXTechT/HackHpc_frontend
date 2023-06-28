@@ -153,7 +153,7 @@
                     <!-- Form buttons -->
                     <div class="flex justify-end mt-8">
                         <button class="px-3" mat-flat-button type="reset" (click)="budgetForm.reset();">Reset</button>
-                        <button class="px-3 ml-2" mat-flat-button type="submit" [class.auth-spinner]="loading" [disabled]="loading" (click)="onSubmit()">
+                        <button class="px-3 ml-2" mat-flat-button type="submit" [class.auth-spinner]="loading" [disabled]="loading" (click)="generatePDF()">
                             {{ (budget === undefined) ? 'Submit' : 'Update report' }}
                         </button>
                     </div>
@@ -246,7 +246,7 @@
                     </div>
                     <!-- Form buttons -->
                     <div class="flex justify-end mt-8">
-                        <button class="px-3 ml-2 mat-icon-button" mat-flat-button type="submit" (click)="generatePDF()">
+                        <button class="px-3 ml-2 mat-icon-button" mat-flat-button type="submit" (click)="printPDF()">
                             <mat-icon class="icon-size-5">print</mat-icon>
                             <span class="ml-2">Print report</span>
                         </button>

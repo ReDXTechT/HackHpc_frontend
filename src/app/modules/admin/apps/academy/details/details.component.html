@@ -110,6 +110,16 @@
                             <span class="ml-2">Register</span>
                         </button>
                     </div>
+                    <div *ngIf="competition?.status === 'About_to_start' && role=='Admin'">
+
+                        <button
+                            mat-flat-button
+                            style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="heroicons_outline:rocket-launch"></mat-icon>
+
+                            <span class="ml-2">Launch Competition</span>
+                        </button>
+                    </div>
 
                 </div>
             </div>

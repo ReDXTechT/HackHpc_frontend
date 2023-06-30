@@ -57,11 +57,11 @@
                 mat-flat-button
                 [color]="'primary'"
                target="_blank"
-                href="{{user?.cv}}">>
+                href="{{user?.cv}}">
                 Download your cv
             </a>
         </fuse-card>
-        <fuse-card class="flex flex-col  w-full p-8 mt-5">
+        <fuse-card class="flex flex-col  w-full p-8 mt-5" *ngIf="role==='Customer'">
             <div class="text-2xl font-semibold leading-tight">My Competitions</div>
 
             <div class="tableBody mt-5">
@@ -167,12 +167,12 @@
 <!--                                </div>-->
 <!--                            </div>-->
                         </div>
-                        <div class="course-detelies-wrapper" *ngIf="role==='Competitor'">
+                        <div class="course-detelies-wrapper mt-10" *ngIf="role==='Competitor'">
                             <div class="header mb-10 achievements-title mt-4">
                                 <h2>Contributions</h2>
                                 <mat-icon svgIcon="mat_solid:try"></mat-icon>
                             </div>
-                            <div class="tableBody">
+                            <div class="tableBody  mb-10">
                                 <div class="table-responsive">
                                     <table class="centered-table table">
                                         <thead>

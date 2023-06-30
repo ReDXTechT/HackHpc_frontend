@@ -57,7 +57,7 @@ export class SettingsComponent implements OnInit, OnDestroy
                 icon       : 'heroicons_outline:user-circle',
                 title      : 'Account',
                 description: 'Manage your public profile and private information',
-                roles : ['Customer']
+                roles : ['Customer','Competitor']
 
             },
             {
@@ -65,7 +65,7 @@ export class SettingsComponent implements OnInit, OnDestroy
                 icon       : 'heroicons_outline:lock-closed',
                 title      : 'Security',
                 description: 'Manage your password and 2-step verification preferences',
-                roles : ['Customer']
+                roles : ['Customer','Competitor','Admin']
 
             },
             {

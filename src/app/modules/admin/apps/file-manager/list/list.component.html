@@ -24,7 +24,7 @@
                 <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-6 sm:py-12 md:px-8 border-b bg-card dark:bg-transparent">
                     <!-- Title -->
                     <div>
-                        <div class="text-4xl font-extrabold tracking-tight leading-none">File Manager</div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">Submissions</div>
                         <div class="flex items-center mt-0.5 font-medium text-secondary">
                             <ng-container *ngIf="!items.path.length">
                                 {{items.folders.length}} folders, {{items.files.length}} files
@@ -34,14 +34,14 @@
                                 <div class="flex items-center space-x-2">
                                     <a
                                         class="text-primary cursor-pointer"
-                                        [routerLink]="['/apps/file-manager']">Home
+                                        [routerLink]="['/apps/results-submissions']">Home
                                     </a>
                                     <div class="">/</div>
                                     <ng-container *ngFor="let path of items.path; let last = last; trackBy: trackByFn">
                                         <ng-container *ngIf="!last">
                                             <a
                                                 class="text-primary cursor-pointer"
-                                                [routerLink]="['/apps/file-manager/folders/', path.id]">{{path.name}}</a>
+                                                [routerLink]="['/apps/results-submissions/folders/', path.id]">{{path.name}}</a>
                                         </ng-container>
                                         <ng-container *ngIf="last">
                                             <div>{{path.name}}</div>
@@ -54,16 +54,7 @@
                             </ng-container>
                         </div>
                     </div>
-                    <!-- Actions -->
-                    <div class="mt-4 sm:mt-0">
-                        <!-- Upload button -->
-                        <button
-                            mat-flat-button
-                            [color]="'primary'">
-                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>
-                            <span class="ml-2 mr-1">Upload file</span>
-                        </button>
-                    </div>
+
                 </div>
 
                 <!-- Items list -->
@@ -88,7 +79,7 @@
                                             </a>
                                             <a
                                                 class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
-                                                [routerLink]="['/apps/file-manager/folders/', folder.id]">
+                                                [routerLink]="['/apps/results-submissions/folders/', folder.id]">
                                                 <div class="aspect-[9/6]">
                                                     <div class="flex items-center justify-center h-full">
                                                         <!-- Icon -->

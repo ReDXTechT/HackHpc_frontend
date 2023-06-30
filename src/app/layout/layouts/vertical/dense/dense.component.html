@@ -70,10 +70,13 @@
 <!--            <languages></languages>-->
             <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
 <!--            <search [appearance]="'bar'"></search>-->
-            <shortcuts></shortcuts>
+<!--            <shortcuts></shortcuts>-->
 <!--            <messages></messages>-->
 <!--            <notifications></notifications>-->
-            <user *ngIf="user"></user>
+            <user *ngIf="user; else noUser"></user>
+            <ng-template #noUser>
+                <button class="bg-red-600 hover:bg-black hover:text-white text-black font-bold py-2 px-4 rounded-full" routerLink="/sign-in">Sign In</button>
+            </ng-template>
         </div>
     </div>
 

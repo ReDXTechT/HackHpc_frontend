@@ -2,7 +2,7 @@ import {NgIf} from '@angular/common';
 import {Component, OnDestroy, OnInit, ViewEncapsulation} from '@angular/core';
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
-import {ActivatedRoute, Router, RouterOutlet} from '@angular/router';
+import {ActivatedRoute, Router, RouterLink, RouterOutlet} from '@angular/router';
 import {FuseFullscreenComponent} from '@fuse/components/fullscreen';
 import {FuseLoadingBarComponent} from '@fuse/components/loading-bar';
 import {FuseNavigationService, FuseVerticalNavigationComponent} from '@fuse/components/navigation';
@@ -26,7 +26,7 @@ import {User} from "../../../../core/models/User";
     templateUrl: './dense.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [FuseLoadingBarComponent, FuseVerticalNavigationComponent, MatButtonModule, MatIconModule, LanguagesComponent, FuseFullscreenComponent, SearchComponent, ShortcutsComponent, MessagesComponent, NotificationsComponent, UserComponent, NgIf, RouterOutlet, QuickChatComponent],
+    imports: [FuseLoadingBarComponent, FuseVerticalNavigationComponent, MatButtonModule, MatIconModule, LanguagesComponent, FuseFullscreenComponent, SearchComponent, ShortcutsComponent, MessagesComponent, NotificationsComponent, UserComponent, NgIf, RouterOutlet, QuickChatComponent, RouterLink],
 })
 export class DenseLayoutComponent implements OnInit, OnDestroy {
     isScreenSmall: boolean;

@@ -60,18 +60,14 @@ export class ProfileComponent
         if(this.route.snapshot.paramMap.get('id')){
             this.teamMemberId = this.route.snapshot.paramMap.get('id');
             this.getUserById(this.teamMemberId)
-            if(this.role==='Competitor'){
-                this.getCompetitorContributions()
-                this.getCompetitorAchievements()
+            this.getCompetitorContributions(this.teamMemberId)
+            this.getCompetitorAchievements(this.teamMemberId)
 
-            }
-            else {            this.getCustomerCompetitions()
-            }
         }else{
             this.getUserById(this.userId)
             if(this.role==='Competitor'){
-                this.getCompetitorContributions()
-                this.getCompetitorAchievements()
+                this.getCompetitorContributions(this.userId)
+                this.getCompetitorAchievements(this.userId)
 
             }
             else {            this.getCustomerCompetitions()
@@ -113,15 +109,15 @@ export class ProfileComponent
         this.image = URL.createObjectURL(this.selectedImage);
 
     }
-    getCompetitorAchievements() {
-        this.userService.getCompetitorAchievements(this.authService.currentUserValue.id).subscribe(res=>{
+    getCompetitorAchievements(userId:any) {
+        this.userService.getCompetitorAchievements(userId).subscribe(res=>{
             console.log(res)
             this.Achievements=res
         })
     }
-    getCompetitorContributions() {
-        this.userService.getCompetitorContributions(this.authService.currentUserValue.id).subscribe(res=>{
-            console.log(res)
+    getCompetitorContributions(userId:any) {
+        this.userService.getCompetitorContributions(userId).subscribe(res=>{
+            console.log('--------------------------',res)
             this.Contributions=res
         })
     }

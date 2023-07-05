@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HPC Competitions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+
+        .hero {
+            background-image: url("assets/images/header8.webp");
+            background-size: cover;
+            background-position: center;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            margin-bottom: 40px;
+            backdrop-filter: blur(4px); /* This line adds a blur effect */
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero p {
+            font-size: 24px;
+            margin-bottom: 40px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .competitions-section {
+            background-color: #fff;
+            padding: 50px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 1.1em;
+            text-decoration: none;
+            color: white;
+            border: 2px solid white;
+            border-radius: 30px;
+            background-color: transparent;
+            box-shadow: 0 4px 6px rgba(218, 208, 208, 0.1);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .cta-button:hover {
+            background-color: #7e0c0c;
+            color: black;
+        }
+
+        .title {
+            font-size: 3.5em;
+            font-weight: bold;
+            margin-top: 20px;
+            text-shadow: 3px 3px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .competitions-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .competition-boxes {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .competition-box {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .competition-box:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .competition-box h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .competition-box p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .competition-box .button {
+            background-color: #ff2b2b;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .competition-box .button:hover {
+            background-color: #e60000;
+        }
+
+        .motivational-section {
+            background-color: #f7f7f7;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .motivational-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .motivational-quote {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #666;
+        }
+
+        .motivational-author {
+            font-size: 18px;
+            color: #999;
+        }
+
+        .scrumboard-section {
+            background-color: #f7f7f7;
+            padding: 50px 0;
+            text-align: center;
+        }
+
+        .scrumboard-title {
+            font-size: 36px;
+            margin-bottom: 30px;
+        }
+
+        .scrumboard-boards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .scrumboard-board {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .scrumboard-board:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        .scrumboard-board h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .scrumboard-board p {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        .scrumboard-board .button {
+            background-color: #ff2b2b;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .scrumboard-board .button:hover {
+            background-color: #e60000;
+        }
+    </style>
+</head>
+
+<body>
+<div class="hero">
+    <div style="text-align:center;">
+        <h1 class="title">Welcome to HACK HPC</h1>
+        <p style="font-size: 1.2em; margin: 20px; line-height: 1.5;">
+            HACK HPC is a groundbreaking platform that brings High-Performance Computing (HPC) engineers and enthusiasts together with customers who are seeking innovative solutions. Our competitions challenge the limits of computing power and encourage engineers to unleash their true potential. Customers, on the other hand, benefit from access to cutting-edge solutions. Whether you're an engineer eager to put your skills to the test or a customer seeking high-performance solutions, HACK HPC is where innovation thrives. Sign up to join thrilling competitions and get a chance to win exceptional prizes. Harness the unrivaled power of HPC and be part of a community that is shaping the future!
+        </p>
+        <div class="cta-buttons" style="margin: 20px;">
+            <a class="cta-button" href="/sign-up">Join as Competitor</a>
+            <a class="cta-button" href="/sign-up" style="margin-left: 10px;">Join as Customer</a>
+        </div>
+    </div>
+</div>
+
+<div class="competitions-section">
+    <h2 class="competitions-title">Featured Competitions</h2>
+    <div class="competition-boxes">
+        <div class="competition-box">
+            <h2>Algorithm Optimization Challenge</h2>
+            <p>
+                Push the boundaries of algorithm efficiency and optimize code for lightning-fast computations. Are you up for the challenge?
+            </p>
+            <a class="button" href="/competition-details/1">Learn More</a>
+        </div>
+        <div class="competition-box">
+            <h2>Parallel Computing Hackathon</h2>
+            <p>
+                Collaborate in teams to harness the power of parallel processing. Break through computational barriers and achieve remarkable speedups.
+            </p>
+            <a class="button" href="/competition-details/2">Learn More</a>
+        </div>
+        <div class="competition-box">
+            <h2>Performance Benchmarking Showdown</h2>
+            <p>
+                Pit your computational skills against others and measure your system's performance under real-world workloads. Who will come out on top?
+            </p>
+            <a class="button" href="/competition-details/3">Learn More</a>
+        </div>
+    </div>
+</div>
+
+<div class="motivational-section">
+    <h2 class="motivational-title">Why Join HPC Competitions?</h2>
+    <p class="motivational-quote">"Innovation thrives in the face of competition, and HPC Competitions is where brilliance meets opportunity."</p>
+    <p class="motivational-author">- John Doe, CEO of Leading Tech Solutions</p>
+</div>
+
+<div class="scrumboard-section bg-white">
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class=" text-2xl md:text-6xl font-bold tracking-tight leading-7 sm:leading-10">
+            Active Competitions
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 md:mt-16">
+            <ng-container *ngFor="let competition of activeCompetitions; trackBy: trackByFn">
+                <a [routerLink]="['/apps/competitions', competition.id]" class="flex flex-col items-start w-56 p-6 rounded-lg shadow bg-card rounded-lg hover:shadow-xl transition-shadow duration-150 ease-in-out">
+                    <div class="flex items-center justify-center p-2 rounded-full bg-red-50 text-gray-800 dark:bg-primary dark:text-on-primary">
+                        {{competition.code_type}}
+                    </div>
+                    <div class="mt-5 text-lg font-medium leading-5">{{competition.title}}</div>
+                    <div class="flex items-center mt-5">
+                        <mat-icon svgIcon="heroicons_outline:trophy"></mat-icon>
+                        <span class="ml-2 font-bold">1st place : $ {{competition?.prizes[0].amount}}</span>
+                    </div>
+                    <div class="mt-0.5 line-clamp-2 text-secondary"></div>
+                    <ng-container *ngIf="competition.competitors?.length">
+                        <div class="w-12 h-1 mt-6 border-t-2"></div>
+                        <div class="flex items-center mt-6 -space-x-1.5">
+                            <ng-container *ngFor="let member of competition?.competitors.slice(0, 5); trackBy: trackByFn">
+                                <img class="flex-0 w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent object-cover" [src]="member?.user?.image" alt="Member avatar">
+                            </ng-container>
+                            <ng-container *ngIf="competition?.competitors.length > 5">
+                                <div class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
+                                    <div class="text-md font-semibold">+{{ competition?.competitors.slice(5).length }}</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <div class="flex items-center mt-4 text-md font-md">
+                        <div class="text-secondary">Started:</div>
+                        <div class="ml-1">{{ getDaysSinceStart(competition.starting_date) }} days ago</div>
+                    </div>
+
+                </a>
+            </ng-container>
+            <button (click)="addActiveCompetition()" class="flex flex-col items-center justify-center w-56 rounded-lg cursor-pointer border-2 border-gray-300 border-dashed hover:bg-hover transition-colors duration-150 ease-in-out">
+                <mat-icon class="icon-size-12 text-hint" [svgIcon]="'heroicons_outline:plus'"></mat-icon>
+            </button>
+
+        </div>
+
+    </div>
+    <div class="flex items-center justify-center">
+        <a routerLink="/apps/competitions" class="px-8 py-3 text-lg font-medium text-white bg-primary hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-dark rounded-none">
+            View More
+        </a>
+    </div>
+</div>
+
+</body>
+
+</html>

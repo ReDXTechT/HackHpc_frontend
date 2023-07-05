@@ -1,0 +1,124 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container
+        class="flex-auto h-full bg-card dark:bg-transparent"
+        (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer
+            class="w-full md:w-160 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="false"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawer>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8 border-b">
+
+                    <!-- Title -->
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">Customers</div>
+                        <div class="ml-0.5 font-medium text-secondary">
+                            <ng-container *ngIf="customersCount > 0">
+                                {{customersCount}}
+                            </ng-container>
+                            {{customersCount | i18nPlural: {
+                            '=0'   : 'No customers',
+                            '=1'   : 'Customer',
+                            'other': 'Customers'
+                        } }}
+                        </div>
+                    </div>
+
+                    <!-- Main actions -->
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+                        <!-- Search -->
+                        <div class="flex-auto">
+                            <mat-form-field
+                                class="fuse-mat-dense fuse-mat-rounded w-full min-w-50"
+                                subscriptSizing="dynamic">
+                                <mat-icon
+                                    class="icon-size-5"
+                                    matPrefix
+                                    [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+                                <input
+                                    matInput
+                                    (input)="onSearch(query.value)"
+                                    [formControl]="searchInputControl"
+                                    [autocomplete]="'off'"
+                                    [placeholder]="'Search customers'"
+                                    #query>
+                            </mat-form-field>
+                        </div>
+                        <!-- Add customer button -->
+<!--                        <button-->
+<!--                            class="ml-4"-->
+<!--                            mat-flat-button-->
+<!--                            [color]="'primary'"-->
+<!--                            (click)="openDrawer(true)">-->
+<!--                            <mat-icon [svgIcon]="'heroicons_outline:plus'"></mat-icon>-->
+<!--                            <span class="ml-2 mr-1">Add</span>-->
+<!--                        </button>-->
+
+                    </div>
+                </div>
+
+                <!-- customers list -->
+                <div class="relative">
+                        <ng-container *ngIf="customers.length; else nocustomers">
+                            <ng-container *ngFor="let customer of customers; let i = index; trackBy: trackByFn">
+                                <!-- Group -->
+                                <ng-container *ngIf="i === 0 || customer?.user?.firstName.charAt(0) !== customers[i - 1]?.user?.firstName.charAt(0)">
+                                    <div class="z-10 sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-50 dark:bg-gray-900">
+                                        {{customer?.user?.firstName.charAt(0)}}
+                                    </div>
+                                </ng-container>
+                                <!-- customer -->
+                                <a
+                                    class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer border-b"
+                                    [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedcustomer || selectedcustomer?.user?.id !== customer?.user?.id,
+                'bg-primary-50 dark:bg-hover': selectedcustomer && selectedcustomer?.user?.id === customer?.user?.id}"
+                                    [routerLink]="['./', customer?.user?.id]">
+                                    <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full  overflow-hidden">
+                                        <ng-container *ngIf="customer?.user?.image">
+                                            <img
+                                                class="object-contain w-full h-full"
+                                                [src]="customer?.user?.image"
+                                                alt="customer avatar"/>
+                                        </ng-container>
+                                        <ng-container *ngIf="!customer?.user?.image">
+                                            <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                {{customer?.user?.firstName.charAt(0)}}
+                                            </div>
+                                        </ng-container>
+                                    </div>
+                                    <div class="min-w-0 ml-4">
+                                        <div class="font-medium leading-5 truncate">{{customer?.user?.firstName}} {{customer?.user?.lastName}}</div>
+                                        <div class="leading-5 truncate text-secondary">{{customer?.occupation}}</div>
+                                    </div>
+                                </a>
+                            </ng-container>
+                        </ng-container>
+
+                    <!-- No customers -->
+                    <ng-template #nocustomers>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no customers!</div>
+                    </ng-template>
+
+                </div>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

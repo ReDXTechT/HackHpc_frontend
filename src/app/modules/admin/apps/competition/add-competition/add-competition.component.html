@@ -1,0 +1,475 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div class="flex flex-col sm:flex-row flex-0 sm:items-center sm:justify-between p-6 sm:py-8 sm:px-10 border-b bg-card dark:bg-transparent">
+        <div class="flex-1 min-w-0">
+
+            <!-- Title -->
+            <div class="mt-2">
+                <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-7 sm:leading-10 truncate">
+                    Create a competition
+                </h2>
+            </div>
+            <!-- Breadcrumbs -->
+            <div class="flex flex-wrap items-center font-medium">
+                <div class="group inline-flex items-center rounded cursor-pointer">
+                    <mat-icon
+                        class="icon-size-5 text-secondary"
+                        [svgIcon]="'heroicons_mini:chevron-right'"></mat-icon>
+                    <a routerLink="/apps/help-center" class="ml-1 text-red-600 group-hover:underline">Please check the competition guide</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto p-6 sm:p-10">
+
+        <div class="">
+            <!--            <div class="mt-16 mb-8 text-3xl font-bold">Create a new competition</div>-->
+
+            <form
+                class="p-4 bg-card shadow rounded overflow-hidden"
+                [formGroup]="horizontalStepperForm">
+                <mat-horizontal-stepper
+                    [linear]="true"
+                    #horizontalStepper>
+                    <mat-step
+                        [formGroupName]="'step1'"
+                        [stepControl]="horizontalStepperForm.get('step1')"
+                        #horizontalStepperStep1>
+                        <ng-template matStepLabel>Competition Details</ng-template>
+                        <p class="my-6 font-medium">
+                            Please provide granular details for the competition
+                        </p>
+                        <div class="flex">
+                            <mat-form-field class="flex-auto">
+                                <mat-icon svgIcon="feather:edit-3" class="mr-4"></mat-icon>
+                                <input
+                                    matInput
+                                    [formControlName]="'title'"
+                                    [placeholder]="'Title'"
+                                    required>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex">
+                            <mat-form-field class="flex-auto">
+                                <mat-icon svgIcon="feather:github" class="mr-4"></mat-icon>
+
+                                <input
+                                    matInput
+                                    [formControlName]="'git_repo_url'"
+                                    [placeholder]="'Git repository Url'"
+                                    required>
+
+                            </mat-form-field>
+                        </div>
+
+                        <div class="grid sm:grid-cols-4 gap-6 w-full ">
+                        <div class="sm:col-span-2">
+                            <mat-form-field class="w-full"
+                                            [subscriptSizing]="'dynamic'">
+                                <mat-select
+                                    [formControlName]="'code_type'"
+                                    [placeholder]="'Code Type'"
+                                    required>
+                                    <mat-option value="openacc">OpenACC</mat-option>
+                                    <mat-option value="openmp">OpenMP</mat-option>
+                                    <mat-option value="mpi">MPI</mat-option>
+                                    <mat-option value="c_cpp">C/C++</mat-option>
+                                </mat-select>
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:document-text'"></mat-icon>
+
+                            </mat-form-field>
+                        </div>
+                        <!-- Company -->
+                        <div class="sm:col-span-2">
+                            <mat-form-field
+                                class="w-full"
+                                [subscriptSizing]="'dynamic'">
+                                <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-group'"></mat-icon>
+
+                                <input
+                                    [formControlName]="'max_competitors'"
+                                    [placeholder]="'Maximum Number of Competitors'"
+                                    matInput
+                                type="number">
+                            </mat-form-field>
+                        </div>
+
+                        </div>
+                        <div class="grid sm:grid-cols-4 gap-6 w-full ">
+                        <div class="sm:col-span-2 mt-5">
+                            <mat-form-field
+                                class="w-full">
+                                <input
+                                    matInput
+                                    [formControlName]="'submission_deadline'"
+                                    [matDatepicker]="picker2"
+                                    [placeholder]="'Submission Deadline'">
+                                <mat-datepicker-toggle
+                                    matSuffix
+                                    [for]="picker2"></mat-datepicker-toggle>
+                                <mat-datepicker #picker2></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                        <!-- Company -->
+                        <div class="sm:col-span-2 mt-5">
+                            <mat-form-field
+                                class="w-full">
+                                <input
+                                    matInput
+                                    [formControlName]="'winner_announcement_date'"
+                                    [matDatepicker]="picker1"
+                                    [placeholder]="'Winner Announcement Date'">
+                                <mat-datepicker-toggle
+                                    matSuffix
+                                    [for]="picker1"></mat-datepicker-toggle>
+                                <mat-datepicker #picker1></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+
+                        </div>
+                        <div class="flex mt-5">
+                            <mat-form-field class="flex-auto">
+                        <textarea
+                            matInput
+                            [placeholder]="'Give a detailed description about the competition'"
+                            [formControlName]="'project_description'"
+                            [rows]="3"></textarea>
+                                <mat-icon
+                                    class="icon-size-5"
+                                    matPrefix
+                                    [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex">
+                            <mat-form-field class="flex-auto">
+                        <textarea
+                            matInput
+                            [placeholder]="'The skills required to join the competition'"
+                            [formControlName]="'skills_required'"
+
+                            [rows]="3"></textarea>
+                                <mat-icon
+                                    class="icon-size-5"
+                                    matPrefix
+                                    [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex">
+                            <mat-form-field class="flex-auto">
+                        <textarea
+                            matInput
+                            [placeholder]="'Please provide Optimization Guidelines'"
+                            [formControlName]="'optimization_guidelines'"
+
+                            [rows]="3"></textarea>
+                                <mat-icon
+                                    class="icon-size-5"
+                                    matPrefix
+                                    [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div class="flex justify-end">
+                            <button
+                                class="px-8"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [disabled]="horizontalStepperStep1.stepControl.pristine || horizontalStepperStep1.stepControl.invalid"
+                                type="button"
+                                matStepperNext>
+                                Next
+                            </button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step
+                        [formGroupName]="'step2'"
+                        [stepControl]="horizontalStepperForm.get('step2')"
+                        #horizontalStepperStep2>
+                        <ng-template matStepLabel>Target Architecture</ng-template>
+                        <p class="my-6 font-medium">
+                            Please provide the precise hardware specifications for hosting the competition, enabling us to select the most suitable AWS instance type
+                        </p>
+                        <div class="grid sm:grid-cols-4 gap-6 w-full ">
+                            <div class="sm:col-span-2">
+                                <mat-form-field
+                                    class="w-full"
+                                    [subscriptSizing]="'dynamic'">
+                                    <mat-icon svgIcon="feather:cpu" class="mr-2"></mat-icon>
+
+                                    <input
+                                        [formControlName]="'processor'"
+                                        [placeholder]="'Processor'"
+                                        matInput
+                                    >
+                                </mat-form-field>
+                            </div>
+                            <!-- Company -->
+                            <div class="sm:col-span-2">
+                                <mat-form-field
+                                    class="w-full"
+                                    [subscriptSizing]="'dynamic'">
+                                    <mat-icon svgIcon="memory" class="mr-2"></mat-icon>
+
+                                    <input
+                                        [formControlName]="'cpu_memory'"
+                                        [placeholder]="'CPU Memory in GB'"
+                                        matInput
+                                        type="number"
+                                        >
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div class="grid sm:grid-cols-4 gap-6 w-full ">
+                            <div class="sm:col-span-2 mt-5">
+                                <mat-form-field
+                                    class="w-full"
+                                    [subscriptSizing]="'dynamic'">
+                                    <mat-icon class="mr-2">settings_ethernet</mat-icon>
+                                    <input
+                                        [formControlName]="'vcpu'"
+                                        [placeholder]="'VCPU (Virtual CPUs)'"
+                                        matInput
+                                        type="number">
+                                </mat-form-field>
+                            </div>
+                            <!-- Company -->
+                            <div class="sm:col-span-2 mt-5">
+                                <mat-form-field
+                                    class="w-full"
+                                    [subscriptSizing]="'dynamic'">
+                                    <mat-icon class="icon-size-5" [svgIcon]="'feather:hard-drive'" matPrefix></mat-icon>
+
+                                    <input
+                                        [formControlName]="'storage'"
+                                        [placeholder]="'Storage in GB'"
+                                        matInput
+                                        type="number">
+                                </mat-form-field>
+                            </div>
+
+                        </div>
+                        <div class="flex justify-start mt-5" [formGroup]="horizontalStepperForm.get('step2')">
+                            <div class="flex items-center" style="width: 50%;">
+                                <mat-radio-group formControlName="architectureType">
+                                    <mat-radio-button [value]="'CPU'">CPU</mat-radio-button>
+                                    <mat-radio-button [value]="'GPU'">GPU</mat-radio-button>
+                                </mat-radio-group>
+                            </div>
+                            <div class="ml-4 flex items-center" style="width: 50%;" *ngIf="horizontalStepperForm.get('step2.architectureType').value === 'GPU'" [formGroup]="horizontalStepperForm.get('step2')">
+                                <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                    <mat-icon svgIcon="feather:cpu" class="mr-2"></mat-icon>
+                                    <input formControlName="graphics_card" placeholder="Graphic card" matInput>
+                                </mat-form-field>
+                            </div>
+                        </div>
+
+
+
+                        <div *ngIf="horizontalStepperForm.get('step2.architectureType').value === 'GPU'" [formGroup]="horizontalStepperForm.get('step2')">
+                            <div class="grid sm:grid-cols-2 gap-6 w-full">
+                                <div class="mt-5">
+                                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                        <mat-icon svgIcon="memory" class="mr-2"></mat-icon>
+                                        <input formControlName="parallel_processing_units" placeholder="Parallel Processing Units" matInput type="number">
+                                    </mat-form-field>
+                                </div>
+                                <div class="mt-5">
+                                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                        <mat-icon svgIcon="memory" class="mr-2"></mat-icon>
+                                        <input formControlName="graphics_card_memory" placeholder="Graphics Card Memory in GB" matInput>
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="flex justify-end mt-5">
+                            <button
+                                class="px-8 mr-2"
+                                mat-flat-button
+                                [color]="'accent'"
+                                type="button"
+                                matStepperPrevious>
+                                Back
+                            </button>
+                            <button
+                                class="px-8"
+                                mat-flat-button
+                                [color]="'primary'"
+                                [disabled]="horizontalStepperStep2.stepControl.pristine || horizontalStepperStep2.stepControl.invalid"
+                                type="button"
+                                matStepperNext>
+                                Next
+                            </button>
+                        </div>
+                    </mat-step>
+
+                    <mat-step
+                        [formGroupName]="'step3'"
+                        [stepControl]="horizontalStepperForm.get('step3')">
+                        <ng-template matStepLabel>Prizes</ng-template>
+                        <p class="my-6 font-medium">
+                            Please provide the prizes for each level of the competition
+                        </p>
+                        <div class="mt-8">
+                            <div class="space-y-4">
+                                <ng-container formArrayName="prizes">
+                                    <div class="relative flex" *ngFor="let prize of prizes.controls; let i = index; let first = first; let last = last; trackBy: trackByFn" [formGroupName]="i">
+                                        <mat-form-field class="flex-auto" [subscriptSizing]="'dynamic'">
+                                            <mat-label *ngIf="first">Prize amount</mat-label>
+                                            <input matInput formControlName="prize" [placeholder]="'amount'">
+                                            <span matPrefix>$</span>
+                                            <span matSuffix>.00</span>
+                                        </mat-form-field>
+                                        <mat-form-field class="flex-auto w-full max-w-24 sm:max-w-40 ml-2 sm:ml-4" [subscriptSizing]="'dynamic'">
+                                            <mat-label *ngIf="first">Level</mat-label>
+                                            <mat-icon matPrefix class="hidden sm:flex icon-size-5" [svgIcon]="'heroicons_solid:tag'"></mat-icon>
+                                            <input matInput formControlName="label" [placeholder]="getPlaceholder(i)">
+                                        </mat-form-field>
+                                        <!-- Remove prize field -->
+                                        <ng-container *ngIf="!(first && last)">
+                                            <div class="flex items-center w-10 pl-2" [ngClass]="{'mt-6': first}">
+                                                <button class="w-8 h-8 min-h-8" mat-icon-button (click)="removePrize(i)" matTooltip="Remove">
+                                                    <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+                                    </div>
+
+                                </ng-container>
+
+
+
+                            </div>
+                            <div class="group inline-flex items-center mt-2 -ml-4 py-2 px-4 rounded cursor-pointer" (click)="addPrize()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                                <span class="ml-2 font-medium text-secondary group-hover:underline">Add a prize</span>
+                            </div>
+                        </div>
+
+
+                        <div class="flex justify-end mt-8">
+                            <button
+                                class="px-8 mr-2"
+                                mat-flat-button
+                                [color]="'accent'"
+                                type="button"
+                                matStepperPrevious>
+                                Back
+                            </button>
+                            <button
+                                class="px-8"
+                                mat-flat-button
+                                [color]="'primary'"
+                                type="button"
+                                matStepperNext>
+                                Next
+                            </button>
+                        </div>
+                    </mat-step>
+                    <mat-step [formGroupName]="'step4'" [stepControl]="horizontalStepperForm.get('step4')">
+                        <ng-template matStepLabel>Competitor Proficiency Assessment</ng-template>
+                        <p class="my-6 font-medium">
+                            To participate in the competition, competitors must possess the necessary skills. Please complete the assessment evaluation and specify the minimum score for accepting competitors.
+                        </p>
+                        <div class="mt-8">
+                            <div class="space-y-4">
+                                <div class="mt-4">
+                                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                        <mat-label>Minimal Score that the competitor should get to join the competition %</mat-label>
+                                        <input matInput formControlName="minimal_score" placeholder="Enter the minimal score" type="number">
+                                        <span matSuffix>%</span>
+                                    </mat-form-field>
+                                </div>
+                                <ng-container formArrayName="questions">
+                                    <div class="relative" *ngFor="let question of questions.controls; let i = index" [formGroupName]="i">
+                                        <div class="flex space-x-4 align-center">
+                                            <mat-form-field class="flex-auto" [subscriptSizing]="'dynamic'">
+                                                <mat-label>Question {{i + 1}}</mat-label>
+                                                <input matInput formControlName="text" [placeholder]="'Enter the question'">
+                                            </mat-form-field>
+                                            <button class="w-8 h-8 min-h-8 mt-6" mat-icon-button (click)="onRemoveQuestion(i)" matTooltip="Remove" *ngIf="i > 1">
+                                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                            </button>
+                                        </div>
+
+                                        <div formArrayName="options" style="margin-top: 10px">
+                                            <div class="relative" *ngFor="let option of options(i).controls; let j = index" [formGroupName]="j">
+                                                <div class="flex space-x-4 align-center ml-16 mr-8">
+                                                    <mat-form-field class="flex-auto">
+                                                        <mat-label>Option {{j + 1}}</mat-label>
+                                                        <input matInput formControlName="text" [placeholder]="'Enter the option'">
+                                                    </mat-form-field>
+                                                    <mat-checkbox formControlName="is_correct">Correct</mat-checkbox>
+                                                    <button class="w-10 h-10 min-h-8 mt-6" mat-icon-button (click)="onRemoveOption(i, j)" matTooltip="Remove">
+                                                        <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:trash'"></mat-icon>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="flex space-x-4 align-center ml-16 rounded cursor-pointer" (click)="onAddOption(i)">
+                                            <mat-icon class="icon-size-5 text-primary" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                                            <span class="ml-2 font-medium text-primary group-hover:underline">Add Option</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                            </div>
+                            <div class="group inline-flex items-center mt-4 -ml-4 py-2 px-4 rounded cursor-pointer" (click)="AddQuestion()">
+                                <mat-icon class="icon-size-5" [svgIcon]="'heroicons_solid:plus-circle'"></mat-icon>
+                                <span class="ml-2 font-medium text-secondary group-hover:underline">Add a question</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-end mt-8">
+                            <button class="px-8 mr-2" mat-flat-button [color]="'accent'" type="button" matStepperPrevious>Back</button>
+                            <button class="px-8" mat-flat-button [color]="'primary'" type="button" matStepperNext [disabled]="!horizontalStepperForm.get('step4').valid">Next</button>
+                        </div>
+                    </mat-step>
+
+
+                    <mat-step>
+                        <ng-template matStepLabel>Done</ng-template>
+                        <p class="my-6 font-medium">
+                            Thank you for completing the competition form. We will get back to you soon via email.
+                        </p>
+                        <div class="flex justify-end mt-8">
+                            <button
+                                class="px-8 mr-2"
+                                mat-flat-button
+                                [color]="'accent'"
+                                type="button"
+                                matStepperPrevious>
+                                Back
+                            </button>
+                            <button
+                                class="px-8"
+                                mat-flat-button
+                                [color]="'primary'"
+                                type="reset"
+                                (click)="horizontalStepper.reset();">
+                                Reset
+                            </button>
+                            <button
+                                class="px-8 ml-2"
+                                mat-flat-button
+                                [color]="'warn'"
+                                type="submit"
+                                [class.auth-spinner]="loading" [disabled]="loading"
+                            (click)="onSubmit()">
+                                Submit
+                            </button>
+
+
+                        </div>
+                    </mat-step>
+                </mat-horizontal-stepper>
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

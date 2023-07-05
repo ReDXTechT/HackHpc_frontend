@@ -1,0 +1,271 @@
+<div class="row w-full m-10 ">
+    <div class="column-left">
+        <div class="card">
+            <div class="pt-5">
+                <div class="contact-grid pt-5">
+                    <img [src]="user?.user?.image ? user?.user?.image : 'assets/images/user/profile.jpg'"
+                         class="user-img" alt="">
+                    <div class="profile-header">
+                        <div class="user-name">{{user?.user?.firstName}} {{user?.user?.lastName}}</div>
+                        <div class="name-center">{{user?.occupation}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <fuse-card class="flex flex-col  w-full p-8">
+            <div class="text-2xl font-semibold leading-tight">About Me</div>
+            <div class="mt-4"><span class="font-bold">Biography : </span>
+                {{user?.biography}}
+            </div>
+            <div class="mt-4" *ngIf="role==='Competitor' || teamMemberId"><span class="font-bold">Skills : </span>
+                {{user?.skills}}
+            </div>
+            <hr class="w-full border-t my-6">
+            <div class="flex flex-col" >
+                <div class="flex items-center" *ngIf="role==='Customer'">
+                    <mat-icon
+                        class="icon-size-5 mr-3"
+                        [svgIcon]="'heroicons_solid:map-pin'"></mat-icon>
+                    <span class="leading-none">{{user?.address}}</span>
+                </div>
+                <div class="flex items-center mt-4" *ngIf="role==='Customer'">
+                    <mat-icon
+                        class="icon-size-5 mr-3"
+                        [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
+                    <span class="leading-none">{{user?.organization_name}}</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <mat-icon svgIcon="mat_solid:email"  class="icon-size-5 mr-3"></mat-icon>
+
+                    <span class="leading-none">{{user?.user?.email}}</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <mat-icon svgIcon="mat_solid:phone"  class="icon-size-5 mr-3"></mat-icon>
+                    <span class="leading-none">{{user?.user?.mobile_phone}}</span>
+                </div>
+                <div class="flex items-center mt-4">
+                    <mat-icon
+                        class="icon-size-5 mr-3"
+                        [svgIcon]="'heroicons_solid:cake'"></mat-icon>
+                    <span class="leading-none">{{user?.birthdate}}</span>
+                </div>
+            </div>
+
+            <a *ngIf="role==='Competitor' || teamMemberId"
+                class="px-6 mt-8"
+                mat-flat-button
+                [color]="'primary'"
+               target="_blank"
+                href="{{user?.cv}}">
+                Download cv
+            </a>
+        </fuse-card>
+        <fuse-card class="flex flex-col  w-full p-8 mt-5" *ngIf="role==='Customer'">
+            <div class="text-2xl font-semibold leading-tight">My Competitions</div>
+
+            <div class="tableBody mt-5">
+                <div class="table-responsive">
+                    <table class="centered-table table">
+                        <thead>
+                        <tr>
+                            <th>Competition</th>
+                            <th>Status</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr *ngFor="let comp of customerCompetitions" [routerLink]="isClickableStatus(comp.status) ? '/apps/pending-competitions/' + comp.id : null" style="cursor: pointer">
+                            <td>{{ comp.title }}</td>
+                            <td *ngIf="comp.status === 'About_to_start'">
+                                <span class="badge badge-solid-pink">{{ comp.status }}</span>
+                            </td>
+                            <td *ngIf="comp.status === 'Running'">
+                                <span class="badge badge-solid-green">{{ comp.status }}</span>
+                            </td>
+                            <td *ngIf="comp.status === 'Terminated'">
+                                <span class="badge badge-solid-orange">{{ comp.status }}</span>
+                            </td>
+                            <td *ngIf="comp.status === 'pending'">
+                                <span class="badge badge-solid-cyan">{{ comp.status }}</span>
+                            </td>
+                            <td *ngIf="comp.status === 'rejected'">
+                                <span class="badge badge-solid-purple">{{ comp.status }}</span>
+                            </td>
+                        </tr>
+                        <!-- Add more rows as necessary -->
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+        </fuse-card>
+    </div>
+    <div class="column-right">
+        <div class="card">
+            <mat-tab-group>
+                <mat-tab>
+                    <ng-template mat-tab-label>
+                        <mat-icon class="example-tab-icon msr-2">face</mat-icon>
+                        Journey
+                    </ng-template>
+                    <div class="col-lg-12 col-md-12 col-sm-12 p-2">
+
+                        <div style="overflow-y: auto; max-height: 1200px;">
+                            <activity *ngIf="role==='Customer'"></activity>
+                        </div>
+
+
+
+                        <div class="course-detelies-wrapper" *ngIf="role==='Competitor' || teamMemberId">
+                            <div class="header mb-10 achievements-title">
+                                <h2>Achievements</h2>
+                                <mat-icon svgIcon="heroicons_outline:trophy"></mat-icon>
+                            </div>
+                            <div class="tableBody">
+                                <div class="table-responsive">
+                                    <table class="centered-table table">
+                                        <thead>
+                                        <tr>
+                                            <th>Competition</th>
+                                            <th>Prize</th>
+                                            <th>Place</th>
+                                            <th>Date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr *ngFor="let achievement of Achievements">
+                                            <td>{{ achievement.competition.title }}</td>
+                                            <td>${{ achievement.prize }}</td>
+                                            <td>{{ achievement.level}}</td>
+                                            <td>{{ achievement.date  }}</td>
+                                        </tr>
+                                        <!-- Add more rows as necessary -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+<!--                            <div class="pagination-container">-->
+<!--                                &lt;!&ndash;                    <span&ndash;&gt;-->
+<!--                                &lt;!&ndash;                        style="margin-top: 10px; margin-inline: 20px">Total courses enrolled in <span>{{courses?.length}}</span></span>&ndash;&gt;-->
+
+<!--                                <div class="edu-pagination mt-30 mb-20">-->
+<!--                                    &lt;!&ndash;                                            <ul>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                <li><a (click)="next_previous('previous')"><i class="fas fa-angle-double-left"></i></a></li>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                &lt;!&ndash;                <li class="active"><a href="#"><span>01</span></a> </li>&ndash;&gt;&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                &lt;!&ndash;                <li><a href="#"><span>02</span></a></li>&ndash;&gt;&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                <li *ngFor="let i of [].constructor(totalPages); let page = index "&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                    [ngClass]="{ 'active': page === (currentPage-1 ) }">&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                    <a (click)="onPageChanged(page+1)" style="cursor: pointer">&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                        <span *ngIf="(page+1)<10">0{{ page + 1}}</span>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                        <span *ngIf="(page+1)>=10">{{ page + 1 }}</span>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                    </a>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                                </li>&ndash;&gt;-->
+
+<!--                                    &lt;!&ndash;                                                <li><a (click)="next_previous('next')"><i class="fas fa-angle-double-right"></i></a></li>&ndash;&gt;-->
+<!--                                    &lt;!&ndash;                                            </ul>&ndash;&gt;-->
+
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                        <div class="course-detelies-wrapper mt-10" *ngIf="role==='Competitor' || teamMemberId">
+                            <div class="header mb-10 achievements-title mt-4">
+                                <h2>Contributions</h2>
+                                <mat-icon svgIcon="mat_solid:try"></mat-icon>
+                            </div>
+                            <div class="tableBody  mb-10">
+                                <div class="table-responsive">
+                                    <table class="centered-table table">
+                                        <thead>
+                                        <tr>
+                                            <th>Competition</th>
+                                            <th>Status</th>
+                                            <th>Starting date</th>
+                                            <th>Winner announcement date</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        <tr *ngFor="let contribution of Contributions">
+                                            <td>{{ contribution.title }}</td>
+                                            <td>{{ contribution.status }}</td>
+                                            <td>{{ contribution.starting_date}}</td>
+                                            <td>{{ contribution.winner_announcement_date  }}</td>
+                                        </tr>
+                                        <!-- Add more rows as necessary -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="pagination-container">
+                                <!--                    <span-->
+                                <!--                        style="margin-top: 10px; margin-inline: 20px">Total courses enrolled in <span>{{courses?.length}}</span></span>-->
+
+                                <div class="edu-pagination mt-30 mb-20">
+                                    <!--                                            <ul>-->
+                                    <!--                                                <li><a (click)="next_previous('previous')"><i class="fas fa-angle-double-left"></i></a></li>-->
+                                    <!--                                                &lt;!&ndash;                <li class="active"><a href="#"><span>01</span></a> </li>&ndash;&gt;-->
+                                    <!--                                                &lt;!&ndash;                <li><a href="#"><span>02</span></a></li>&ndash;&gt;-->
+                                    <!--                                                <li *ngFor="let i of [].constructor(totalPages); let page = index "-->
+                                    <!--                                                    [ngClass]="{ 'active': page === (currentPage-1 ) }">-->
+                                    <!--                                                    <a (click)="onPageChanged(page+1)" style="cursor: pointer">-->
+                                    <!--                                                        <span *ngIf="(page+1)<10">0{{ page + 1}}</span>-->
+                                    <!--                                                        <span *ngIf="(page+1)>=10">{{ page + 1 }}</span>-->
+                                    <!--                                                    </a>-->
+                                    <!--                                                </li>-->
+
+                                    <!--                                                <li><a (click)="next_previous('next')"><i class="fas fa-angle-double-right"></i></a></li>-->
+                                    <!--                                            </ul>-->
+
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                </mat-tab>
+                <mat-tab label="Profile Picture" *ngIf="!teamMemberId">
+                    <ng-template mat-tab-label>
+                        <mat-icon class="example-tab-icon msr-2">camera</mat-icon>
+                        Upload photo
+                    </ng-template>
+                    <div class="flex flex-col items-start w-full mt-4 p-2 rounded-2xl shadow overflow-hidden bg-card border-2 border-dashed border-gray-300 dark:border-gray-600">
+                        <div class="flex">
+                            <input
+                                id="file-input"
+                                class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                type="file"
+                                accept="image/*"
+                                (change)="onImageSelected($event)"
+                                #fileInput
+                            >
+                            <label class="flex-auto" for="file-input">
+                                <div class="flex items-center justify-center w-full h-10 rounded-md cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600">
+                                    <mat-icon class="mr-2" svgIcon="ads_click"></mat-icon>
+                                    <span class="ml-4" *ngIf="!image">Please upload your image file here</span>
+                                    <img class="ml-4" style="width: 80px ; height: 75px" *ngIf="image" [src]="image" alt="Selected Image">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button class="bg-black hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="updateProfilePicture(userId)" [disabled]="!image">Save Image</button>
+                    </div>
+                </mat-tab>
+                <mat-tab *ngIf="!teamMemberId">
+                    <ng-template mat-tab-label>
+                        <mat-icon class="example-tab-icon msr-2">settings</mat-icon>
+                        Settings
+                    </ng-template>
+                    <div class="header">
+                        <h2>
+                            <strong>Account</strong> Settings</h2>
+                    </div>
+                    <div class="body">
+                   <settings-account></settings-account>
+                    </div>
+
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+    </div>
+</div>

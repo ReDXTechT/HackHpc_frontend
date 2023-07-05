@@ -1,0 +1,109 @@
+<div class="absolute inset-0 flex flex-col min-w-0 overflow-hidden">
+
+    <mat-drawer-container
+        class="flex-auto h-full bg-card dark:bg-transparent"
+        (backdropClick)="onBackdropClicked()">
+
+        <!-- Drawer -->
+        <mat-drawer
+            class="w-full md:w-160 dark:bg-gray-900"
+            [mode]="drawerMode"
+            [opened]="false"
+            [position]="'end'"
+            [disableClose]="true"
+            #matDrawerPending>
+            <router-outlet></router-outlet>
+        </mat-drawer>
+
+        <mat-drawer-content class="flex flex-col">
+
+            <!-- Main -->
+            <div class="flex-auto">
+
+                <!-- Header -->
+                <div class="flex flex-col sm:flex-row md:flex-col flex-auto justify-between py-8 px-6 md:px-8 border-b">
+
+                    <!-- Title -->
+                    <div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">Pending customers accounts</div>
+                        <div class="ml-0.5 font-medium text-secondary">
+                            <ng-container *ngIf="customersCount > 0">
+                                {{customersCount}}
+                            </ng-container>
+                            {{customersCount | i18nPlural: {
+                            '=0'   : 'No customers',
+                            '=1'   : 'Customer',
+                            'other': 'Customers'
+                        } }}
+                        </div>
+                    </div>
+
+                    <!-- Main actions -->
+                    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+
+                    </div>
+                </div>
+
+                <!-- customers list -->
+                <div class="relative">
+                    <ng-container *ngIf="customers$ | async as customers">
+                        <ng-container *ngIf="customers.length; else nocustomers">
+                            <ng-container *ngFor="let customer of customers; let i = index; trackBy: trackByFn">
+                                <!-- Group -->
+                                <ng-container *ngIf="i === 0 || customer.user.firstName.charAt(0) !== customers[i - 1].user.firstName.charAt(0)">
+                                    <div class="z-10 sticky top-0 -mt-px px-6 py-1 md:px-8 border-t border-b font-medium uppercase text-secondary bg-gray-50 dark:bg-gray-900">
+                                        {{customer.user.firstName.charAt(0)}}
+                                    </div>
+                                </ng-container>
+
+                                <!-- Customer card -->
+                                <div class="z-20 flex items-center px-6 py-4 md:px-8 cursor-pointer border-b"
+                                     [ngClass]="{'hover:bg-gray-100 dark:hover:bg-hover': !selectedcustomer || selectedcustomer.user.id !== customer.user.id,
+                    'bg-primary-50 dark:bg-hover': selectedcustomer && selectedcustomer.user.id === customer.user.id}">
+
+                                    <!-- Customer info and anchor tag for opening drawer -->
+                                    <a [routerLink]="['./', customer.user.id]" class="flex-grow flex items-center">
+                                        <div class="flex flex-0 items-center justify-center w-20 h-20 rounded-full overflow-hidden">
+                                            <ng-container *ngIf="customer.user.image">
+                                                <img class="object-contain w-full h-full" [src]="customer.user.image" alt="customer avatar"/>
+                                            </ng-container>
+                                            <ng-container *ngIf="!customer.user.image">
+                                                <div class="flex items-center justify-center w-full h-full rounded-full text-lg uppercase bg-gray-200 text-gray-600 dark:bg-gray-700 dark:text-gray-200">
+                                                    {{customer?.user?.firstName.charAt(0)}}
+                                                </div>
+                                            </ng-container>
+                                        </div>
+                                        <div class="min-w-0 ml-4 flex-grow">
+                                            <div class="font-medium leading-5 truncate">{{customer?.user?.firstName}} {{customer?.user?.lastName}}</div>
+                                            <div class="leading-5 truncate text-secondary">{{customer?.occupation}}</div>
+                                        </div>
+                                    </a>
+
+                                    <!-- Approve and reject buttons -->
+                                    <div>
+                                        <button class="min-w-10 min-h-7 h-7 px-2 leading-6" mat-stroked-button (click)="approveCustomerAccount(customer.user.id); $event.stopPropagation()">
+                                            <mat-icon svgIcon="mat_solid:thumb_up_alt" style="color: #0d9488"></mat-icon>
+                                        </button>
+                                        <button class="min-w-10 min-h-7 h-7 px-2 " mat-stroked-button (click)="rejectCustomerAccount(customer.user.id); $event.stopPropagation()">
+                                            <mat-icon svgIcon="mat_solid:thumb_down_alt"  style="color: #9f1239"></mat-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                            </ng-container>
+                        </ng-container>
+                    </ng-container>
+
+                    <!-- No customers -->
+                    <ng-template #nocustomers>
+                        <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no pending customers accounts!</div>
+                    </ng-template>
+
+                </div>
+
+            </div>
+
+        </mat-drawer-content>
+
+    </mat-drawer-container>
+
+</div>

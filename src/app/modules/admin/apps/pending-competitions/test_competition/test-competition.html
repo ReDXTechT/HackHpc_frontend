@@ -1,0 +1,52 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160  ">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="my-0 font-bold text-2xl">Test {{ competition.title }}</h2>
+            </div>
+            <button
+                matDialogClose
+                (click)="close()"
+                mat-icon-button>
+                <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+            </button>
+        </div>
+        <div class="m-4">
+
+            <form [formGroup]="updateFrom">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-icon svgIcon="feather:edit-3" class="mr-4"></mat-icon>
+                        <input matInput [formControlName]="'instance_type'" [placeholder]="'Title'" required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                        <mat-select [formControlName]="'ami'" placeholder="Custom_ami" required>
+                            <mat-option *ngFor="let ami of amis" [value]="ami.ami_id">{{ ami.code_type }}</mat-option>
+                        </mat-select>
+                        <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:document-text'"></mat-icon>
+                    </mat-form-field>
+                </div>
+
+
+            </form>
+
+            <div class="flex justify-end mt-5">
+                <button
+                    (click)="updateCompetition()"
+                    class="px-8 mr-2"
+                    mat-flat-button
+                    [color]="'accent'"
+                    type="button"
+                >
+                    Test now
+                </button>
+
+            </div>
+
+
+
+        </div>
+
+</div>

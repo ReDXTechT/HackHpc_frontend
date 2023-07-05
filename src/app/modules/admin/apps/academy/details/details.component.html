@@ -1,0 +1,611 @@
+<div class="flex flex-col flex-auto min-w-0">
+
+    <!-- Header -->
+    <div class="bg-card">
+        <div class="flex flex-col w-full max-w-screen-xl mx-auto px-6 sm:px-8">
+            <div class="flex flex-col sm:flex-row flex-auto sm:items-center min-w-0 my-8 sm:my-12">
+                <!-- Avatar and name -->
+                <div class="flex flex-auto items-center min-w-0">
+
+                    <div class="flex flex-col min-w-0 ml-4">
+                        <div class="flex items-center mb-3">
+                            <div
+                                class="ml-1.5 leading-6 truncate text-gray-700 font-bold text-3xl">{{competition?.title}}</div>
+                        </div>
+                        <hr class="my-4 border-b border-gray-300 mt-4">
+                        <div class="flex flex-col md:flex-row items-start md:items-center md:space-x-4 w-full p-2 md:p-0">
+                            <div>
+                                <div class="flex items-center mt-2">
+                                    <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:user'"></mat-icon>
+                                    <div class="font-bold">{{customer?.user?.firstName}} {{customer?.user?.lastName}}</div>
+                                </div>
+                                <div class="text-sm text-gray-500">Sponsor</div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center w-full md:w-auto">
+                                <div class="flex items-center mb-2 md:mb-0">
+                                    <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:users'"></mat-icon>
+                                    <div class="font-bold">{{competition?.max_competitors}}</div>
+                                </div>
+                                <div class="text-sm text-gray-500">Max competitors</div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center w-full md:w-auto">
+                                <div class="flex items-center mb-2 md:mb-0">
+                                    <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:users'"></mat-icon>
+                                    <div class="font-bold">{{competition?.competitors.length}}</div>
+                                </div>
+                                <div class="text-sm text-gray-500">Registered</div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center w-full md:w-auto">
+                                <div class="font-bold text-center mb-2 md:mb-0">{{ endsInText }}</div>
+                                <div class="flex items-center justify-between">
+                                    <ng-container *ngIf="competition?.status != 'Terminated'">
+                                        <!-- Display the calculated values based on the competition status -->
+                                        <span class="font-bold mr-1">{{ days }}</span> Days
+                                        <span class="font-bold mx-1">{{ hours }}</span> Hours
+                                        <span class="font-bold ml-1 mr-1">{{ minutes }}</span> Minutes
+                                    </ng-container>
+                                    <ng-container *ngIf="competition?.status == 'Terminated'">
+                                        <!-- Display the calculated values based on the competition status -->
+                                        <span class="font-bold mr-1">{{ competition?.winner_announcement_date }}</span>
+                                    </ng-container>
+                                </div>
+                            </div>
+                            <div class="flex flex-col items-start md:items-center w-full md:w-auto">
+                                <div class="flex items-center mb-2 md:mb-0">
+                                    <mat-icon svgIcon="feather:award" class="mr-1"></mat-icon>
+                                    <div class="font-bold mr-4">Prizes</div>
+                                </div>
+                                <div class="text-l text-gray-600 ml-2">1st place : $ {{competition?.prizes[0].amount}}</div>
+                            </div>
+                        </div>
+                        <hr class="my-4 border-b border-gray-300">
+                    </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
+                    <div >
+                        <button  *ngIf="(competition?.status !== 'About_to_start'&& role=='Admin') || (competition?.status !== 'About_to_start'&& role=='Customer')"class=" mr-2" mat-flat-button routerLink="/apps/results-submissions"
+                                style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="mat_solid:drive_file_move"></mat-icon>
+                            <span class="ml-2">View Submissions</span>
+                        </button>
+                        <button *ngIf="(competition?.status == 'Running'&& role=='Admin') || (competition?.status == 'Running'&& role=='Customer')" class=" mr-2" mat-flat-button (click)="announceWinners()"
+                                style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="heroicons_outline:trophy"></mat-icon>
+                            <span class="ml-2">Announce winners</span>
+                        </button>
+                    </div>
+
+                    <div *ngIf="competition?.status === 'About_to_start' && role=='Competitor'">
+
+                        <button *ngIf="approved === true && !register" mat-flat-button style="background-color:  #04b78d; color: white;">
+                            <mat-icon svgIcon="heroicons_solid:check"></mat-icon>
+                            <span class="ml-2">Already Registered</span>
+                        </button>
+
+                        <button *ngIf="approved === false && !register" mat-flat-button style="background-color: gray; color: white;">
+                            <mat-icon svgIcon="heroicons_solid:check"></mat-icon>
+                            <span class="ml-2">Request Sent</span>
+                        </button>
+
+
+                        <button *ngIf="register && !approved"
+                            mat-flat-button
+                            (click)="quizPassing(competition)"
+                                style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="mat_solid:person_add"></mat-icon>
+
+                            <span class="ml-2">Register</span>
+                        </button>
+                    </div>
+                    <div *ngIf="competition?.status === 'About_to_start' && role==''">
+
+                        <button
+                                mat-flat-button
+                                (click)="quizPassing(competition)"
+                                style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="mat_solid:person_add"></mat-icon>
+
+                            <span class="ml-2">Register</span>
+                        </button>
+                    </div>
+                    <div *ngIf="competition?.status === 'About_to_start' && role=='Admin'">
+
+                        <button
+                            mat-flat-button
+                            (click)="launchCompetition(competition.id)"
+                            style="background-color: #020202; color: white;">
+                            <mat-icon svgIcon="heroicons_outline:rocket-launch"></mat-icon>
+
+                            <span class="ml-2">Launch Competition</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+            <!-- Project selector -->
+            <div
+                class="relative flex self-start pt-2 pb-1 pl-5 pr-4 cursor-pointer overflow-hidden rounded-t-xl border border-b-0 " style="background-color: rgba(252, 249, 249, 0.81)"
+                matRipple
+            >
+                <div class="flex items-center">
+                    <div class="flex items-center mt-6 sm:mt-0  space-x-3">
+                        <mat-icon svgIcon="heroicons_outline:building-office-2"></mat-icon>
+
+                        <div class="font-medium leading-6 truncate">Company : {{customer?.organization_name}}</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Main -->
+    <div class="flex-auto border-t -mt-px pt-4 sm:pt-6">
+        <div class="w-full max-w-screen-xl mx-auto">
+            <!-- Tabs -->
+            <mat-tab-group [selectedIndex]="selectedIndex"
+                           class="sm:px-2"
+                           mat-stretch-tabs="false"
+                           [animationDuration]="'0'">
+
+                <!-- Overview -->
+                <mat-tab label="Overview" id="Overview">
+                    <ng-template matTabContent>
+                        <!-- Summary -->
+                        <div class="max-w-full mb-12 p-8 rounded-2xl shadow bg-card">
+                            <div class="flex items-center">
+                                <h2 class="my-0 font-bold text-2xl">Challenge Overview</h2>
+                                <span class="ml-auto">
+                                    <button mat-icon-button (click)="editOverview(competition)">
+                                        <mat-icon svgIcon="feather:edit"></mat-icon>
+                                    </button>
+                                </span>
+                            </div>
+
+                            <hr class="mt-6">
+                            <div class="mt-8">
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Challenge Description</span>
+                                <ul class="mt-4 ml-6">
+                                    <li>{{competition?.project_description}}</li>
+                                </ul>
+                            </div>
+
+                            <div class="mt-8">
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold"> Challenge Dates </span>
+                                <ul class="mt-4 ml-6">
+                                    <li>
+                                        <div class="flex items-center">
+                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'" style="color: darkred"></mat-icon>
+                                            <div class="font-bold">Starting Date:</div>
+                                            <div class="ml-2">{{ competition?.starting_date }}</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center">
+                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'" style="color: darkred"></mat-icon>
+                                            <div class="font-bold">Submission Deadline:</div>
+                                            <div class="ml-2">{{ competition?.submission_deadline  }}</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center">
+                                            <mat-icon class="mr-2" [svgIcon]="'heroicons_solid:calendar'" style="color: darkred"></mat-icon>
+                                            <div class="font-bold">Winner Announcement:</div>
+                                            <div class="ml-2">{{ competition?.winner_announcement_date }}</div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </div>
+
+
+                            <div class="mt-8">
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Eligibility</span>
+                                <ul class="mt-4 ml-6">
+                                    <li>{{competition?.skills_required}}</li>
+                                </ul>
+                            </div>
+
+                            <div class="mt-8">
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Optimization guidelines</span>
+                                <ul class="mt-4 ml-6">
+                                    <li>{{competition?.optimization_guidelines}}</li>
+                                </ul>
+                            </div>
+
+                            <div class="mt-8">
+                                <span class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Target Architecture</span>
+                                <ul class="mt-4 ml-6">
+                                    <li>
+                                        <div class="flex items-center">
+                                            <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
+                                            <div class="font-bold">CPU Memory:</div>
+                                            <div class="ml-2">{{ competition?.target_architecture.cpu_memory }}</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center">
+                                            <mat-icon svgIcon="feather:cpu" class="mr-2" style="color: darkred"></mat-icon>
+                                            <div class="font-bold">Processor:</div>
+                                            <div class="ml-2">{{ competition?.target_architecture.processor }}</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center">
+                                            <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
+                                            <div class="font-bold">vCPU:</div>
+                                            <div class="ml-2">{{ competition?.target_architecture.vcpu }}</div>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div class="flex items-center">
+                                            <mat-icon svgIcon="feather:hard-drive" class="mr-2" style="color: darkred"></mat-icon>
+                                            <div class="font-bold">Storage:</div>
+                                            <div class="ml-2">{{ competition?.target_architecture.storage }}</div>
+                                        </div>
+                                    </li>
+                                    <ng-container *ngIf="competition?.target_architecture.graphics_card === null">
+                                        <li>
+                                            <div class="flex items-center">
+                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
+                                                <div class="font-bold">Graphics Card:</div>
+                                                <div class="ml-2">N/A</div>
+                                            </div>
+                                        </li>
+                                    </ng-container>
+                                    <ng-container *ngIf="competition?.target_architecture.graphics_card !== null">
+                                        <li>
+                                            <div class="flex items-center">
+                                                <mat-icon svgIcon="feather:cpu" class="mr-2" style="color: darkred"></mat-icon>
+                                                <div class="font-bold">Graphics Card:</div>
+                                                <div
+                                                    class="ml-2">{{ competition?.target_architecture.graphics_card }}</div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex items-center">
+                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
+                                                <div class="font-bold">Graphics Card Memory:</div>
+                                                <div
+                                                    class="ml-2">{{ competition?.target_architecture.graphics_card_memory }}</div>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div class="flex items-center">
+                                                <mat-icon svgIcon="heroicons_solid:cpu-chip" class="mr-2" style="color: darkred"></mat-icon>
+                                                <div class="font-bold">Parallel Processing Units:</div>
+                                                <div
+                                                    class="ml-2">{{ competition?.target_architecture.parallel_processing_units }}</div>
+                                            </div>
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+
+
+                            <div class="mt-8">
+                                <span
+                                    class="inline-flex bg-red-50 rounded px-3 py-1 text-gray-700 font-bold">Prizes</span>
+                                <ul class="mt-4 ml-6 list-disc">
+                                    <ng-container *ngFor="let prize of competition.prizes; let i = index">
+                                        <li class="ml-2">
+                                            <span class="font-bold text-lg">{{ prize.level }} : </span>
+                                            $ {{ prize?.amount }}
+                                        </li>
+                                    </ng-container>
+                                </ul>
+                            </div>
+
+
+                        </div>
+
+
+                    </ng-template>
+                </mat-tab>
+
+                <!--                Rules-->
+
+                <mat-tab label="Rules" id="Rules">
+                    <ng-template matTabContent>
+                        <div class=" gap-6 w-full min-w-0">
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                Competitors must first complete the questionnaire provided by the competition host and
+                                achieve the minimum required score to be eligible for participation.
+                            </fuse-alert>
+
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                In the submission description, competitors are required to include any additional
+                                dependencies they have installed or used in their solution.
+                            </fuse-alert>
+
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                Before submitting their solution, competitors must run the "validate.sh" script provided
+                                by the competition host to ensure their code meets the specified requirements and passes
+                                the validation process.
+                            </fuse-alert>
+
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                If a competitor leaves their workspace for an extended period and then attempts to
+                                rejoin using the same credentials provided via email, they may need to wait for a few
+                                minutes until their workspace becomes available again.
+                            </fuse-alert>
+
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                The number of submissions is irrelevant and has no influence on winning the prizes. What
+                                matters the most is the quality of the results submitted. Competitors should ensure that
+                                before making any submission, they have thoroughly tested and optimized their code to
+                                achieve the best performance and results.
+                            </fuse-alert>
+
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                The competition organizers reserve the right to disqualify participants found in
+                                violation of the rules or suspected of fraudulent activities.
+                            </fuse-alert>
+
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                All code submissions must follow the specified guidelines and requirements.
+                            </fuse-alert>
+
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                Participants must submit their work before the submission deadline. Late submissions
+                                will not be accepted.
+                            </fuse-alert>
+                            <fuse-alert
+                                [appearance]="'border'"
+                                [type]="'warning'">
+                                Any violation of the competition rules may result in disqualification.
+                            </fuse-alert>
+
+                        </div>
+                    </ng-template>
+
+                </mat-tab>
+
+                <!-- Budget -->
+                <mat-tab label="Budget" id="Budget">
+                    <ng-template matTabContent>
+                        <div class=" gap-6 w-full min-w-0">
+                            <!-- Budget details -->
+                            <div
+                                class="sm:col-span-6 flex flex-col flex-auto p-6 bg-card shadow rounded-2xl overflow-hidden">
+                                <div class="text-lg font-medium tracking-tight leading-6 truncate">Budget Details</div>
+                                <div class="flex flex-col flex-auto mt-2 overflow-x-auto">
+                                    <table class="min-w-240 overflow-y-visible" mat-table
+                                           [dataSource]="data.budget_items">
+                                        <!-- Item -->
+                                        <ng-container matColumnDef="Item" sticky>
+                                            <th mat-header-cell *matHeaderCellDef>Item</th>
+                                            <td mat-cell *matCellDef="let budget; let i = index">
+                                              <span class="flex items-center">
+                                                <span class="w-2 h-2 rounded-full"
+                                                      [ngClass]="getDotColor(i)"></span>
+                                                <span class="ml-3 leading-4">{{ budget.item }}</span>
+                                              </span>
+                                            </td>
+                                        </ng-container>
+
+                                        <!-- Description -->
+                                        <ng-container matColumnDef="Description">
+                                            <th mat-header-cell *matHeaderCellDef>Description</th>
+                                            <td mat-cell *matCellDef="let budget">{{ budget.description }}</td>
+                                        </ng-container>
+
+                                        <!-- Total_cost -->
+                                        <ng-container matColumnDef="Total_cost">
+                                            <th mat-header-cell *matHeaderCellDef>Total price</th>
+                                            <td mat-cell
+                                                *matCellDef="let budget">{{ budget.cost | currency:'USD' }}</td>
+                                        </ng-container>
+
+                                        <tr mat-header-row *matHeaderRowDef="datasource.budgetDetails.columns"></tr>
+                                        <tr mat-row
+                                            *matRowDef="let budget; columns: datasource.budgetDetails.columns"></tr>
+                                    </table>
+                                </div>
+
+                                <div class="mt-4">
+                                    <span class="font-bold">Total:</span>
+                                    <span class="ml-2 font-bold">{{ getTotalCost() | currency:'USD' }}</span>
+                                </div>
+                            </div>
+                            <!-- Budget distribution -->
+                            <div
+                                class="w-full flex flex-col flex-auto p-6 mt-10 bg-card shadow rounded-2xl overflow-hidden w-full">
+                                <div class="text-lg font-medium tracking-tight leading-6 truncate">Budget Distribution
+                                </div>
+                                <div class="flex flex-col flex-auto">
+                                    <apx-chart class="w-full"
+                                               [chart]="chartBudgetDistribution.chart"
+                                               [colors]="chartBudgetDistribution.colors"
+                                               [dataLabels]="chartBudgetDistribution.dataLabels"
+                                               [markers]="chartBudgetDistribution.markers"
+                                               [plotOptions]="chartBudgetDistribution.plotOptions"
+                                               [series]="chartBudgetDistribution.series"
+                                               [stroke]="chartBudgetDistribution.stroke"
+                                               [tooltip]="chartBudgetDistribution.tooltip"
+                                               [xaxis]="chartBudgetDistribution.xaxis"
+                                               [yaxis]="chartBudgetDistribution.yaxis"></apx-chart>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </mat-tab>
+
+                <!-- TeamComponent -->
+                <mat-tab label="Condidats" id="Team">
+                    <ng-template mat-tab-label>
+                        <span class="inline-flex items-center space-x-2">
+                            <span class="">Condidats</span>
+                            <span
+                                class="px-2 py-1 text-sm rounded-full bg-red-100 text-on-black-100">{{competition?.competitors.length}}</span>
+                        </span>
+                    </ng-template>
+                    <team [competitionId]="competition.id"></team>
+                </mat-tab>
+
+                <!-- TeamComponent -->
+                <mat-tab label="Leaderbord" id="Leaderbord">
+                    <ng-template matTabContent>
+                        <leaderbord></leaderbord>
+                    </ng-template>
+                </mat-tab>
+
+                <mat-tab *ngIf="competition.status==='About_to_start'" label="Waiting List" id="WaitingList">
+                    <ng-template mat-tab-label>
+                        <span class="inline-flex items-center space-x-2">
+                            <span class="">Waiting List</span>
+                            <span
+                                class="px-2 py-1 text-sm rounded-full bg-red-100 text-on-black-100">{{waitingList?.length}}</span>
+                        </span>
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <waiting-list [competitionId]="competition.id"></waiting-list>
+
+                    </ng-template>
+                </mat-tab>
+
+                <mat-tab *ngIf="competition.status==='Terminated'" label="Winners" id="Winners">
+                    <ng-template mat-tab-label>
+                        <span class="inline-flex items-center space-x-2">
+                            <span class="">Winners</span>
+                            <span
+                                class="px-2 py-1 text-sm rounded-full bg-red-100 text-on-black-100">{{winnersLength}}</span>
+                        </span>
+                    </ng-template>
+                    <ng-template matTabContent>
+                        <winners [competitionId]="competition.id"></winners>
+
+                    </ng-template>
+                </mat-tab>
+
+
+                <!-- Solution checker -->
+                <mat-tab label="Solution checker" id="Solution_Checker">
+                    <ng-template matTabContent>
+                        <div class=" gap-6 w-full min-w-0">
+                            <!-- Summary -->
+                            <fuse-alert [appearance]="'border'" [type]="'info'">
+                                <div style="font-size: 15px; font-weight: bold;">
+                                    Before proceeding with the verification process, please ensure that you have
+                                    completed the following steps:
+                                </div>
+                                <ul class="mt-4" style="list-style-type: none; padding-left: 1.5rem;">
+                                    <li style="text-indent: -1.5rem; margin-bottom: 0.5rem;">
+                                        <span
+                                            style="display: inline-block; width: 1rem; text-align: center;">&bull;</span>
+                                        Push your code into a public GitHub repository: Make sure your code is hosted in
+                                        a public repository on GitHub. This will allow the checker to access and clone
+                                        your repository for verification.
+                                    </li>
+                                    <li style="text-indent: -1.5rem; margin-bottom: 0.5rem;">
+                                        <span
+                                            style="display: inline-block; width: 1rem; text-align: center;">&bull;</span>
+                                        Capture the output in a well-structured text file: Run your code and capture the
+                                        output in a text file. Ensure that the output is organized and easy to
+                                        understand. You will need to submit this file later.
+                                    </li>
+                                    <li style="text-indent: -1.5rem; margin-bottom: 0.5rem;">
+                                        <span
+                                            style="display: inline-block; width: 1rem; text-align: center;">&bull;</span>
+                                        Provide the path of the <code>validate.sh</code> file: In your GitHub
+                                        repository, you already have a <code>validate.sh</code> file that contains the
+                                        necessary instructions to validate your code. Please provide the Path of this
+                                        file below in the directory "/home/competitor/workspace".
+                                    </li>
+                                </ul>
+                            </fuse-alert>
+                            <form
+                                class="flex flex-col w-full mt-8 p-8 space-y-8 rounded-2xl shadow overflow-hidden bg-card"
+                                [formGroup]="submissionForm">
+
+                                <div class="flex">
+                                    <mat-form-field class="flex-auto">
+                                        <mat-icon svgIcon="heroicons_solid:pencil" class="mr-4"></mat-icon>
+                                        <textarea
+                                            matInput
+                                            [formControlName]="'solution_description'"
+                                            [placeholder]="'Solution Description'"
+                                            cdkTextareaAutosize></textarea>
+                                    </mat-form-field>
+                                </div>
+
+                                <div class="flex">
+                                    <mat-form-field class="w-full flex">
+                                        <mat-icon svgIcon="heroicons_solid:folder" class="mr-4"></mat-icon>
+                                        <input
+                                            matInput
+                                            [formControlName]="'validate_script'"
+                                            [placeholder]="'give the full path of file validate.sh in your repo'"
+                                            required>
+                                    </mat-form-field>
+                                </div>
+                                <div class="flex">
+                                    <mat-form-field class="w-full flex">
+                                        <mat-icon svgIcon="feather:github" class="mr-4"></mat-icon>
+                                        <input
+                                            matInput
+                                            [formControlName]="'git_repo_url'"
+                                            [placeholder]="'Git repository URL, make sure the repo is public'"
+                                            required>
+                                    </mat-form-field>
+                                </div>
+
+                                <div
+                                    class="flex flex-col items-start w-full mt-8 p-8 space-y-8 rounded-2xl shadow overflow-hidden bg-card border-2 border-dashed border-gray-300 dark:border-gray-600">
+                                    <div class="flex">
+                                        <input
+                                            id="file-input"
+                                            class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
+                                            type="file"
+                                            [accept]="'text/plain'"
+                                            (change)="uploadFile(fileInput.files)"
+                                            #fileInput>
+                                        <label
+                                            class="flex-auto"
+                                            for="file-input">
+                                            <div
+                                                class="flex items-center justify-center w-full h-10 rounded-md cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600">
+                                                <mat-icon class="mr-2" svgIcon="ads_click"></mat-icon>
+                                                <span
+                                                    class="ml-4"> Please upload your execution output TXT file here</span>
+                                            </div>
+                                        </label>
+                                    </div>
+                                </div>
+
+
+                                <!-- Actions -->
+                                <div class="flex items-center justify-end w-full mt-8">
+                                    <button type="reset" (click)="submissionForm.reset();" mat-button>Reset</button>
+                                    <button class="ml-2" [color]="'primary'" type="button" mat-flat-button>Submit
+                                    </button>
+                                </div>
+                            </form>
+
+
+                        </div>
+                    </ng-template>
+                </mat-tab>
+
+            </mat-tab-group>
+        </div>
+    </div>
+
+</div>

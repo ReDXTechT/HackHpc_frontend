@@ -1,0 +1,92 @@
+<!-- Loading bar -->
+<fuse-loading-bar></fuse-loading-bar>
+
+<!-- Navigation -->
+<ng-container *ngIf="navigation">
+    <fuse-vertical-navigation
+        class="dark bg-black print:hidden"
+        [appearance]="navigationAppearance"
+        [mode]="isScreenSmall ? 'over' : 'side'"
+        [name]="'mainNavigation'"
+        [navigation]="navigation.default"
+        [opened]="!isScreenSmall">
+
+        <!-- Navigation header hook -->
+        <ng-container fuseVerticalNavigationContentHeader>
+            <!-- Logo -->
+            <div class="flex items-center justify-center h-20">
+                <img
+                    class="w-15"
+                    src="assets/icons/redx.png"
+                    alt="Logo image">
+            </div>
+            <div class="flex flex-col items-center w-full p-4" *ngIf="user">
+                <div class="relative w-18 h-18 "*ngIf="user?.image" >
+                    <ng-container >
+                        <img class="w-full h-full rounded-full" [src]="user.image" alt="User avatar">
+                    </ng-container>
+                </div>
+
+                <div class="flex flex-col items-center justify-center w-full mt-6"  >
+                    <div
+                        class="w-full whitespace-nowrap text-ellipsis overflow-hidden text-center leading-normal font-medium">
+                        {{user.firstName}} {{user.lastName}}
+                    </div>
+                    <div
+                        class="w-full mt-0.5 whitespace-nowrap text-ellipsis overflow-hidden text-center text-md leading-normal font-medium text-secondary">
+                        {{user.role}}
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+    </fuse-vertical-navigation>
+</ng-container>
+
+
+<!-- Wrapper -->
+<div class="flex flex-col flex-auto w-full min-w-0">
+
+    <!-- Header -->
+    <div
+        class="relative flex flex-0 items-center w-full h-16 px-4 md:px-6 z-49 shadow dark:shadow-none dark:border-b bg-card dark:bg-transparent print:hidden">
+        <div class="flex items-center pr-2 space-x-2">
+            <!-- Navigation toggle button -->
+            <button
+                mat-icon-button
+                (click)="toggleNavigation('mainNavigation')">
+                <mat-icon [svgIcon]="'heroicons_outline:bars-3'"></mat-icon>
+            </button>
+            <!-- Navigation appearance toggle button -->
+            <button
+                class="hidden md:inline-flex"
+                mat-icon-button
+                (click)="toggleNavigationAppearance()">
+                <mat-icon [svgIcon]="'heroicons_outline:arrows-right-left'"></mat-icon>
+            </button>
+        </div>
+        <!-- Components -->
+        <div class="flex items-center pl-2 ml-auto space-x-0.5 sm:space-x-2">
+<!--            <languages></languages>-->
+            <fuse-fullscreen class="hidden md:block"></fuse-fullscreen>
+<!--            <search [appearance]="'bar'"></search>-->
+<!--            <shortcuts></shortcuts>-->
+<!--            <messages></messages>-->
+<!--            <notifications></notifications>-->
+            <user *ngIf="user; else noUser"></user>
+            <ng-template #noUser>
+                <button class="bg-red-600 hover:bg-black hover:text-white text-black font-bold py-2 px-4 rounded-full" routerLink="/sign-in">Sign In</button>
+            </ng-template>
+        </div>
+    </div>
+
+    <!-- Content -->
+    <div class="flex flex-col flex-auto">
+        <!-- *ngIf="true" hack is required here for router-outlet to work correctly.
+             Otherwise, layout changes won't be registered and the view won't be updated! -->
+        <router-outlet *ngIf="true"></router-outlet>
+
+    </div>
+
+
+</div>

@@ -1,0 +1,213 @@
+<div class="flex flex-col flex-auto md:w-160 md:min-w-160  ">
+        <!-- Header -->
+        <div class="flex items-center justify-between">
+            <div>
+                <h2 class="my-0 font-bold text-2xl">Update {{ competition.title }}</h2>
+            </div>
+            <button
+                matDialogClose
+                mat-icon-button>
+                <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
+            </button>
+        </div>
+        <div class="m-4">
+
+            <form [formGroup]="updateFrom">
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-icon svgIcon="feather:edit-3" class="mr-4"></mat-icon>
+                        <input matInput [formControlName]="'title'" [placeholder]="'Title'" required>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                        <mat-icon svgIcon="feather:github" class="mr-4"></mat-icon>
+                        <input matInput [formControlName]="'git_repo_url'" [placeholder]="'Git repository Url'" required>
+                    </mat-form-field>
+                </div>
+
+                <div class="grid sm:grid-cols-4 gap-6 w-full">
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                            <mat-select [formControlName]="'code_type'" [placeholder]="'Code Type'" required>
+                                <mat-option value="openacc">OpenACC</mat-option>
+                                <mat-option value="openmp">OpenMP</mat-option>
+                                <mat-option value="mpi">MPI</mat-option>
+                                <mat-option value="c_cpp">C/C++</mat-option>
+                            </mat-select>
+                            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:document-text'"></mat-icon>
+                        </mat-form-field>
+                    </div>
+                    <div class="sm:col-span-2">
+                        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:user-group'"></mat-icon>
+                            <input [formControlName]="'max_competitors'" [placeholder]="'Maximum Number of Competitors'"
+                                   matInput type="number">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="grid sm:grid-cols-4 gap-6 w-full">
+                    <div class="sm:col-span-2 mt-5">
+                        <mat-form-field class="w-full">
+                            <mat-label>Submission deadline</mat-label>
+                            <input matInput [formControlName]="'submission_deadline'" [matDatepicker]="picker2"
+                                   [placeholder]="'Submission Deadline'">
+                            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                            <mat-datepicker #picker2></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="sm:col-span-2 mt-5">
+                        <mat-form-field class="w-full">
+                            <mat-label>Winner announcement date</mat-label>
+
+                            <input matInput [formControlName]="'winner_announcement_date'" [matDatepicker]="picker1"
+                                   [placeholder]="'Winner Announcement Date'">
+                            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker #picker1></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="flex mt-5">
+                    <mat-form-field class="flex-auto">
+                    <textarea matInput [placeholder]="'Give a detailed description about the competition'"
+                              [formControlName]="'project_description'" [rows]="3"></textarea>
+                        <mat-icon class="icon-size-5" matPrefix
+                                  [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                    <textarea matInput [placeholder]="'The skills required to join the competition'"
+                              [formControlName]="'skills_required'" [rows]="3"></textarea>
+                        <mat-icon class="icon-size-5" matPrefix
+                                  [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
+                    </mat-form-field>
+                </div>
+                <div class="flex">
+                    <mat-form-field class="flex-auto">
+                    <textarea matInput [placeholder]="'Please provide Optimization Guidelines'"
+                              [formControlName]="'optimization_guidelines'" [rows]="3"></textarea>
+                        <mat-icon class="icon-size-5" matPrefix
+                                  [svgIcon]="'heroicons_solid:bars-3-bottom-left'"></mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div>
+                    <h2 class="my-0 font-bold text-2xl mb-3">Update Target architecture</h2>
+                </div>
+
+                <div class="grid sm:grid-cols-4 gap-6 w-full ">
+                    <div class="sm:col-span-2">
+                        <mat-form-field
+                            class="w-full"
+                            [subscriptSizing]="'dynamic'">
+                            <mat-icon svgIcon="feather:cpu" class="mr-2"></mat-icon>
+
+                            <input
+                                [formControlName]="'processor'"
+                                [placeholder]="'Processor'"
+                                matInput
+                            >
+                        </mat-form-field>
+                    </div>
+                    <!-- Company -->
+                    <div class="sm:col-span-2">
+                        <mat-form-field
+                            class="w-full"
+                            [subscriptSizing]="'dynamic'">
+                            <mat-icon svgIcon="memory" class="mr-2"></mat-icon>
+
+                            <input
+                                [formControlName]="'cpu_memory'"
+                                [placeholder]="'CPU Memory in GB'"
+                                matInput
+                                type="number"
+                            >
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <div class="grid sm:grid-cols-4 gap-6 w-full ">
+                    <div class="sm:col-span-2 mt-5">
+                        <mat-form-field
+                            class="w-full"
+                            [subscriptSizing]="'dynamic'">
+                            <mat-icon class="mr-2">settings_ethernet</mat-icon>
+                            <input
+                                [formControlName]="'vcpu'"
+                                [placeholder]="'VCPU (Virtual CPUs)'"
+                                matInput
+                                type="number">
+                        </mat-form-field>
+                    </div>
+                    <!-- Company -->
+                    <div class="sm:col-span-2 mt-5">
+                        <mat-form-field
+                            class="w-full"
+                            [subscriptSizing]="'dynamic'">
+                            <mat-icon class="icon-size-5" [svgIcon]="'feather:hard-drive'" matPrefix></mat-icon>
+
+                            <input
+                                [formControlName]="'storage'"
+                                [placeholder]="'Storage in GB'"
+                                matInput
+                                type="number">
+                        </mat-form-field>
+                    </div>
+
+                </div>
+                <div class="flex justify-start mt-5" >
+                    <div class="flex items-center" style="width: 50%;">
+                        <mat-radio-group formControlName="architectureType">
+                            <mat-radio-button [value]="'CPU'">CPU</mat-radio-button>
+                            <mat-radio-button [value]="'GPU'">GPU</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                    <div class="ml-4 flex items-center" style="width: 50%;" *ngIf="updateFrom.get('architectureType').value === 'GPU'">
+                        <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                            <mat-icon svgIcon="feather:cpu" class="mr-2"></mat-icon>
+                            <input formControlName="graphics_card" placeholder="Graphic card" matInput>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+
+
+                <div *ngIf="updateFrom.get('architectureType').value === 'GPU'" >
+                    <div class="grid sm:grid-cols-2 gap-6 w-full">
+                        <div class="mt-5">
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                <mat-icon svgIcon="memory" class="mr-2"></mat-icon>
+                                <input formControlName="parallel_processing_units" placeholder="Parallel Processing Units" matInput type="number">
+                            </mat-form-field>
+                        </div>
+                        <div class="mt-5">
+                            <mat-form-field class="w-full" [subscriptSizing]="'dynamic'">
+                                <mat-icon svgIcon="memory" class="mr-2"></mat-icon>
+                                <input formControlName="graphics_card_memory" placeholder="Graphics Card Memory in GB" matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <div class="flex justify-end mt-5">
+                <button
+                    (click)="updateCompetition()"
+                    class="px-8 mr-2"
+                    mat-flat-button
+                    [color]="'accent'"
+                    type="button"
+                >
+                    Update
+                </button>
+
+            </div>
+
+
+
+        </div>
+
+</div>

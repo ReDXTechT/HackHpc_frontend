@@ -2,7 +2,6 @@ import {ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {Router, RouterLink} from '@angular/router';
-import {WhyJoin} from "./whyJoin/whyJoin";
 import {ScrumboardBoardsComponent} from "../../admin/apps/scrumboard/boards/boards.component";
 import {CdkScrollable} from "@angular/cdk/scrolling";
 import {NgFor, NgIf} from "@angular/common";
@@ -18,7 +17,7 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
     templateUrl: './home.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [MatSnackBarModule ,MatButtonModule, RouterLink, MatIconModule, WhyJoin, ScrumboardBoardsComponent, CdkScrollable, NgFor, RouterLink, MatIconModule, NgIf],
+    imports: [MatSnackBarModule ,MatButtonModule, RouterLink, MatIconModule, ScrumboardBoardsComponent, CdkScrollable, NgFor, RouterLink, MatIconModule, NgIf],
 })
 export class LandingHomeComponent implements OnInit {
     /**
@@ -26,6 +25,7 @@ export class LandingHomeComponent implements OnInit {
      */
 
     activeCompetitions: Competition[];
+    CompetitionsWillStartSoon: Competition[];
 
     // Private
     private _unsubscribeAll: Subject<any> = new Subject<any>();
@@ -42,6 +42,7 @@ export class LandingHomeComponent implements OnInit {
     ngOnInit(): void {
 
         this.getActivecompetitions()
+        this.getComingSooncompetitions()
     }
 
     getActivecompetitions() {
@@ -49,6 +50,23 @@ export class LandingHomeComponent implements OnInit {
             this.activeCompetitions = res;
             for (let i = 0; i < this.activeCompetitions.length; i++) {
                 const competition = this.activeCompetitions[i];
+                this.competitionService.getTeamByCompetitionId(competition.id).subscribe(res => {
+                    console.log(res);
+                    competition.competitors = res;
+                    this._changeDetectorRef.detectChanges();
+                    console.log(competition.competitors)
+
+                });
+                this._changeDetectorRef.detectChanges();
+            }
+        });
+    }
+
+    getComingSooncompetitions() {
+        this.competitionService.getAllComingSoonCompetitions().subscribe(res => {
+            this.CompetitionsWillStartSoon = res;
+            for (let i = 0; i < this.CompetitionsWillStartSoon.length; i++) {
+                const competition = this.CompetitionsWillStartSoon[i];
                 this.competitionService.getTeamByCompetitionId(competition.id).subscribe(res => {
                     console.log(res);
                     competition.competitors = res;

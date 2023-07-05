@@ -128,25 +128,43 @@
         }
 
         .motivational-section {
-            background-color: #f7f7f7;
-            padding: 50px 0;
             text-align: center;
-        }
-
-        .motivational-title {
-            font-size: 36px;
-            margin-bottom: 30px;
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background-color: #f2f2f2;
         }
 
         .motivational-quote {
-            font-size: 24px;
-            margin-bottom: 20px;
-            color: #666;
+            font-size: 20px;
+            font-weight: bold;
+            color: #333333;
+            margin: 20px 0;
         }
 
-        .motivational-author {
+        .motivational-text {
             font-size: 18px;
-            color: #999;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+        .motivational-title {
+            font-size: 28px;
+            color: #333333;
+        }
+
+        .motivational-list {
+            list-style-type: disc;
+            font-size: 16px;
+            color: #333333;
+            text-align: left;
+            margin-left: 40px;
+            margin-bottom: 20px;
+        }
+
+        .motivational-call-to-action {
+            font-size: 20px;
+            font-weight: bold;
+            color: #333333;
+            margin-top: 20px;
         }
 
         .scrumboard-section {
@@ -230,35 +248,87 @@
     <h2 class="competitions-title">Featured Competitions</h2>
     <div class="competition-boxes">
         <div class="competition-box">
-            <h2>Algorithm Optimization Challenge</h2>
+            <h2 style="color: #7e0c0c">Algorithm Optimization Challenge</h2>
             <p>
                 Push the boundaries of algorithm efficiency and optimize code for lightning-fast computations. Are you up for the challenge?
             </p>
-            <a class="button" href="/competition-details/1">Learn More</a>
         </div>
         <div class="competition-box">
-            <h2>Parallel Computing Hackathon</h2>
+            <h2 style="color: #7e0c0c">Parallel Computing Hackathon</h2>
             <p>
                 Collaborate in teams to harness the power of parallel processing. Break through computational barriers and achieve remarkable speedups.
             </p>
-            <a class="button" href="/competition-details/2">Learn More</a>
         </div>
         <div class="competition-box">
-            <h2>Performance Benchmarking Showdown</h2>
+            <h2 style="color: #7e0c0c">Performance Benchmarking Showdown</h2>
             <p>
                 Pit your computational skills against others and measure your system's performance under real-world workloads. Who will come out on top?
             </p>
-            <a class="button" href="/competition-details/3">Learn More</a>
         </div>
     </div>
 </div>
 
 <div class="motivational-section">
-    <h2 class="motivational-title">Why Join HPC Competitions?</h2>
-    <p class="motivational-quote">"Innovation thrives in the face of competition, and HPC Competitions is where brilliance meets opportunity."</p>
-    <p class="motivational-author">- John Doe, CEO of Leading Tech Solutions</p>
+    <h2 class="motivational-title">Why Join HPC Competitions!</h2>
+    <p class="motivational-quote">"Step into the arena of innovation, where your talents meet endless opportunities."</p>
+    <p class="motivational-text">Why settle for ordinary when you can push the boundaries of extraordinary? HPC Competitions are the ultimate platform where brilliance is recognized, nurtured, and celebrated. Here's why you should embark on this exhilarating journey:</p>
+    <ul class="motivational-list">
+        <li>Ignite Your Creativity: HACK HPC provide the canvas for you to unleash your creativity and explore the uncharted realms of high-performance computing.</li>
+        <li>Sharpen Your Skills: In the arena of competition, your skills are sharpened like never before. Collaborate with fellow enthusiasts, exchange ideas, and challenge yourself to new heights.</li>
+        <li>Seize the Spotlight: HPC Competitions offer you a chance to shine among the brightest minds in the field. Showcase your expertise, innovations, and problem-solving prowess.</li>
+        <li>Unravel New Frontiers: Through HPC Competitions, you'll delve into the latest technologies, target architectures, and optimization methodologies.</li>
+        <li>Forge Lifelong Connections: Connect with a vibrant community of like-minded individuals who share your passion for HPC. Build lasting relationships, foster collaborations, and engage in meaningful discussions.</li>
+    </ul>
+    <p class="motivational-call-to-action">Dare to be extraordinary. Join an HPC Competition today and let your brilliance ignite the path to limitless possibilities!</p>
 </div>
 
+<div class="scrumboard-section bg-white">
+    <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
+        <div class=" text-2xl md:text-6xl font-bold tracking-tight leading-7 sm:leading-10">
+            Competitions will start soon
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-8 md:mt-16">
+            <ng-container *ngFor="let competition of CompetitionsWillStartSoon; trackBy: trackByFn">
+                <a [routerLink]="['/apps/competitions', competition.id]" class="flex flex-col items-start w-56 p-6 rounded-lg shadow bg-card rounded-lg hover:shadow-xl transition-shadow duration-150 ease-in-out">
+                    <div class="flex items-center justify-center p-2 rounded-full bg-red-50 text-gray-800 dark:bg-primary dark:text-on-primary">
+                        {{competition.code_type}}
+                    </div>
+                    <div class="mt-5 text-lg font-medium leading-5">{{competition.title}}</div>
+                    <div class="flex items-center mt-5">
+                        <mat-icon svgIcon="heroicons_outline:trophy"></mat-icon>
+                        <span class="ml-2 font-bold">1st place : $ {{competition?.prizes[0].amount}}</span>
+                    </div>
+                    <div class="mt-0.5 line-clamp-2 text-secondary"></div>
+                    <ng-container *ngIf="competition.competitors?.length">
+                        <div class="w-12 h-1 mt-6 border-t-2"></div>
+                        <div class="flex items-center mt-6 -space-x-1.5">
+                            <ng-container *ngFor="let member of competition?.competitors.slice(0, 5); trackBy: trackByFn">
+                                <img class="flex-0 w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent object-cover" [src]="member?.user?.image" alt="Member avatar">
+                            </ng-container>
+                            <ng-container *ngIf="competition?.competitors.length > 5">
+                                <div class="flex flex-0 items-center justify-center w-8 h-8 rounded-full ring ring-offset-1 ring-bg-card ring-offset-transparent bg-gray-200 text-gray-500">
+                                    <div class="text-md font-semibold">+{{ competition?.competitors.slice(5).length }}</div>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </ng-container>
+                    <div class="flex items-center mt-4 text-md font-md">
+                        <div class="text-secondary">Will start in :</div>
+                        <div class="ml-1">{{competition.starting_date}}</div>
+                    </div>
+
+                </a>
+            </ng-container>
+
+        </div>
+
+    </div>
+    <div class="flex items-center justify-center">
+        <a routerLink="/apps/competitions" class="px-8 py-3 text-lg font-medium text-white bg-primary hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-dark rounded-none">
+            View More
+        </a>
+    </div>
+</div>
 <div class="scrumboard-section bg-white">
     <div class="flex flex-col flex-auto items-center p-6 sm:p-10">
         <div class=" text-2xl md:text-6xl font-bold tracking-tight leading-7 sm:leading-10">

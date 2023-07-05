@@ -21,6 +21,9 @@ export class CompetitionService {
     getAllPendingCompetitions(): Observable<Competition[]> {
         return this.http.get<Competition[]>(`${this.baseUrl}/competitions/pending`);
     }
+    getAllComingSoonCompetitions(): Observable<Competition[]> {
+        return this.http.get<Competition[]>(`${this.baseUrl}/competitions/starting_soon`);
+    }
     getAllApprovedNotCompletedCompetitions(): Observable<Competition[]> {
         return this.http.get<Competition[]>(`${this.baseUrl}/competitions/approved_notCompleted`);
     }

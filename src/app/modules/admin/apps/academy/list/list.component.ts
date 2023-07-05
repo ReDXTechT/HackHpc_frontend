@@ -17,7 +17,6 @@ import {CompetitionService} from "../../../../../core/services/competition.servi
 import {Competition} from "../../../../../core/models/competiton";
 import {Customer} from "../../../../../core/models/User";
 import {UsersService} from "../../../../../core/services/users.service";
-import {WhyJoin} from "../../../../landing/home/whyJoin/whyJoin";
 import {AuthenticationService} from "../../../../../core/services/authentication.service";
 
 @Component({
@@ -28,7 +27,7 @@ import {AuthenticationService} from "../../../../../core/services/authentication
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone     : true,
-    imports: [MatIconModule, CdkScrollable, MatFormFieldModule, MatSelectModule, MatOptionModule, NgFor, MatIconModule, MatInputModule, MatSlideToggleModule, NgIf, NgClass, MatTooltipModule, MatProgressBarModule, MatButtonModule, RouterLink, FuseFindByKeyPipe, PercentPipe, I18nPluralPipe, WhyJoin],
+    imports: [MatIconModule, CdkScrollable, MatFormFieldModule, MatSelectModule, MatOptionModule, NgFor, MatIconModule, MatInputModule, MatSlideToggleModule, NgIf, NgClass, MatTooltipModule, MatProgressBarModule, MatButtonModule, RouterLink, FuseFindByKeyPipe, PercentPipe, I18nPluralPipe],
 })
 export class AcademyListComponent implements OnInit, OnDestroy
 {

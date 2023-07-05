@@ -18,6 +18,7 @@ import {catchError, of, startWith} from "rxjs";
 import {DatePipe} from "@angular/common";
 import {UsersService} from "../../../../../core/services/users.service";
 import {Customer} from "../../../../../core/models/User";
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
     selector     : 'report',
@@ -212,25 +213,43 @@ export class ReportComponent implements OnInit
     generatePDF(): void {
         const element = document.getElementById('report-section');
 
-        const currentDatetime = new Date();
-        const formattedDatetime = `${currentDatetime.getFullYear()}-${currentDatetime.getMonth()+1}-${currentDatetime.getDate()}_${currentDatetime.getHours()}-${currentDatetime.getMinutes()}`;
+        const uniqueId = uuidv4(); // Generate a unique identifier
         const opt = {
-            margin: [0.3, 0.3, 0.3, 0.3], // Set the margins (in inches) for the PDF
-            filename:  `report_${formattedDatetime}.pdf`, // Set the filename for the downloaded PDF
-            image: { type: 'jpeg', quality: 0.98 }, // Set the image quality for the PDF
-            html2canvas: { scale: 2 }, // Set the scale for the HTML to Canvas conversion
-            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }, // Set the PDF format and orientation
+            margin: [0.3, 0.3, 0.3, 0.3],
+            filename: `report_${uniqueId}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' },
         };
 
-        // html2pdf().set(opt).from(element).save(); // Generate and save the PDF
         html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
-            // Create a new File object from the PDF blob
-            const reportData = new File([pdfBlob], `report_${formattedDatetime}.pdf`, { type: 'application/pdf' });
+            const reportData = new File([pdfBlob], `report_${uniqueId}.pdf`, { type: 'application/pdf' });
 
-            // Call the onSubmit function and pass the file as form data
             this.onSubmit(reportData);
         });
     }
+    // generatePDF(): void {
+    //     const element = document.getElementById('report-section');
+    //
+    //     const currentDatetime = new Date();
+    //     const formattedDatetime = `${currentDatetime.getFullYear()}-${currentDatetime.getMonth()+1}-${currentDatetime.getDate()}_${currentDatetime.getHours()}-${currentDatetime.getMinutes()}`;
+    //     const opt = {
+    //         margin: [0.3, 0.3, 0.3, 0.3], // Set the margins (in inches) for the PDF
+    //         filename:  `report_${formattedDatetime}.pdf`, // Set the filename for the downloaded PDF
+    //         image: { type: 'jpeg', quality: 0.98 }, // Set the image quality for the PDF
+    //         html2canvas: { scale: 2 }, // Set the scale for the HTML to Canvas conversion
+    //         jsPDF: { unit: 'in', format: 'a4', orientation: 'portrait' }, // Set the PDF format and orientation
+    //     };
+    //
+    //     // html2pdf().set(opt).from(element).save(); // Generate and save the PDF
+    //     html2pdf().set(opt).from(element).outputPdf('blob').then((pdfBlob) => {
+    //         // Create a new File object from the PDF blob
+    //         const reportData = new File([pdfBlob], `report_${formattedDatetime}.pdf`, { type: 'application/pdf' });
+    //
+    //         // Call the onSubmit function and pass the file as form data
+    //         this.onSubmit(reportData);
+    //     });
+    // }
 
     printPDF(): void {
         const element = document.getElementById('report-section');

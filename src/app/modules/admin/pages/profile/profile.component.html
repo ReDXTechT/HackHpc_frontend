@@ -23,13 +23,13 @@
             </div>
             <hr class="w-full border-t my-6">
             <div class="flex flex-col" >
-                <div class="flex items-center" *ngIf="role==='Customer'">
+                <div class="flex items-center" *ngIf="role==='Customer' && !teamMemberId">
                     <mat-icon
                         class="icon-size-5 mr-3"
                         [svgIcon]="'heroicons_solid:map-pin'"></mat-icon>
                     <span class="leading-none">{{user?.address}}</span>
                 </div>
-                <div class="flex items-center mt-4" *ngIf="role==='Customer'">
+                <div class="flex items-center mt-4" *ngIf="role==='Customer' && !teamMemberId">
                     <mat-icon
                         class="icon-size-5 mr-3"
                         [svgIcon]="'heroicons_solid:briefcase'"></mat-icon>
@@ -61,7 +61,7 @@
                 Download cv
             </a>
         </fuse-card>
-        <fuse-card class="flex flex-col  w-full p-8 mt-5" *ngIf="role==='Customer'">
+        <fuse-card class="flex flex-col  w-full p-8 mt-5" *ngIf="role==='Customer' && !teamMemberId">
             <div class="text-2xl font-semibold leading-tight">My Competitions</div>
 
             <div class="tableBody mt-5">
@@ -111,7 +111,7 @@
                     <div class="col-lg-12 col-md-12 col-sm-12 p-2">
 
                         <div style="overflow-y: auto; max-height: 1200px;">
-                            <activity *ngIf="role==='Customer'"></activity>
+                            <activity *ngIf="role==='Customer' && !teamMemberId"></activity>
                         </div>
 
 

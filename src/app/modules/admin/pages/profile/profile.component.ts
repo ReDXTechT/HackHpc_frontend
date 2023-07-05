@@ -58,8 +58,9 @@ export class ProfileComponent
         }
 
         if(this.route.snapshot.paramMap.get('id')){
+            console.log('heyyyyyyyyy')
             this.teamMemberId = this.route.snapshot.paramMap.get('id');
-            this.getUserById(this.teamMemberId)
+            this.getCompetitorById(this.teamMemberId)
             this.getCompetitorContributions(this.teamMemberId)
             this.getCompetitorAchievements(this.teamMemberId)
 
@@ -70,7 +71,8 @@ export class ProfileComponent
                 this.getCompetitorAchievements(this.userId)
 
             }
-            else {            this.getCustomerCompetitions()
+            else {
+                this.getCustomerCompetitions()
             }
         }
 
@@ -84,13 +86,28 @@ export class ProfileComponent
             this.userService.getCustomerDetailsById(userId).subscribe(res=>{
                 this.user = res
                 console.log(res)
+                this._changeDetectorRef.detectChanges()
+
             })
         }else{
             this.userService.getCompetitorDetailsById(userId).subscribe(res=>{
                 this.user = res
                 console.log(res)
+                this._changeDetectorRef.detectChanges()
+
             })
         }
+
+    }
+    getCompetitorById(userId){
+
+            this.userService.getCompetitorDetailsById(userId).subscribe(res=>{
+                this.user = res
+                console.log(res)
+                this._changeDetectorRef.detectChanges()
+
+            })
+
 
     }
 

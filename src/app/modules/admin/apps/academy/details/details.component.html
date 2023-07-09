@@ -545,17 +545,6 @@
                                             cdkTextareaAutosize></textarea>
                                     </mat-form-field>
                                 </div>
-
-                                <div class="flex">
-                                    <mat-form-field class="w-full flex">
-                                        <mat-icon svgIcon="heroicons_solid:folder" class="mr-4"></mat-icon>
-                                        <input
-                                            matInput
-                                            [formControlName]="'validate_script'"
-                                            [placeholder]="'give the full path of file validate.sh in your repo'"
-                                            required>
-                                    </mat-form-field>
-                                </div>
                                 <div class="flex">
                                     <mat-form-field class="w-full flex">
                                         <mat-icon svgIcon="feather:github" class="mr-4"></mat-icon>
@@ -571,30 +560,39 @@
                                     class="flex flex-col items-start w-full mt-8 p-8 space-y-8 rounded-2xl shadow overflow-hidden bg-card border-2 border-dashed border-gray-300 dark:border-gray-600">
                                     <div class="flex">
                                         <input
-                                            id="file-input"
+                                            id="cv-input"
                                             class="absolute h-0 w-0 opacity-0 invisible pointer-events-none"
                                             type="file"
-                                            [accept]="'text/plain'"
-                                            (change)="uploadFile(fileInput.files)"
-                                            #fileInput>
-                                        <label
-                                            class="flex-auto"
-                                            for="file-input">
-                                            <div
-                                                class="flex items-center justify-center w-full h-10 rounded-md cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600">
+                                            accept=".doc,.docx,.pdf,.txt"
+                                            (change)="onOutputSelected($event)"
+                                            #fileInput
+                                            required
+                                        >
+                                        <label class="flex-auto" for="cv-input">
+                                            <div class="flex items-center justify-center w-full h-10 rounded-md cursor-pointer dark:bg-gray-700 dark:hover:bg-gray-600">
                                                 <mat-icon class="mr-2" svgIcon="ads_click"></mat-icon>
-                                                <span
-                                                    class="ml-4"> Please upload your execution output TXT file here</span>
+                                                <span class="ml-4">{{ outputFileName ? outputFileName : 'Please slect your output txt file here' }}</span>
                                             </div>
                                         </label>
                                     </div>
                                 </div>
 
-
+<!--                                <div *ngIf="submissionResult" [ngClass]="{'text-green-500': submissionResult.startsWith('Submission accepted'), 'text-red-500': submissionResult.startsWith('Submission rejected')}">-->
+<!--                                    {{ submissionResult }}-->
+<!--                                </div>-->
+                                <fuse-alert
+                                            class="mt-8"
+                                    *ngIf="showAlert"
+                                    [appearance]="'outline'"
+                                    [showIcon]="false"
+                                    [type]="alert.type"
+                                    [@shake]="alert.type === 'error'">
+                                    {{alert.message}}
+                                </fuse-alert>
                                 <!-- Actions -->
                                 <div class="flex items-center justify-end w-full mt-8">
                                     <button type="reset" (click)="submissionForm.reset();" mat-button>Reset</button>
-                                    <button class="ml-2" [color]="'primary'" type="button" mat-flat-button>Submit
+                                    <button (click)="createSubmission(competition.id,userId)" class="ml-2" [color]="'primary'" type="button" mat-flat-button>Submit
                                     </button>
                                 </div>
                             </form>

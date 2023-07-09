@@ -25,15 +25,8 @@ export class SubmissionsService {
         return this.http.get<any>(`${this.baseUrl}/submissions_by_competitor/${competitorId}`);
     }
 
-    createSubmission(submission: any): Observable<any> {
-        return this.http.post<any>(`${this.baseUrl}/submissions/add`, submission);
+    createSubmission(competitionId : string ,competitorId : string, submission: any): Observable<any> {
+        return this.http.post<any>(`${this.baseUrl}/submission_verification/${competitionId}/user/${competitorId}`, submission);
     }
 
-    // updateCompetitionReport(competitionId: any, competition: any): Observable<any> {
-    //     return this.http.put<any>(`${this.baseUrl}/competition-budget-report/${competitionId}`, competition);
-    // }
-    // //
-    // deleteCompetition(competitionId: string): Observable<any> {
-    //     return this.http.delete(`${this.baseUrl}/competitions/${competitionId}/delete`);
-    // }
 }

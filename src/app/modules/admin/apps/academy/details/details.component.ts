@@ -20,7 +20,7 @@ import {FuseMediaWatcherService} from '@fuse/services/media-watcher';
 import {Subject} from 'rxjs';
 import {CompetitionService} from "../../../../../core/services/competition.service";
 import {Competition} from "../../../../../core/models/competiton";
-import {FuseAlertComponent} from "../../../../../../@fuse/components/alert";
+import {FuseAlertComponent, FuseAlertType} from "../../../../../../@fuse/components/alert";
 import {FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup, Validators} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatInputModule} from "@angular/material/input";
@@ -40,6 +40,7 @@ import {Customer} from "../../../../../core/models/User";
 import {TeamComponent} from "./team/team.component";
 import {AnnounceWinners} from "./announce_winners/announce-winners";
 import {Winners} from "./winners/winners";
+import {SubmissionsService} from "../../../../../core/services/submissions.service";
 
 @Component({
     selector: 'academy-details',
@@ -68,10 +69,20 @@ export class AcademyDetailsComponent implements OnInit {
     register = false
     waitingList =[]
     winnersLength =0
+    userId :any
+    outputFileName : any
+    selectedOutput: File = null;
+
+    alert: { type: FuseAlertType; message: string } = {
+        type   : 'success',
+        message: '',
+    };
+    showAlert: boolean = false;
     constructor(
         @Inject(DOCUMENT) private _document: Document,
         private competitionService: CompetitionService,
         private authenticationService: AuthenticationService,
+        private submissionsService: SubmissionsService,
         private budgetReportService: Budget_reportService,
         private usersService: UsersService,
         private route: ActivatedRoute,
@@ -85,10 +96,10 @@ export class AcademyDetailsComponent implements OnInit {
     ) {
         if(this.authenticationService.currentUserValue){
             this.role = this.authenticationService.currentUserValue.role
+            this.userId=this.authenticationService.currentUserValue.id
         }
         this.submissionForm = this._formBuilder.group({
             git_repo_url: ['', Validators.required],
-            validate_script: ['', Validators.required],
             expected_output: ['', Validators.required],
             solution_description: ['', Validators.required],
 
@@ -449,14 +460,17 @@ export class AcademyDetailsComponent implements OnInit {
         });
 
         dialogRef.afterClosed().subscribe(result => {
-            this.competitionService.winner_annoucement(this.competition.id ,result).subscribe(res=>{
-                this._snackBar.open(res.message, 'Close', {
-                    duration: 5000,
-                });
-                this.navigateToCompetitionDetailsTab('Winners')
-                this.changeDetectorRef.detectChanges()
-                window.location.reload()
-            })
+            if(result){
+                this.competitionService.winner_annoucement(this.competition.id ,result).subscribe(res=>{
+                    this._snackBar.open(res.message, 'Close', {
+                        duration: 5000,
+                    });
+                    this.navigateToCompetitionDetailsTab('Winners')
+                    this.changeDetectorRef.detectChanges()
+                    window.location.reload()
+                })
+            }
+
         });
     }
 
@@ -464,8 +478,54 @@ export class AcademyDetailsComponent implements OnInit {
         this.competitionService.launchCompetition(competitionId , this.authenticationService.currentUserValue.id).subscribe(
             res=>{
                 console.log(res)
+                if ( res == "{'build status': 'SUCCESS'}"){
+                    console.log("here")
+                    this.changeDetectorRef.detectChanges()
+                }
             }
         )
 
+    }
+
+
+    createSubmission(competitionId: any, competitorId: any) {
+        const formData = new FormData();
+        formData.append('git_repo_url', this.submissionForm.get('git_repo_url').value);
+        formData.append('expected_output', this.selectedOutput);
+        formData.append('solution_description', this.submissionForm.get('solution_description').value);
+        formData.append('validate_url', 'https://raw.githubusercontent.com/ReDXTechT/Laplace2d-intel/main/validate.sh');
+
+        this.submissionsService.createSubmission(competitionId, competitorId, formData).subscribe(res => {
+            console.log(res);
+            // Update the submission result variable
+
+            if(res.submission_status.startsWith('Submission accepted')){
+                this.alert = {
+                    type   : 'success',
+                    message: `${res.submission_status}\n\nExecution Time: ${res.execution_time}`,
+                };
+
+                // Show the alert
+                this.showAlert = true;
+                this.changeDetectorRef.detectChanges()
+            }
+            else{
+                this.alert = {
+                    type   : 'error',
+                    message: `${res.submission_status}\nExecution Time: ${res.execution_time}`,
+                };
+
+                // Show the alert
+                this.showAlert = true;
+                this.changeDetectorRef.detectChanges()
+
+            }
+
+
+        });
+    }
+    onOutputSelected(event) {
+        this.selectedOutput = <File>event.target.files[0];
+        this.outputFileName = this.selectedOutput ? this.selectedOutput.name : '';
     }
 }

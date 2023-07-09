@@ -2,7 +2,6 @@ import {ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/
 import {MatButtonModule} from '@angular/material/button';
 import {MatIconModule} from '@angular/material/icon';
 import {Router, RouterLink} from '@angular/router';
-import {ScrumboardBoardsComponent} from "../../admin/apps/scrumboard/boards/boards.component";
 import {CdkScrollable} from "@angular/cdk/scrolling";
 import {NgFor, NgIf} from "@angular/common";
 import {Subject} from "rxjs";
@@ -17,7 +16,7 @@ import {MatSnackBar, MatSnackBarModule} from "@angular/material/snack-bar";
     templateUrl: './home.component.html',
     encapsulation: ViewEncapsulation.None,
     standalone: true,
-    imports: [MatSnackBarModule ,MatButtonModule, RouterLink, MatIconModule, ScrumboardBoardsComponent, CdkScrollable, NgFor, RouterLink, MatIconModule, NgIf],
+    imports: [MatSnackBarModule ,MatButtonModule, RouterLink, MatIconModule, CdkScrollable, NgFor, RouterLink, MatIconModule, NgIf],
 })
 export class LandingHomeComponent implements OnInit {
     /**

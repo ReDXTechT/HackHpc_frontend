@@ -13,10 +13,18 @@ export class SubmissionsService {
 
     constructor(private http: HttpClient) { }
 
-    getsubmissions(): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}/submissions`);
+    getLeaderBoard(competitionId : string): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/competitions/${competitionId}/leaderboard`);
     }
+    getFilteredCandidatsOnLeaderBoard( competitionId : string ,name: string): Observable<any> {
+        let params = new HttpParams();
+        const url = `${this.baseUrl}/competitions/${competitionId}/leaderboard`;
 
+        if (name) {
+            params = params.set('search', name);
+        }
+        return this.http.get<any>(url, { params });
+    }
     getsubmissionsByCompetitionsId(competitionId : string): Observable<any> {
         return this.http.get<any>(`${this.baseUrl}/submissions_by_competition/${competitionId}`);
     }

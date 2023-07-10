@@ -7,9 +7,19 @@
                 <mat-progress-bar [mode]="'indeterminate'"></mat-progress-bar>
             </div>
             <!-- Title -->
-            <div class="text-2xl font-extrabold tracking-tight mb-4">Condidats results</div>
+            <div class="text-2xl font-extrabold tracking-tight mb-4">Best competitors submissions results</div>
         </div>
+
+        <!-- Search Field -->
+        <mat-form-field class="fuse-mat-dense fuse-mat-rounded w-full min-w-50 pr-10" subscriptSizing="dynamic">
+            <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:magnifying-glass'"></mat-icon>
+            <input matInput (input)="onSearch(competitionId,query.value)" [formControl]="searchInputControl" [autocomplete]="'off'" [placeholder]="'Search condidats'" #query>
+        </mat-form-field>
     </div>
+
+
+    <div class="flex items-center mt-4 sm:mt-0 md:mt-4">
+        <!-- Search -->
 
     <!-- Main -->
     <div class="flex flex-auto overflow-hidden">
@@ -27,10 +37,9 @@
                             <div></div>
                             <div
                                 class="hidden md:block"
-                                [mat-sort-header]="'condidat'">
-                                Condidat
+                                [mat-sort-header]="'result'">
+                                Candidat
                             </div>
-                            <div [mat-sort-header]="'solution_description'">Solution description</div>
                             <div
                                 class="hidden sm:block"
                                 [mat-sort-header]="'checker_output'">
@@ -51,112 +60,67 @@
 
                         </div>
                         <!-- Rows -->
-                        <ng-container >
-<!--                            <ng-container *ngFor="let product of products">-->
-<!--                                <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">-->
+                        <ng-container *ngIf="leaderBoard as results ; else noSubmissions" >
+                            <ng-container *ngFor="let result of leaderBoard">
+                                <div class="inventory-grid grid items-center gap-4 py-3 px-6 md:px-8 border-b">
 
-<!--                                    &lt;!&ndash; Image &ndash;&gt;-->
-<!--                                    <div class="flex items-center">-->
-<!--                                        <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">-->
-<!--                                            <img-->
-<!--                                                class="w-8"-->
-<!--                                                *ngIf="product.thumbnail"-->
-<!--                                                [alt]="'Product thumbnail image'"-->
-<!--                                                [src]="product.thumbnail">-->
-<!--                                            <div-->
-<!--                                                class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"-->
-<!--                                                *ngIf="!product.thumbnail">-->
-<!--                                                NO THUMB-->
-<!--                                            </div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <!-- Image -->
+                                    <div class="flex items-center">
+                                        <div class="relative flex flex-0 items-center justify-center w-12 h-12 mr-6 rounded overflow-hidden border">
+                                            <img
+                                                class="w-8"
+                                                *ngIf="result.image"
+                                                [alt]="'result thumbnail image'"
+                                                [src]="result.image">
+                                            <div
+                                                class="flex items-center justify-center w-full h-full text-xs font-semibold leading-none text-center uppercase"
+                                                *ngIf="!result.image">
+                                                NO THUMB
+                                            </div>
+                                        </div>
+                                    </div>
 
-<!--                                    &lt;!&ndash; SKU &ndash;&gt;-->
-<!--                                    <div class="hidden md:block truncate">-->
-<!--                                        {{product.sku}}-->
-<!--                                    </div>-->
+                                    <div class=" truncate">
+                                        {{result.firstName}}  {{result.lastName}}
+                                    </div>
 
-<!--                                    &lt;!&ndash; Name &ndash;&gt;-->
-<!--                                    <div class="truncate">-->
-<!--                                        {{product.name}}-->
-<!--                                    </div>-->
+                                    <div class="truncate">
+                                        {{result.best_submission.formatted_output}}
+                                    </div>
 
-<!--                                    &lt;!&ndash; Price &ndash;&gt;-->
-<!--                                    <div class="hidden sm:block">-->
-<!--                                        {{product.price | currency:'USD':'symbol':'1.2-2'}}-->
-<!--                                    </div>-->
 
-<!--                                    &lt;!&ndash; Stock &ndash;&gt;-->
-<!--                                    <div class="hidden lg:flex items-center">-->
-<!--                                        <div class="min-w-4">{{product.stock}}</div>-->
-<!--                                        &lt;!&ndash; Low stock &ndash;&gt;-->
-<!--                                        <div-->
-<!--                                            class="flex items-end ml-2 w-1 h-4 bg-red-200 rounded overflow-hidden"-->
-<!--                                            *ngIf="product.stock < 20">-->
-<!--                                            <div class="flex w-full h-1/3 bg-red-600"></div>-->
-<!--                                        </div>-->
-<!--                                        &lt;!&ndash; Medium stock &ndash;&gt;-->
-<!--                                        <div-->
-<!--                                            class="flex items-end ml-2 w-1 h-4 bg-orange-200 rounded overflow-hidden"-->
-<!--                                            *ngIf="product.stock >= 20 && product.stock < 30">-->
-<!--                                            <div class="flex w-full h-2/4 bg-orange-400"></div>-->
-<!--                                        </div>-->
-<!--                                        &lt;!&ndash; High stock &ndash;&gt;-->
-<!--                                        <div-->
-<!--                                            class="flex items-end ml-2 w-1 h-4 bg-green-100 rounded overflow-hidden"-->
-<!--                                            *ngIf="product.stock >= 30">-->
-<!--                                            <div class="flex w-full h-full bg-green-400"></div>-->
-<!--                                        </div>-->
-<!--                                    </div>-->
+                                    <div class=" lg:flex items-center">
+                                        <div class="min-w-4">     {{result.best_submission.formatted_date}}
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="min-w-4">{{result.rank}}</div>
 
-<!--                                    &lt;!&ndash; Active &ndash;&gt;-->
-<!--                                    <div class="hidden lg:block">-->
-<!--                                        <ng-container *ngIf="product.active">-->
-<!--                                            <mat-icon-->
-<!--                                                class="text-green-400 icon-size-5"-->
-<!--                                                [svgIcon]="'heroicons_solid:check'"></mat-icon>-->
-<!--                                        </ng-container>-->
-<!--                                        <ng-container *ngIf="!product.active">-->
-<!--                                            <mat-icon-->
-<!--                                                class="text-gray-400 icon-size-5"-->
-<!--                                                [svgIcon]="'heroicons_solid:x-mark'"></mat-icon>-->
-<!--                                        </ng-container>-->
-<!--                                    </div>-->
+                                    </div>
 
-<!--                                    &lt;!&ndash; Details button &ndash;&gt;-->
-<!--                                    <div>-->
-<!--                                        <button-->
-<!--                                            class="min-w-10 min-h-7 h-7 px-2 leading-6"-->
-<!--                                            mat-stroked-button-->
-<!--                                            (click)="toggleDetails(product.id)">-->
-<!--                                            <mat-icon-->
-<!--                                                class="icon-size-5"-->
-<!--                                                [svgIcon]="selectedProduct?.id === product.id ? 'heroicons_solid:chevron-up' : 'heroicons_solid:chevron-down'"></mat-icon>-->
-<!--                                        </button>-->
-<!--                                    </div>-->
-<!--                                </div>-->
-<!--                                <div class="grid">-->
-<!--                                    <ng-container *ngIf="selectedProduct?.id === product.id">-->
-<!--                                        <ng-container *ngTemplateOutlet="rowDetailsTemplate; context: {$implicit: product}"></ng-container>-->
-<!--                                    </ng-container>-->
-<!--                                </div>-->
-<!--                            </ng-container>-->
+
+                                </div>
+                            </ng-container>
                         </ng-container>
                     </div>
 
-<!--                    <mat-paginator-->
-<!--                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"-->
-<!--                        [ngClass]="{'pointer-events-none': isLoading}"-->
-<!--                        [length]="pagination.length"-->
-<!--                        [pageIndex]="pagination.page"-->
-<!--                        [pageSize]="pagination.size"-->
-<!--                        [pageSizeOptions]="[5, 10, 25, 100]"-->
-<!--                        [showFirstLastButtons]="true"></mat-paginator>-->
+                    <mat-paginator
+                        class="sm:absolute sm:inset-x-0 sm:bottom-0 border-b sm:border-t sm:border-b-0 z-10 bg-gray-50 dark:bg-transparent"
+                        [ngClass]="{'pointer-events-none': isLoading}"
+                        [length]="pagination.length"
+                        [pageIndex]="pagination.page"
+                        [pageSize]="pagination.size"
+                        [pageSizeOptions]="[5, 10, 25, 100]"
+                        [showFirstLastButtons]="true"
+                        (page)="handlePageEvent($event)">
+                    </mat-paginator>
+
+
 
                 </ng-container>
             </ng-container>
-            <ng-template #noProducts>
-                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no condidats wainting approval yet!</div>
+            <ng-template #noSubmissions>
+                <div class="p-8 sm:p-16 border-t text-4xl font-semibold tracking-tight text-center">There are no submissions yet!</div>
             </ng-template>
 
         </div>

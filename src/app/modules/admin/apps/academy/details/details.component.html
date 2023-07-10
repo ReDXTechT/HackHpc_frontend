@@ -463,7 +463,7 @@
                 <!-- TeamComponent -->
                 <mat-tab label="Leaderbord" id="Leaderbord">
                     <ng-template matTabContent>
-                        <leaderbord></leaderbord>
+                        <leaderbord [competitionId]="competition.id"></leaderbord>
                     </ng-template>
                 </mat-tab>
 
@@ -517,17 +517,14 @@
                                     <li style="text-indent: -1.5rem; margin-bottom: 0.5rem;">
                                         <span
                                             style="display: inline-block; width: 1rem; text-align: center;">&bull;</span>
-                                        Capture the output in a well-structured text file: Run your code and capture the
-                                        output in a text file. Ensure that the output is organized and easy to
-                                        understand. You will need to submit this file later.
+                                        You need to downloawd same output txt file generated while running the validate.sh and submitted here ,
+                                        in fact the solution checker will run your code with the initial customer provided validate.sh and compare its output to yours
                                     </li>
                                     <li style="text-indent: -1.5rem; margin-bottom: 0.5rem;">
                                         <span
                                             style="display: inline-block; width: 1rem; text-align: center;">&bull;</span>
-                                        Provide the path of the <code>validate.sh</code> file: In your GitHub
-                                        repository, you already have a <code>validate.sh</code> file that contains the
-                                        necessary instructions to validate your code. Please provide the Path of this
-                                        file below in the directory "/home/competitor/workspace".
+                                        Each submission will be executed 3 times successfully and the execution runtime will be the average of the 3 execution runtime results
+                                        , you have only two submissions per day and please consider the submission deadline , Best of luck.
                                     </li>
                                 </ul>
                             </fuse-alert>

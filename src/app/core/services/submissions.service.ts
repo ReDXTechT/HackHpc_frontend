@@ -34,8 +34,8 @@ export class SubmissionsService {
         return this.http.get<any>(`${this.baseUrl}/submission/${submissionId}`);
     }
 
-    getsubmissionsByCompetitiorId(competitorId : string): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}/submissions_by_competitor/${competitorId}`);
+    getsubmissionsByCompetitiorId(competitorId : string,competitionId:any): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/submissions_by_competitor/${competitorId}/competition/${competitionId}`);
     }
 
     createSubmission(competitionId : string ,competitorId : string, submission: any): Observable<any> {

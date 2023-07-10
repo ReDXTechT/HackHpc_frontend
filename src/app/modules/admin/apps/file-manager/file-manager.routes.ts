@@ -21,7 +21,7 @@ export default [
                 ],
             },
             {
-                path     : 'files/:fileId',
+                path     : 'competition/:compId/files/:fileId',
                 component: FileManagerListComponent,
                 children : [
                     {

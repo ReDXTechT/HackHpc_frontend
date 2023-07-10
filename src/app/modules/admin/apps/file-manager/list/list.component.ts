@@ -31,6 +31,8 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     submissions : any[]
     competitions = ''
     candidat : any
+    competitionId: string;
+
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
@@ -47,11 +49,11 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     {
         this.getactiveCompetitions()
         this._activatedRoute.params.subscribe(params => {
-            const competitionId = params['folderId'];
-            if(competitionId){
+            this.competitionId = params['folderId'];
+            if( this.competitionId){
                 this.competitions= 'candidats'
-                console.log(competitionId)
-                this.getTeamByCompetitionId(competitionId)
+                console.log( this.competitionId)
+                this.getTeamByCompetitionId( this.competitionId)
                 this._changeDetectorRef.detectChanges()
                 console.log(this.competitions)
 
@@ -59,13 +61,15 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         });
         this._activatedRoute.params.subscribe(params => {
             const competitorId = params['fileId'];
+            const competitionId = params['compId'];
+
             if(competitorId){
                 this.usersService.getCompetitorDetailsById(competitorId).subscribe(res=>{
                     this.candidat = res
                     this._changeDetectorRef.detectChanges()
                 })
                 this.competitions= 'submissions'
-                this.getsubmissionsByCompetitor(competitorId)
+                this.getsubmissionsByCompetitor(competitorId,competitionId)
                 this._changeDetectorRef.detectChanges()
 
             }
@@ -84,7 +88,7 @@ export class FileManagerListComponent implements OnInit, OnDestroy
             });
     }
 
-    getTeamByCompetitionId(competitionId: number){
+    getTeamByCompetitionId(competitionId: string){
         this.competitionService.getTeamByCompetitionId(competitionId).subscribe(res=>{
             console.log(res)
             this.condidats=res
@@ -128,8 +132,8 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         })
     }
 
-    getsubmissionsByCompetitor(competitorId:any){
-        this.submissionsService.getsubmissionsByCompetitiorId(competitorId).subscribe(res=>{
+    getsubmissionsByCompetitor(competitorId:any,competitionId:any){
+        this.submissionsService.getsubmissionsByCompetitiorId(competitorId,competitionId).subscribe(res=>{
             console.log(res)
             this.submissions = res
 

@@ -1,8 +1,9 @@
 <div class="flex flex-col flex-auto p-6 md:p-8">
 
     <!-- Close button -->
-    <div class="flex items-center justify-end">
+    <div class="flex submissions-center justify-end">
         <a
+            (click)="closeDrawer()"
             mat-icon-button
             [routerLink]="['../../']">
             <mat-icon [svgIcon]="'heroicons_outline:x-mark'"></mat-icon>
@@ -10,66 +11,65 @@
     </div>
 
     <!-- Preview -->
-    <div class="mt-8 aspect-[9/6]">
-        <div class="flex items-center justify-center h-full border rounded-lg bg-gray-50 dark:bg-card">
-            <ng-container *ngIf="item.type === 'folder'">
-                <mat-icon
-                    class="icon-size-24 text-hint"
-                    [svgIcon]="'heroicons_outline:folder'"></mat-icon>
+    <div class="mt-4 ">
+        <a class="flex submissions-center justify-center border rounded-lg bg-gray-50 dark:bg-card p-5"
+           style="cursor: pointer"
+           [href]="submission.expected_output"
+           target="_blank">
+            <ng-container>
+                <mat-icon class="icon-size-10 text-hint" [svgIcon]="'heroicons_outline:document'"></mat-icon>
             </ng-container>
-            <ng-container *ngIf="item.type !== 'folder'">
-                <mat-icon
-                    class="icon-size-24 text-hint"
-                    [svgIcon]="'heroicons_outline:document'"></mat-icon>
-            </ng-container>
-        </div>
+        </a>
+
     </div>
 
     <!-- Name & Type -->
-    <div class="flex flex-col items-start mt-8">
-        <div class="text-xl font-medium">{{item.name}}</div>
-        <div
-            class="mt-1 px-1.5 rounded text-sm font-semibold leading-5 text-white"
-            [class.bg-indigo-600]="item.type === 'folder'"
-            [class.bg-red-600]="item.type === 'PDF'"
-            [class.bg-blue-600]="item.type === 'DOC'"
-            [class.bg-green-600]="item.type === 'XLS'"
-            [class.bg-gray-600]="item.type === 'TXT'"
-            [class.bg-amber-600]="item.type === 'JPG'">
-            {{item.type.toUpperCase()}}
+    <div class="flex flex-col submissions-start mt-8">
+        <div class="mt-1 px-1.5 rounded text-sm font-semibold leading-5">
+            <span class="text-white bg-red-600 p-1 font-semibold">TXT</span>
         </div>
+
     </div>
 
     <!-- Information -->
     <div class="text-lg font-medium mt-8">Information</div>
     <div class="flex flex-col mt-4 border-t border-b divide-y font-medium">
-        <div class="flex items-center justify-between py-3">
+        <div class="flex submissions-center justify-between py-3">
             <div class="text-secondary">Created By</div>
-            <div>{{item.createdBy}}</div>
+            <div>{{submission?.competitor?.user?.firstName}} {{submission?.competitor?.user?.lastName}}</div>
         </div>
-        <div class="flex items-center justify-between py-3">
-            <div class="text-secondary">Created At</div>
-            <div>{{item.createdAt}}</div>
+        <div class="flex submissions-center justify-between py-3">
+            <div class="text-secondary">Submitted At</div>
+            <div>{{submission?.submitted_at | date:'short'}}</div>
         </div>
-        <div class="flex items-center justify-between py-3">
-            <div class="text-secondary">Modified At</div>
-            <div>{{item.modifiedAt}}</div>
+
+        <div class="flex submissions-center justify-between py-3">
+            <div class="text-secondary">Solution checker output</div>
+            <div>{{submission?.pipeline_output}}</div>
         </div>
-        <div class="flex items-center justify-between py-3">
-            <div class="text-secondary">Size</div>
-            <div>{{item.size}}</div>
+        <div class="flex submissions-center justify-between py-3">
+            <div class="text-red-600">Execution runtime</div>
+            <div>{{submission?.execution_runtime}} seconds</div>
         </div>
-        <ng-container *ngIf="item.contents">
-            <div class="flex items-center justify-between py-3">
-                <div class="text-secondary">Contents</div>
-                <div>{{item.contents}}</div>
+
+        <ng-container >
+            <div class="flex submissions-center justify-between py-3">
+                <mat-icon svgIcon="feather:github" class="mr-4"></mat-icon>
+                <div class="flex items-center leading-6">
+                    <a
+                        class="hover:underline font-normal"
+                        [href]="submission?.git_repo_url"
+                        target="_blank">
+                        {{submission?.git_repo_url}}
+                    </a>
+                </div>
             </div>
         </ng-container>
     </div>
 
     <!-- Description -->
-    <div class="flex items-center justify-between mt-8">
-        <div class="text-lg font-medium">Description</div>
+    <div class="flex submissions-center justify-between mt-8">
+        <div class="text-lg font-medium">Solution Description</div>
         <button mat-icon-button>
             <mat-icon
                 class="icon-size-5"
@@ -78,28 +78,26 @@
     </div>
     <div class="flex mt-2 border-t">
         <div class="py-3">
-            <ng-container *ngIf="item.description">
-                <div>{{item.description}}</div>
+            <ng-container>
+                <div>{{submission?.solution_description}}</div>
             </ng-container>
-            <ng-container *ngIf="!item.description">
-                <div class="italic text-secondary">Click here to add a description</div>
-            </ng-container>
+
         </div>
     </div>
 
-    <!-- Actions -->
-    <div class="grid grid-cols-2 gap-4 w-full mt-8">
-        <button
-            class="flex-auto"
-            mat-flat-button
-            [color]="'primary'">
-            Download
-        </button>
-        <button
-            class="flex-auto"
-            mat-stroked-button>
-            Delete
-        </button>
-    </div>
+<!--    &lt;!&ndash; Actions &ndash;&gt;-->
+<!--    <div class="grid grid-cols-2 gap-4 w-full mt-8">-->
+<!--        <button-->
+<!--            class="flex-auto"-->
+<!--            mat-flat-button-->
+<!--            [color]="'primary'">-->
+<!--            Download-->
+<!--        </button>-->
+<!--        <button-->
+<!--            class="flex-auto"-->
+<!--            mat-stroked-button>-->
+<!--            Delete-->
+<!--        </button>-->
+<!--    </div>-->
 
 </div>

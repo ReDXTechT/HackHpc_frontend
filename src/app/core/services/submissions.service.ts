@@ -25,8 +25,13 @@ export class SubmissionsService {
         }
         return this.http.get<any>(url, { params });
     }
-    getsubmissionsByCompetitionsId(competitionId : string): Observable<any> {
-        return this.http.get<any>(`${this.baseUrl}/submissions_by_competition/${competitionId}`);
+
+    getsubmissionsCountPerDay(competitionId: any, competitorId: number): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/competitions/${competitionId}/competitor/${competitorId}/submissions_count_per_day`);
+    }
+
+    getsubmissionsById(submissionId : string): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/submission/${submissionId}`);
     }
 
     getsubmissionsByCompetitiorId(competitorId : string): Observable<any> {

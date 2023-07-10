@@ -24,59 +24,22 @@
                 <div class="flex flex-col sm:flex-row items-start sm:items-center sm:justify-between p-6 sm:py-12 md:px-8 border-b bg-card dark:bg-transparent">
                     <!-- Title -->
                     <div>
-                        <div class="text-4xl font-extrabold tracking-tight leading-none">Submissions</div>
-                        <div class="flex items-center mt-0.5 font-medium text-secondary">
-                            <ng-container *ngIf="!items.path.length">
-                                {{items.folders.length}} folders, {{items.files.length}} files
-                            </ng-container>
-                            <!-- Breadcrumbs -->
-                            <ng-container *ngIf="items.path.length">
-                                <div class="flex items-center space-x-2">
-                                    <a
-                                        class="text-primary cursor-pointer"
-                                        [routerLink]="['/apps/results-submissions']">Home
-                                    </a>
-                                    <div class="">/</div>
-                                    <ng-container *ngFor="let path of items.path; let last = last; trackBy: trackByFn">
-                                        <ng-container *ngIf="!last">
-                                            <a
-                                                class="text-primary cursor-pointer"
-                                                [routerLink]="['/apps/results-submissions/folders/', path.id]">{{path.name}}</a>
-                                        </ng-container>
-                                        <ng-container *ngIf="last">
-                                            <div>{{path.name}}</div>
-                                        </ng-container>
-                                        <ng-container *ngIf="!last">
-                                            <div class="">/</div>
-                                        </ng-container>
-                                    </ng-container>
-                                </div>
-                            </ng-container>
-                        </div>
+                        <div class="text-4xl font-extrabold tracking-tight leading-none">Submissions Details</div>
+
                     </div>
 
                 </div>
+                <ng-container *ngIf="competitions==''">
 
-                <!-- Items list -->
-                <ng-container *ngIf="items && (items.folders.length > 0 || items.files.length > 0); else noItems">
-                    <div class="p-6 md:p-8 space-y-8">
+                <div class="p-6 md:p-8 space-y-8">
                         <!-- Folders -->
-                        <ng-container *ngIf="items.folders.length > 0">
+                        <ng-container >
                             <div>
-                                <div class="font-medium">Folders</div>
-                                <div
+                                <div class="font-semibold mb-10">Active competitions</div>
+                                <div *ngIf="activeCompetitions?.length>0 ; else noactiveComp"
                                     class="flex flex-wrap -m-2 mt-2">
-                                    <ng-container *ngFor="let folder of items.folders; trackBy:trackByFn">
+                                    <ng-container *ngFor="let folder of activeCompetitions; trackBy:trackByFn">
                                         <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
-                                            <a
-                                                class="absolute z-20 top-1.5 right-1.5 w-8 h-8 min-h-8"
-                                                (click)="$event.preventDefault()"
-                                                [routerLink]="['./details/', folder.id]"
-                                                mat-icon-button>
-                                                <mat-icon
-                                                    class="icon-size-5"
-                                                    [svgIcon]="'heroicons_solid:information-circle'"></mat-icon>
-                                            </a>
                                             <a
                                                 class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
                                                 [routerLink]="['/apps/results-submissions/folders/', folder.id]">
@@ -91,10 +54,36 @@
                                                 <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
                                                     <div
                                                         class="truncate"
-                                                        [matTooltip]="folder.name">{{folder.name}}</div>
-                                                    <ng-container *ngIf="folder.contents">
-                                                        <div class="text-secondary truncate">{{folder.contents}}</div>
-                                                    </ng-container>
+                                                        [matTooltip]="folder.title">{{folder.title}}</div>
+                                                </div>
+                                            </a>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </ng-container>
+                        <ng-container>
+                            <div>
+                                <div class="font-semibold mb-10">Terminated competitions</div>
+                                <div *ngIf="terminatedCompetitions?.length>0 ; else noterminatedComp"
+                                    class="flex flex-wrap -m-2 mt-2">
+                                    <ng-container *ngFor="let folder of activeCompetitions; trackBy:trackByFn">
+                                        <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
+                                            <a
+                                                class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
+                                                [routerLink]="['/apps/results-submissions/folders/', folder.id]">
+                                                <div class="aspect-[9/6]">
+                                                    <div class="flex items-center justify-center h-full">
+                                                        <!-- Icon -->
+                                                        <mat-icon
+                                                            class="icon-size-14 text-hint opacity-50"
+                                                            [svgIcon]="'heroicons_solid:folder'"></mat-icon>
+                                                    </div>
+                                                </div>
+                                                <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                                                    <div
+                                                        class="truncate"
+                                                        [matTooltip]="folder.title">{{folder.title}}</div>
                                                 </div>
                                             </a>
                                         </div>
@@ -103,58 +92,136 @@
                             </div>
                         </ng-container>
 
-                        <!-- Files -->
-                        <ng-container *ngIf="items.files.length > 0">
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="competitions==='candidats'">
+
+                    <div class="p-6 md:p-8 space-y-8">
+                        <!-- Folders -->
+                        <ng-container >
                             <div>
-                                <div class="font-medium">Files</div>
-                                <div
-                                    class="flex flex-wrap -m-2 mt-2">
-                                    <ng-container *ngFor="let file of items.files; trackBy:trackByFn">
-                                        <a
-                                            class="flex flex-col w-40 h-40 m-2 p-4 shadow rounded-2xl cursor-pointer bg-card"
-                                            [routerLink]="['./details/', file.id]">
-                                            <div class="aspect-[9/6]">
-                                                <div class="flex items-center justify-center h-full">
-                                                    <!-- Icons -->
-                                                    <div class="relative">
+                                <div class="font-semibold mb-10">candidats submissions history</div>
+                                <div *ngIf="condidats?.length>0 ; else nocandidats"
+                                     class="flex flex-wrap -m-2 mt-2">
+                                    <ng-container *ngFor="let candidat of condidats; trackBy:trackByFn">
+                                        <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
+                                            <a
+                                                class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
+                                                [routerLink]="['/apps/results-submissions/files/', candidat.user.id]">
+                                                <div class="aspect-[9/6]">
+                                                    <div class="flex items-center justify-center h-full">
+                                                        <!-- Icon -->
                                                         <mat-icon
                                                             class="icon-size-14 text-hint opacity-50"
-                                                            [svgIcon]="'heroicons_solid:document'"></mat-icon>
-                                                        <div
-                                                            class="absolute left-0 bottom-0 px-1.5 rounded text-sm font-semibold leading-5 text-white"
-                                                            [class.bg-red-600]="file.type === 'PDF'"
-                                                            [class.bg-blue-600]="file.type === 'DOC'"
-                                                            [class.bg-green-600]="file.type === 'XLS'"
-                                                            [class.bg-gray-600]="file.type === 'TXT'"
-                                                            [class.bg-amber-600]="file.type === 'JPG'">
-                                                            {{file.type.toUpperCase()}}
-                                                        </div>
+                                                            [svgIcon]="'heroicons_solid:folder'"></mat-icon>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
-                                                <div
-                                                    class="truncate"
-                                                    [matTooltip]="file.name">{{file.name}}</div>
-                                                <ng-container *ngIf="file.contents">
-                                                    <div class="text-secondary truncate">{{file.contents}}</div>
-                                                </ng-container>
-                                            </div>
-                                        </a>
+                                                <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                                                    <div
+                                                        class="truncate"
+                                                        [matTooltip]="candidat.title">{{candidat.user.firstName}} {{candidat.user.lastName}}</div>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </ng-container>
                                 </div>
                             </div>
                         </ng-container>
+
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="competitions==='submissions'">
+
+                    <div class="p-6 md:p-8 space-y-8">
+                        <!-- Folders -->
+                        <ng-container >
+                            <div>
+                                <div class="font-semibold mb-10">{{candidat?.user?.firstName}} {{candidat?.user?.lastName}} submissions</div>
+                                <div *ngIf="submissions?.length>0 ; else nosubmissions"
+                                     class="flex flex-wrap -m-2 mt-2">
+                                    <ng-container *ngIf="submissions.length > 0">
+                                        <div>
+                                            <div class="font-medium">Files</div>
+                                            <div
+                                                class="flex flex-wrap -m-2 mt-2">
+                                                <ng-container *ngFor="let file of submissions; trackBy:trackByFn">
+                                                    <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
+
+                                                    <a
+                                                        class="absolute z-20 top-1.5 right-1.5 w-8 h-8 min-h-8"
+
+                                                        *ngIf="file.execution_runtime === getLowestExecutionTime()"
+                                                        mat-icon-button
+                                                    >
+                                                        <mat-icon class="icon-size-5 " [svgIcon]="'heroicons_solid:star'" style="color: yellow"></mat-icon>
+                                                    </a>
+                                                    <a
+                                                        class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
+                                                        [routerLink]="['./details/', file.id]"
+                                                    >
+                                                        <div class="aspect-[9/6]">
+                                                            <div class="flex items-center justify-center h-full">
+                                                                <!-- Icons -->
+                                                                <div class="relative">
+                                                                    <mat-icon
+                                                                        class="icon-size-14 text-hint opacity-50"
+                                                                        [svgIcon]="'heroicons_solid:document'"
+                                                                    ></mat-icon>
+                                                                    <div class="mt-1 px-1.5 rounded text-sm font-semibold leading-5">
+                                                                        <span class="text-white bg-red-600 p-1 font-semibold">TXT</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="flex flex-col flex-auto justify-center text-center text-sm font-medium">
+                                                            <div class="truncate" [matTooltip]="file.name">{{ file.submitted_at | date: 'short' }}</div>
+                                                        </div>
+                                                    </a>
+                                                    </div>
+                                                </ng-container>
+
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                </div>
+                            </div>
+                        </ng-container>
+
                     </div>
                 </ng-container>
 
                 <!-- No items template -->
-                <ng-template #noItems>
-                    <div class="flex flex-auto flex-col items-center justify-center bg-gray-100 dark:bg-transparent">
+                <ng-template #nocandidats>
+                    <div class="flex flex-auto flex-col items-center justify-center ">
+                        <mat-icon
+                            class="icon-size-24"
+                            [svgIcon]="'heroicons_outline:document'"></mat-icon>
+                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">{{candidat?.user?.firstName}} {{candidat?.user?.lastName}} hasn't submitted yet!</div>
+                    </div>
+                </ng-template>
+
+                <ng-template #nosubmissions>
+                    <div class="flex flex-auto flex-col items-center justify-center ">
+                        <mat-icon
+                            class="icon-size-24"
+                            [svgIcon]="'heroicons_outline:document'"></mat-icon>
+                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">There are no submissions yet!</div>
+                    </div>
+                </ng-template>
+                <ng-template #noactiveComp>
+                    <div class="flex flex-auto flex-col items-center justify-center ">
                         <mat-icon
                             class="icon-size-24"
                             [svgIcon]="'heroicons_outline:folder-open'"></mat-icon>
-                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">There are no items!</div>
+                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">There are no active competitions!</div>
+                    </div>
+                </ng-template>
+                <ng-template #noterminatedComp>
+                    <div class="flex flex-auto flex-col items-center justify-center ">
+                        <mat-icon
+                            class="icon-size-24"
+                            [svgIcon]="'heroicons_outline:folder-open'"></mat-icon>
+                        <div class="mt-4 text-2xl font-semibold tracking-tight text-secondary">There are no terminated competitions!</div>
                     </div>
                 </ng-template>
 

@@ -1,5 +1,5 @@
 import {CdkScrollable} from '@angular/cdk/scrolling';
-import {CurrencyPipe, DOCUMENT, NgClass, NgFor, NgIf} from '@angular/common';
+import {CurrencyPipe, DatePipe, DOCUMENT, NgClass, NgFor, NgIf} from '@angular/common';
 import {
     ChangeDetectionStrategy,
     ChangeDetectorRef,
@@ -48,7 +48,8 @@ import {SubmissionsService} from "../../../../../core/services/submissions.servi
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
-    imports: [MatSnackBarModule, MatSidenavModule, FormsModule, ReactiveFormsModule, RouterLink, MatIconModule, NgIf, NgClass, NgFor, MatButtonModule, MatProgressBarModule, CdkScrollable, MatTabsModule, FuseFindByKeyPipe, FuseAlertComponent, MatFormFieldModule, MatInputModule, MatTableModule, CurrencyPipe, NgApexchartsModule, WaitingList, Leaderbord, TeamComponent, Winners],
+    imports: [MatSnackBarModule, MatSidenavModule, FormsModule, ReactiveFormsModule, RouterLink, MatIconModule, NgIf, NgClass, NgFor, MatButtonModule, MatProgressBarModule, CdkScrollable, MatTabsModule, FuseFindByKeyPipe, FuseAlertComponent, MatFormFieldModule, MatInputModule, MatTableModule, CurrencyPipe, NgApexchartsModule, WaitingList, Leaderbord, TeamComponent, Winners, DatePipe],
+    providers:[DatePipe]
 })
 export class AcademyDetailsComponent implements OnInit {
 
@@ -78,6 +79,8 @@ export class AcademyDetailsComponent implements OnInit {
         message: '',
     };
     showAlert: boolean = false;
+    message:any
+    today = new Date()
     constructor(
         @Inject(DOCUMENT) private _document: Document,
         private competitionService: CompetitionService,
@@ -89,6 +92,7 @@ export class AcademyDetailsComponent implements OnInit {
         private changeDetectorRef: ChangeDetectorRef,
         private _formBuilder: UntypedFormBuilder,
         private _matDialog: MatDialog,
+        private date: DatePipe,
         private _snackBar: MatSnackBar,
         private router: Router,
         private _elementRef: ElementRef,
@@ -107,6 +111,7 @@ export class AcademyDetailsComponent implements OnInit {
     }
 
     async ngOnInit(): Promise<void> {
+
         try {
             this.route.fragment.subscribe(fragment => {
                 if (fragment === 'Rules') {
@@ -129,9 +134,18 @@ export class AcademyDetailsComponent implements OnInit {
             });
             const competitionId = this.route.snapshot.paramMap.get('id');
             this.competition = await this.getCompetitionById(competitionId);
+            console.log(new Date(this.competition.submission_deadline).getTime() < this.today.getTime());
+            if (new Date(this.competition.submission_deadline).getTime() < this.today.getTime()) {
+                console.log('You are no longer able to submit');
+                this.message = 'Your are no longer able to submit';
+            }
+
             this.getBudgetDetailsByCompetitionId(competitionId);
             if(this.authenticationService.currentUserValue){
                 this.getCurrentUserScore(this.authenticationService.currentUserValue.id, this.competition.id)
+            }
+            if(this.authenticationService.currentUserValue && this.role==='Competitor'){
+                this.getsubmissionsCountPerDay(competitionId,this.authenticationService.currentUserValue.id)
             }
             this.getWaitingListByCompetitionId(competitionId)
             this.getWinnersByCompetitionId(competitionId)
@@ -145,6 +159,12 @@ export class AcademyDetailsComponent implements OnInit {
         };
     }
 
+    getsubmissionsCountPerDay(competitionId: string, competitorId: number){
+        this.submissionsService.getsubmissionsCountPerDay(competitionId,competitorId).subscribe(res=>{
+            this.message=res
+            this.changeDetectorRef.detectChanges()
+        })
+    }
     getWinnersByCompetitionId(competitionId: string){
         this.competitionService.getWinnersByCompetitionId(competitionId).subscribe(res=>{
             this.winnersLength=res.length
@@ -528,4 +548,6 @@ export class AcademyDetailsComponent implements OnInit {
         this.selectedOutput = <File>event.target.files[0];
         this.outputFileName = this.selectedOutput ? this.selectedOutput.name : '';
     }
+
+    protected readonly Date = Date;
 }

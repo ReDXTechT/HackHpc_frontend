@@ -81,7 +81,6 @@ export const appRoutes: Route[] = [
                 {path: 'results-submissions', loadChildren: () => import('app/modules/admin/apps/file-manager/file-manager.routes')},
                 {path: 'help-center', loadChildren: () => import('app/modules/admin/apps/help-center/help-center.routes')},
                 {path: 'mailbox', loadChildren: () => import('app/modules/admin/apps/mailbox/mailbox.routes')},
-                {path: 'test', loadChildren: () => import('app/modules/admin/apps/test/test.routes')},
             ]},
 
             // Pages

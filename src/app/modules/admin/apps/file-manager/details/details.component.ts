@@ -1,13 +1,12 @@
-import { NgIf } from '@angular/common';
+import {DatePipe, NgIf} from '@angular/common';
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDrawerToggleResult } from '@angular/material/sidenav';
-import { RouterLink } from '@angular/router';
-import { FileManagerService } from 'app/modules/admin/apps/file-manager/file-manager.service';
-import { Item } from 'app/modules/admin/apps/file-manager/file-manager.types';
+import {ActivatedRoute, RouterLink} from '@angular/router';
 import { FileManagerListComponent } from 'app/modules/admin/apps/file-manager/list/list.component';
 import { Subject, takeUntil } from 'rxjs';
+import {SubmissionsService} from "../../../../../core/services/submissions.service";
 
 @Component({
     selector       : 'file-manager-details',
@@ -15,50 +14,35 @@ import { Subject, takeUntil } from 'rxjs';
     encapsulation  : ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone     : true,
-    imports        : [MatButtonModule, RouterLink, MatIconModule, NgIf],
+    imports: [MatButtonModule, RouterLink, MatIconModule, NgIf, DatePipe],
 })
 export class FileDetails implements OnInit, OnDestroy
 {
-    item: Item;
     private _unsubscribeAll: Subject<any> = new Subject<any>();
-
-    /**
-     * Constructor
-     */
+    submission : any
     constructor(
         private _changeDetectorRef: ChangeDetectorRef,
         private _fileManagerListComponent: FileManagerListComponent,
-        private _fileManagerService: FileManagerService,
+        private submissionsService: SubmissionsService,
+        private _activatedRoute: ActivatedRoute,
     )
     {
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Lifecycle hooks
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * On init
-     */
     ngOnInit(): void
     {
+        this._activatedRoute.params.subscribe(params => {
+            const submissionId = params['id'];
+            console.log(submissionId)
+            this.submissionsService.getsubmissionsById(submissionId).subscribe(submission=>{
+                this.submission=submission
+                console.log(this.submission)
+                this._changeDetectorRef.detectChanges()
+            })
+            // Use the submissionId to fetch the customer details and display them
+        });
         // Open the drawer
         this._fileManagerListComponent.matDrawer.open();
-
-        // Get the item
-        this._fileManagerService.item$
-            .pipe(takeUntil(this._unsubscribeAll))
-            .subscribe((item: Item) =>
-            {
-                // Open the drawer in case it is closed
-                this._fileManagerListComponent.matDrawer.open();
-
-                // Get the item
-                this.item = item;
-
-                // Mark for check
-                this._changeDetectorRef.markForCheck();
-            });
     }
 
     /**
@@ -71,13 +55,6 @@ export class FileDetails implements OnInit, OnDestroy
         this._unsubscribeAll.complete();
     }
 
-    // -----------------------------------------------------------------------------------------------------
-    // @ Public methods
-    // -----------------------------------------------------------------------------------------------------
-
-    /**
-     * Close the drawer
-     */
     closeDrawer(): Promise<MatDrawerToggleResult>
     {
         return this._fileManagerListComponent.matDrawer.close();

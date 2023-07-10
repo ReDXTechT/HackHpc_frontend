@@ -587,11 +587,19 @@
                                     {{alert.message}}
                                 </fuse-alert>
                                 <!-- Actions -->
-                                <div class="flex items-center justify-end w-full mt-8">
+                                <div class="flex items-center justify-end w-full mt-8" *ngIf="message!=='You have exceeded your trials for today.' && (competition.submission_deadline > (today | date:'yyyy-MM-dd'))">
                                     <button type="reset" (click)="submissionForm.reset();" mat-button>Reset</button>
-                                    <button (click)="createSubmission(competition.id,userId)" class="ml-2" [color]="'primary'" type="button" mat-flat-button>Submit
-                                    </button>
+                                    <button (click)="createSubmission(competition.id,userId)" class="ml-2" [color]="'primary'" type="button" mat-flat-button>Submit </button>
                                 </div>
+                                <fuse-alert
+                                    class="mt-8"
+                                    *ngIf="message==='You have exceeded your trials for today.' || (competition.submission_deadline < (today | date:'yyyy-MM-dd'))"
+                                    [appearance]="'outline'"
+                                    [showIcon]="false"
+                                    [type]="'error'"
+                                    [@shake]="alert.type === 'error'">
+                                    {{message}}
+                                </fuse-alert>
                             </form>
 
 

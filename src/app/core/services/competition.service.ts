@@ -90,7 +90,9 @@ export class CompetitionService {
     getActiveCompetitions(): Observable<Competition[]> {
         return this.http.get<Competition[]>(`${this.baseUrl}/competitions/running`);
     }
-
+    getTerminatedCompetitions(): Observable<Competition[]> {
+        return this.http.get<Competition[]>(`${this.baseUrl}/competitions/terminated`);
+    }
     getCompetitorContributions(userId : any): Observable<Competition[]> {
         return this.http.get<Competition[]>(`${this.baseUrl}/competitors-contributions/${userId}`);
     }

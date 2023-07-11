@@ -500,18 +500,22 @@ export class AcademyDetailsComponent implements OnInit {
                 console.log(res)
                 if ( res == "{'build status': 'SUCCESS'}"){
                     console.log("here")
-                    this.changeDetectorRef.detectChanges()
+                    window.location.reload()
                 }
             }
         )
 
     }
 
-
+    getUniqueFileName(originalFileName: string): string {
+        const timestamp = new Date().getTime();
+        const fileExtension = originalFileName.split('.').pop();
+        return `${timestamp}.${fileExtension}`;
+    }
     createSubmission(competitionId: any, competitorId: any) {
         const formData = new FormData();
         formData.append('git_repo_url', this.submissionForm.get('git_repo_url').value);
-        formData.append('expected_output', this.selectedOutput);
+        formData.append('expected_output', this.selectedOutput, this.getUniqueFileName(this.selectedOutput.name));
         formData.append('solution_description', this.submissionForm.get('solution_description').value);
         formData.append('validate_url', 'https://raw.githubusercontent.com/ReDXTechT/Laplace2d-intel/main/validate.sh');
 

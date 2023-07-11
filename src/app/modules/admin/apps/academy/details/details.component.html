@@ -65,7 +65,7 @@
                 <!-- Actions -->
                 <div class="flex items-center mt-6 sm:mt-0 sm:ml-2 space-x-3">
                     <div >
-                        <button  *ngIf="(competition?.status !== 'About_to_start'&& role=='Admin') || (competition?.status !== 'About_to_start'&& role=='Customer')"class=" mr-2" mat-flat-button routerLink="/apps/results-submissions"
+                        <button  *ngIf="(competition?.status !== 'About_to_start'&& role=='Admin') || (competition?.status !== 'About_to_start'&& role=='Customer')"class=" mr-2" mat-flat-button [routerLink]="['/apps/results-submissions/folders/', competition.id]"
                                 style="background-color: #020202; color: white;">
                             <mat-icon svgIcon="mat_solid:drive_file_move"></mat-icon>
                             <span class="ml-2">View Submissions</span>

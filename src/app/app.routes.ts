@@ -72,7 +72,7 @@ export const appRoutes: Route[] = [
 
             // Apps
             {path: 'apps', children: [
-                {path: 'clusters-monitoring', loadChildren: () => import('app/modules/admin/dashboards/analytics/analytics.routes')},
+                {path: 'clusters-monitoring', loadChildren: () => import('app/modules/admin/apps/monitoring/monitoring.routes')},
                 {path: 'competitions', loadChildren: () => import('app/modules/admin/apps/academy/academy.routes')},
                 {path: 'pending-competitions', loadChildren: () => import('app/modules/admin/apps/pending-competitions/pending-competitions.routes')},
                 {path: 'competition', loadChildren: () => import('app/modules/admin/apps/competition/competition.module').then((m) => m.CompetitionModule)},
@@ -80,7 +80,6 @@ export const appRoutes: Route[] = [
                 {path: 'pending-customers-accounts', loadChildren: () => import('app/modules/admin/apps/pending-customers/pending-customers.routes')},
                 {path: 'results-submissions', loadChildren: () => import('app/modules/admin/apps/file-manager/file-manager.routes')},
                 {path: 'help-center', loadChildren: () => import('app/modules/admin/apps/help-center/help-center.routes')},
-                {path: 'mailbox', loadChildren: () => import('app/modules/admin/apps/mailbox/mailbox.routes')},
             ]},
 
             // Pages

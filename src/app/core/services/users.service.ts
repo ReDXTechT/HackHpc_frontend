@@ -44,6 +44,9 @@ export class UsersService {
     deleteCompetition(competitionId: string): Observable<any> {
         return this.http.delete(`${this.baseUrl}/competitions/${competitionId}/delete`);
     }
+    getCompetition(competitionId: string): Observable<any> {
+        return this.http.delete(`${this.baseUrl}/competitions/${competitionId}`);
+    }
     getFilteredCustomers( name: string): Observable<any> {
         let params = new HttpParams();
         const url = `${this.baseUrl}/customers/filter`;

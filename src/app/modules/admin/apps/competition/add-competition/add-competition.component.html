@@ -64,7 +64,37 @@
 
                             </mat-form-field>
                         </div>
+                        <div class="grid sm:grid-cols-4 gap-6 w-full ">
+                            <div class="sm:col-span-2">
+                                <mat-form-field class="w-full">
+                                    <mat-icon svgIcon="feather:github" class="mr-4"></mat-icon>
 
+                                    <input
+                                        matInput
+                                        [formControlName]="'validate_url'"
+                                        [placeholder]="'raw validate url from the git repo'"
+                                        required>
+                                    <mat-error *ngIf="horizontalStepperForm.get('step1').get('validate_url').errors?.invalidUrl">
+                                        URL must start with 'https://raw.githubusercontent.com/'
+                                    </mat-error>
+                                </mat-form-field>
+                            </div>
+                            <!-- Company -->
+                            <div class="sm:col-span-2">
+                                <mat-form-field
+                                    class="w-full"
+                                    [subscriptSizing]="'dynamic'">
+                                    <mat-icon class="icon-size-5" matPrefix [svgIcon]="'heroicons_solid:calculator'"></mat-icon>
+
+                                    <input
+                                        [formControlName]="'submission_tolerance'"
+                                        [placeholder]="'Submission tolerance per cent ( difference between competitor and original output)'"
+                                        matInput
+                                        type="number">
+                                </mat-form-field>
+                            </div>
+
+                        </div>
                         <div class="grid sm:grid-cols-4 gap-6 w-full ">
                         <div class="sm:col-span-2">
                             <mat-form-field class="w-full"

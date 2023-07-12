@@ -517,21 +517,35 @@ export class AcademyDetailsComponent implements OnInit {
         formData.append('git_repo_url', this.submissionForm.get('git_repo_url').value);
         formData.append('expected_output', this.selectedOutput, this.getUniqueFileName(this.selectedOutput.name));
         formData.append('solution_description', this.submissionForm.get('solution_description').value);
-        formData.append('validate_url', 'https://raw.githubusercontent.com/ReDXTechT/Laplace2d-intel/main/validate.sh');
+        formData.append('validate_url', this.competition.validate_url);
 
         this.submissionsService.createSubmission(competitionId, competitorId, formData).subscribe(res => {
             console.log(res);
             // Update the submission result variable
 
             if(res.submission_status.startsWith('Submission accepted')){
-                this.alert = {
-                    type   : 'success',
-                    message: `${res.submission_status}\n\nExecution Time: ${res.execution_time}`,
-                };
+                // Extract the difference from the output
+                const match = res.pipeline_output.match(/Difference between expected and actual output: ([\d.]+)%/);
+                const difference = match ? parseFloat(match[1]) : null;
+                if (difference !== null && difference <= this.competition.submission_tolerance) {
+                    this.alert = {
+                        type   : 'success',
+                        message: `${res.submission_status}\n\nExecution Time: ${res.execution_time}`,
+                    };
 
-                // Show the alert
-                this.showAlert = true;
-                this.changeDetectorRef.detectChanges()
+                    // Show the alert
+                    this.showAlert = true;
+                    this.changeDetectorRef.detectChanges()
+                }else{
+                    this.alert = {
+                        type   : 'error',
+                        message: `${res.submission_status}\n\nExecution Time: ${res.execution_time}, you might check the original output file or revise your submitted output because your code seems correct and the solution checker returned accepted`,
+                    };
+
+                    // Show the alert
+                    this.showAlert = true;
+                    this.changeDetectorRef.detectChanges()
+                }
             }
             else{
                 this.alert = {

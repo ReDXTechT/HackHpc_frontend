@@ -4,6 +4,8 @@ export interface Competition {
     id?: number;
     title: string;
     git_repo_url: string;
+    validate_url: string;
+    submission_tolerance: number;
     code_type: 'openacc' | 'openmp' | 'mpi' | 'c_cpp';
     sponsor: number;
     customer : Customer

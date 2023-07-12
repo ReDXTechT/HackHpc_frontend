@@ -1,11 +1,11 @@
 import {ChangeDetectorRef, Component, OnInit, ViewEncapsulation} from '@angular/core';
 import {
-    FormArray, FormGroup,
+    FormArray, FormControl, FormGroup,
     FormsModule,
     ReactiveFormsModule,
     UntypedFormArray,
     UntypedFormBuilder,
-    UntypedFormGroup,
+    UntypedFormGroup, ValidatorFn,
     Validators
 } from '@angular/forms';
 import {CompetitionService} from "../../../../../core/services/competition.service";
@@ -38,6 +38,8 @@ export class AddCompetition implements OnInit
                 title   : ['', [Validators.required]],
                 code_type : ['', Validators.required],
                 git_repo_url : ['', Validators.required],
+                validate_url: ['', [Validators.required, this.urlValidator()]],
+                submission_tolerance : ['', Validators.required],
                 project_description  : ['', Validators.required],
                 skills_required  : ['', Validators.required],
                 optimization_guidelines  : ['', Validators.required],
@@ -75,6 +77,11 @@ export class AddCompetition implements OnInit
         }
 
     }
+    urlValidator(): ValidatorFn {
+        return (control: FormControl): { [key: string]: any } | null => {
+            const valid = control.value?.startsWith('https://raw.githubusercontent.com/');
+            return valid ? null : { invalidUrl: { value: control.value } };
+        };}
     get prizes(): FormArray {
         return this.horizontalStepperForm.get('step3').get('prizes') as FormArray;
     }
@@ -206,6 +213,8 @@ export class AddCompetition implements OnInit
             title: step1.title,
             git_repo_url: step1.git_repo_url,
             code_type: step1.code_type,
+            validate_url: step1.validate_url,
+            submission_tolerance: step1.submission_tolerance,
             project_description: step1.project_description,
             skills_required: step1.skills_required,
             optimization_guidelines: step1.optimization_guidelines,

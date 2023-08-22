@@ -381,12 +381,15 @@ export class PendingCompetitionsDetailsComponent implements OnInit
         dialogRef.afterClosed()
             .subscribe((result) =>
             {
-                console.log(result)
-                console.log('Compose dialog was closed!');
-                this.competitionService.rejectCompetition(competititionId,result).subscribe(res=>{
-                    console.log(res)
-                    this._router.navigateByUrl("/apps/pending-competitions")
-                })
+                if(result){
+                    console.log(result)
+                    console.log('Compose dialog was closed!');
+                    this.competitionService.rejectCompetition(competititionId,result).subscribe(res=>{
+                        console.log(res)
+                        this._router.navigateByUrl("/apps/pending-competitions")
+                    })
+                }
+
             });
     }
 }

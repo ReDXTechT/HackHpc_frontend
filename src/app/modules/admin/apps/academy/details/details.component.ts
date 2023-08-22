@@ -414,7 +414,9 @@ export class AcademyDetailsComponent implements OnInit {
 
     editOverview(competition: any): void {
         const dialogRef = this._matDialog.open(EditOverview, {
-            autoFocus: false,
+            // autoFocus: false,
+            // height: '400px',
+            // width: '400px',
             data: {
                 competition: cloneDeep(competition),
             },
@@ -517,29 +519,32 @@ export class AcademyDetailsComponent implements OnInit {
         formData.append('git_repo_url', this.submissionForm.get('git_repo_url').value);
         formData.append('expected_output', this.selectedOutput, this.getUniqueFileName(this.selectedOutput.name));
         formData.append('solution_description', this.submissionForm.get('solution_description').value);
-        formData.append('validate_url', this.competition.validate_url);
+        // formData.append('validate_url', this.competition.validate_url);
 
         this.submissionsService.createSubmission(competitionId, competitorId, formData).subscribe(res => {
             console.log(res);
             // Update the submission result variable
 
-            if(res.submission_status.startsWith('Submission accepted')){
+            if(res.submission_status.startsWith('accepted')){
+                console.log("Submission accepted")
                 // Extract the difference from the output
                 const match = res.pipeline_output.match(/Difference between expected and actual output: ([\d.]+)%/);
                 const difference = match ? parseFloat(match[1]) : null;
+                console.log("difference",difference)
+
                 if (difference !== null && difference <= this.competition.submission_tolerance) {
                     this.alert = {
                         type   : 'success',
-                        message: `${res.submission_status}\n\nExecution Time: ${res.execution_time}`,
+                        message: `Submission ${res.submission_status}\n\nExecution Time: ${res.execution_time} , Difference between expected and actual output: ${difference}%`,
                     };
-
+                    console.log(this.alert.message)
                     // Show the alert
                     this.showAlert = true;
                     this.changeDetectorRef.detectChanges()
                 }else{
                     this.alert = {
                         type   : 'error',
-                        message: `${res.submission_status}\n\nExecution Time: ${res.execution_time}, you might check the original output file or revise your submitted output because your code seems correct and the solution checker returned accepted`,
+                        message: `Submission ${res.submission_status}\n\nExecution Time: ${res.execution_time}, you might check the original output file or revise your submitted output because your code seems correct and the solution checker returned accepted`,
                     };
 
                     // Show the alert

@@ -82,7 +82,14 @@ export class UsersService {
     getCustomerCompetitions(userId : any): Observable<any> {
         return this.http.get<any>(`${this.baseUrl}/competitions/sponsor/${userId}`);
     }
+
     getCustomerPendingCompetitions(userId : any): Observable<any> {
         return this.http.get<any>(`${this.baseUrl}/pending-competitions/customer/${userId}`);
+    }
+    getCustomerActiveCompetitions(userId : any): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/active-competitions/customer/${userId}`);
+    }
+    getCustomerTerminatedCompetitions(userId : any): Observable<any> {
+        return this.http.get<any>(`${this.baseUrl}/terminated-competitions/customer/${userId}`);
     }
 }

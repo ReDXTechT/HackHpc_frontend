@@ -11,6 +11,7 @@ import { Subject, takeUntil } from 'rxjs';
 import {CompetitionService} from "../../../../../core/services/competition.service";
 import {SubmissionsService} from "../../../../../core/services/submissions.service";
 import {UsersService} from "../../../../../core/services/users.service";
+import {AuthenticationService} from "../../../../../core/services/authentication.service";
 
 @Component({
     selector       : 'file-manager-list',
@@ -32,22 +33,26 @@ export class FileManagerListComponent implements OnInit, OnDestroy
     competitions = ''
     candidat : any
     competitionId: string;
+    role:any
 
     constructor(
         private _activatedRoute: ActivatedRoute,
         private _changeDetectorRef: ChangeDetectorRef,
         private _router: Router,
         private competitionService: CompetitionService,
+        private authenticationService: AuthenticationService,
         private submissionsService: SubmissionsService,
         private usersService: UsersService,
         private _fuseMediaWatcherService: FuseMediaWatcherService,
     )
     {
+        this.role=this.authenticationService.currentUserValue.role
     }
 
     ngOnInit(): void
     {
         this.getactiveCompetitions()
+        this.getterminatedCompetitions()
         this._activatedRoute.params.subscribe(params => {
             this.competitionId = params['folderId'];
             if( this.competitionId){
@@ -118,18 +123,36 @@ export class FileManagerListComponent implements OnInit, OnDestroy
         return item.id || index;
     }
     getactiveCompetitions(){
-        this.competitionService.getActiveCompetitions().subscribe(res=>{
-            console.log(res)
-            this.activeCompetitions = res
-            this._changeDetectorRef.detectChanges()
-        })
+        if(this.role==='Admin'){
+            this.competitionService.getActiveCompetitions().subscribe(res=>{
+                console.log(res)
+                this.activeCompetitions = res
+                this._changeDetectorRef.detectChanges()
+            })
+        }else{
+            this.usersService.getCustomerActiveCompetitions(this.authenticationService.currentUserValue.id).subscribe(res=>{
+                console.log(res)
+                this.activeCompetitions = res
+                this._changeDetectorRef.detectChanges()
+            })
+        }
+
     }
     getterminatedCompetitions(){
-        this.competitionService.getTerminatedCompetitions().subscribe(res=>{
-            console.log(res)
-            this.terminatedCompetitions = res
-            this._changeDetectorRef.detectChanges()
-        })
+
+        if(this.role==='Admin'){
+            this.competitionService.getTerminatedCompetitions().subscribe(res=>{
+                console.log(res)
+                this.terminatedCompetitions = res
+                this._changeDetectorRef.detectChanges()
+            })
+        }else{
+            this.usersService.getCustomerTerminatedCompetitions(this.authenticationService.currentUserValue.id).subscribe(res=>{
+                console.log(res)
+                this.terminatedCompetitions = res
+                this._changeDetectorRef.detectChanges()
+            })
+        }
     }
 
     getsubmissionsByCompetitor(competitorId:any,competitionId:any){

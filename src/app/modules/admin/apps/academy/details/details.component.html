@@ -461,7 +461,7 @@
                 </mat-tab>
 
                 <!-- TeamComponent -->
-                <mat-tab label="Leaderbord" id="Leaderbord">
+                <mat-tab *ngIf="competition.status==='Running' || competition.status==='Terminated'" label="Leaderbord" id="Leaderbord">
                     <ng-template matTabContent>
                         <leaderbord [competitionId]="competition.id"></leaderbord>
                     </ng-template>
@@ -497,7 +497,7 @@
 
 
                 <!-- Solution checker -->
-                <mat-tab label="Solution checker" id="Solution_Checker">
+                <mat-tab  *ngIf="competition.status==='Running'" label="Solution checker" id="Solution_Checker">
                     <ng-template matTabContent>
                         <div class=" gap-6 w-full min-w-0">
                             <!-- Summary -->

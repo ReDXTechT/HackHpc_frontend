@@ -67,7 +67,7 @@
                                 <div class="font-semibold mb-10">Terminated competitions</div>
                                 <div *ngIf="terminatedCompetitions?.length>0 ; else noterminatedComp"
                                     class="flex flex-wrap -m-2 mt-2">
-                                    <ng-container *ngFor="let folder of activeCompetitions; trackBy:trackByFn">
+                                    <ng-container *ngFor="let folder of terminatedCompetitions; trackBy:trackByFn">
                                         <div class="relative w-40 h-40 m-2 p-4 shadow rounded-2xl bg-card">
                                             <a
                                                 class="z-10 absolute inset-0 flex flex-col p-4 cursor-pointer"
@@ -191,7 +191,7 @@
                 </ng-container>
 
                 <!-- No items template -->
-                <ng-template #nocandidats>
+                <ng-template #nosubmissions>
                     <div class="flex flex-auto flex-col items-center justify-center ">
                         <mat-icon
                             class="icon-size-24"
@@ -200,7 +200,7 @@
                     </div>
                 </ng-template>
 
-                <ng-template #nosubmissions>
+                <ng-template #nocandidats>
                     <div class="flex flex-auto flex-col items-center justify-center ">
                         <mat-icon
                             class="icon-size-24"

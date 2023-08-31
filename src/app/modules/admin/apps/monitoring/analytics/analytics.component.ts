@@ -39,7 +39,7 @@ export class AnalyticsComponent implements OnInit
             const compId = params['compId'];
             this.competitionService.getCompetitionsById(compId).subscribe(res=>{
                 this.competition_title=res.title.replace(" ", "-").toLowerCase();
-                let rawUrl = `https://${this.competition_title}-grafana.hackhpc.com`;
+                let rawUrl = `https://${this.competition_title}-grafana-visualization.hackhpc.com`;
                 this.url = this._sanitizer.bypassSecurityTrustResourceUrl(rawUrl);
                 this._changeDetectorRef.detectChanges();
             });

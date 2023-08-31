@@ -254,7 +254,7 @@ export class AddCompetition implements OnInit
                         'center'
                     );
                     if(this.authenticationService.currentUserValue.role==='Customer'){
-                        this._router.navigate(['/apps/pending-competitions', this.authenticationService.currentUserValue.id]);
+                        this._router.navigate(['/apps/pending-competitions', competition.id]);
 
                     }else{
                         this._router.navigate(['apps/pending-competitions']);

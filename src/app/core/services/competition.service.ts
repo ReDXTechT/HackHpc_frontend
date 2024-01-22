@@ -64,6 +64,9 @@ export class CompetitionService {
     launchCompetition(competitionId: string,userId :any): Observable<any> {
         return this.http.post(`${this.baseUrl}/launch_competition/competition/${competitionId}/user/${userId}`,{});
     }
+    endCompetition(competitionId: string,userId :any): Observable<any> {
+        return this.http.post(`${this.baseUrl}/end_competition/competition/${competitionId}/user/${userId}`,{});
+    }
     approveCompetition(competitionId: string): Observable<any> {
         return this.http.post(`${this.baseUrl}/competition/${competitionId}/approve`,{});
     }

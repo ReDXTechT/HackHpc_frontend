@@ -508,6 +508,20 @@ export class AcademyDetailsComponent implements OnInit {
         )
 
     }
+    EndCompetition(competitionId: any) {
+        this.competitionService.endCompetition(competitionId, this.authenticationService.currentUserValue.id).subscribe(
+            res => {
+                console.log(res);
+                if (res.message === 'Competition ended and resources cleaned up successfully.') {
+                    console.log("Competition ended and resources cleaned up successfully.");
+                    window.location.reload();
+                }
+            },
+            error => {
+                console.error("Error: ", error);
+            }
+        );
+    }
 
     getUniqueFileName(originalFileName: string): string {
         const timestamp = new Date().getTime();

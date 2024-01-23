@@ -28,10 +28,11 @@ COPY . .
 RUN npm run prod
 
 # Use the latest stable nginx image
-FROM nginx:stable
+FROM nginx:latest
 
 # Copy built assets from the build stage to nginx
 COPY --from=build /app/dist/fuse/ /usr/share/nginx/html/
+COPY default.conf /etc/nginx/conf.d/default.conf
 
 # Expose port 80
 EXPOSE 80

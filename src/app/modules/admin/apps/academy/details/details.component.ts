@@ -500,9 +500,9 @@ export class AcademyDetailsComponent implements OnInit {
         this.competitionService.launchCompetition(competitionId , this.authenticationService.currentUserValue.id).subscribe(
             res=>{
                 console.log(res)
-                if ( res == "{'build status': 'SUCCESS'}"){
-                    console.log("here")
-                    window.location.reload()
+                if (res['build status'] === 'SUCCESS') {
+                    console.log("here");
+                    window.location.reload();
                 }
             }
         )

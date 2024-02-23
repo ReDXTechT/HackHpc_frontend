@@ -74,7 +74,17 @@
                             "extractLicenses": true,
                             "vendorChunk": false,
                             "buildOptimizer": true
+                        },
+                        "development": {
+                            "optimization": false,
+                            "outputHashing": "none",
+                            "sourceMap": true,
+                            "extractLicenses": false,
+                            "namedChunks": true,
+                            "vendorChunk": true,
+                            "buildOptimizer": false
                         }
+
                     }
                 },
                 "serve": {
